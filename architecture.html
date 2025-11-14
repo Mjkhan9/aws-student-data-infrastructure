@@ -20,80 +20,232 @@
 
 <main class="content">
     <section class="card">
-        <h1>AWS VPC Architecture</h1>
+        <h1>Enterprise VPC Architecture for Student Information Systems</h1>
         <p>
-            The network design follows a three-tier VPC model with dedicated segments for administration,
-            application workloads, and the database layer. The goal is to protect student data while enabling
-            controlled access for authorized systems and users.
+            This architecture implements a production-grade, three-tier VPC design optimized for sensitive student 
+            data workloads. The network topology follows AWS Well-Architected Framework principles with defense-in-depth 
+            security, high availability across multiple availability zones, and complete isolation of the database tier 
+            from public networks. Each tier operates in dedicated subnets with granular security controls enforced through 
+            security groups, network ACLs, and route table configurations.
+        </p>
+        <p>
+            The design supports FERPA compliance requirements by implementing strict access controls, comprehensive audit 
+            logging, and encryption for all student data at rest and in transit. Network segmentation prevents lateral 
+            movement in the event of compromise, while bastion host architecture provides secure administrative access 
+            without exposing internal systems directly to the internet.
         </p>
     </section>
 
     <section class="card">
-        <h2>VPC Layout</h2>
-        <p><strong>VPC CIDR:</strong> 172.32.0.0/16</p>
+        <h2>VPC Network Topology</h2>
+        <p><strong>VPC CIDR Block:</strong> 172.32.0.0/16 (65,536 IP addresses)</p>
+        <p><strong>Availability Zones:</strong> us-east-1a, us-east-1b (Multi-AZ for high availability)</p>
+        <p><strong>DNS Resolution:</strong> Enabled with private hosted zone integration</p>
+        <p><strong>Flow Logs:</strong> Enabled to S3 with server-side encryption</p>
         <pre class="diagram">
-+-----------------------------------------------------------+
-|                    VPC: 172.32.0.0/16                     |
-|                                                           |
-|  +-----------------+   +-----------------+                |
-|  | Admin Subnet A  |   | Admin Subnet B  |                |
-|  | 172.32.1.0/24   |   | 172.32.2.0/24   |  Bastion,      |
-|  | Jump hosts,     |   | Mgmt tooling    |  monitoring    |
-|  +-----------------+   +-----------------+                |
-|                                                           |
-|  +-----------------+   +-----------------+                |
-|  | App Subnet A    |   | App Subnet B    |  ECS/EC2 app   |
-|  | 172.32.10.0/24  |   | 172.32.11.0/24  |  layer         |
-|  +-----------------+   +-----------------+                |
-|                                                           |
-|  +-----------------+   +-----------------+                |
-|  | DB Subnet A     |   | DB Subnet B     |  RDS (Postgres)|
-|  | 172.32.20.0/24  |   | 172.32.21.0/24  |  fully private |
-|  +-----------------+   +-----------------+                |
-+-----------------------------------------------------------+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         VPC: 172.32.0.0/16                                  │
+│                    (student-data-vpc-production)                            │
+│                                                                             │
+│  ┌─────────────────────────────────┐  ┌─────────────────────────────────┐ │
+│  │     AVAILABILITY ZONE 1A        │  │     AVAILABILITY ZONE 1B        │ │
+│  │                                 │  │                                 │ │
+│  │  ┌───────────────────────────┐ │  │ ┌───────────────────────────┐  │ │
+│  │  │  Admin Subnet A           │ │  │ │  Admin Subnet B           │  │ │
+│  │  │  172.32.1.0/24            │ │  │ │  172.32.2.0/24            │  │ │
+│  │  │  • Bastion Hosts          │ │  │ │  • Jump Servers           │  │ │
+│  │  │  • VPN Endpoints          │ │  │ │  • Monitoring Tools       │  │ │
+│  │  │  • Session Manager Access │ │  │ │  • CloudWatch Agents      │  │ │
+│  │  │  • Public IP: NAT Gateway │ │  │ │  • Public IP: NAT Gateway │  │ │
+│  │  └───────────────────────────┘ │  │ └───────────────────────────┘  │ │
+│  │          ↓ (HTTPS/SSH)         │  │          ↓ (HTTPS/SSH)         │ │
+│  │  ┌───────────────────────────┐ │  │ ┌───────────────────────────┐  │ │
+│  │  │  App Subnet A             │ │  │ │  App Subnet B             │  │ │
+│  │  │  172.32.10.0/24           │ │  │ │  172.32.11.0/24           │  │ │
+│  │  │  • ECS Fargate Tasks      │ │  │ │  • ECS Fargate Tasks      │  │ │
+│  │  │  • Application Load Bal.  │ │  │ │  • API Gateway            │  │ │
+│  │  │  • Lambda Functions       │ │  │ │  • Lambda Functions       │  │ │
+│  │  │  • No Public IPs          │ │  │ │  • No Public IPs          │  │ │
+│  │  └───────────────────────────┘ │  │ └───────────────────────────┘  │ │
+│  │          ↓ (Port 5432)         │  │          ↓ (Port 5432)         │ │
+│  │  ┌───────────────────────────┐ │  │ ┌───────────────────────────┐  │ │
+│  │  │  DB Subnet A              │ │  │ │  DB Subnet B              │  │ │
+│  │  │  172.32.20.0/24           │ │  │ │  172.32.21.0/24           │  │ │
+│  │  │  • RDS Primary (PG 15.3)  │ │  │ │  • RDS Standby (Multi-AZ) │  │ │
+│  │  │  • Fully Private          │ │  │ │  • Fully Private          │  │ │
+│  │  │  • Encrypted Storage      │ │  │ │  • Automated Backups      │  │ │
+│  │  │  • No Internet Route      │ │  │ │  • No Internet Route      │  │ │
+│  │  └───────────────────────────┘ │  │ └───────────────────────────┘  │ │
+│  └─────────────────────────────────┘  └─────────────────────────────────┘ │
+│                                                                             │
+│  Internet Gateway (igw-student-data) ← Admin Tier Only                    │
+│  S3 Gateway Endpoint ← Private S3 Access                                  │
+│  Systems Manager VPC Endpoint ← Secure Session Access                     │
+└─────────────────────────────────────────────────────────────────────────────┘
         </pre>
     </section>
 
     <section class="grid two-columns">
         <div class="card">
-            <h2>Subnet Design</h2>
+            <h2>Subnet Architecture Details</h2>
             <table class="summary-table">
-                <tr><th>Tier</th><th>Subnet</th><th>CIDR</th><th>Purpose</th></tr>
-                <tr><td>Admin</td><td>Admin Subnet A</td><td>172.32.1.0/24</td><td>Jump host, admin access</td></tr>
-                <tr><td>Admin</td><td>Admin Subnet B</td><td>172.32.2.0/24</td><td>Monitoring, tooling</td></tr>
-                <tr><td>App</td><td>App Subnet A</td><td>172.32.10.0/24</td><td>Core application services</td></tr>
-                <tr><td>App</td><td>App Subnet B</td><td>172.32.11.0/24</td><td>Horizontally scaled services</td></tr>
-                <tr><td>DB</td><td>DB Subnet A</td><td>172.32.20.0/24</td><td>Primary RDS instance</td></tr>
-                <tr><td>DB</td><td>DB Subnet B</td><td>172.32.21.0/24</td><td>Standby / multi-AZ</td></tr>
+                <tr><th>Tier</th><th>Subnet Name</th><th>CIDR Block</th><th>Route Table</th><th>Purpose</th></tr>
+                <tr><td rowspan="2">Admin</td><td>Admin-AZ1a</td><td>172.32.1.0/24</td><td>Public</td><td>Bastion hosts, VPN termination</td></tr>
+                <tr><td>Admin-AZ1b</td><td>172.32.2.0/24</td><td>Public</td><td>Monitoring, management tooling</td></tr>
+                <tr><td rowspan="2">Application</td><td>App-AZ1a</td><td>172.32.10.0/24</td><td>Private</td><td>ECS workloads, ALB targets</td></tr>
+                <tr><td>App-AZ1b</td><td>172.32.11.0/24</td><td>Private</td><td>Horizontally scaled services</td></tr>
+                <tr><td rowspan="2">Database</td><td>DB-AZ1a</td><td>172.32.20.0/24</td><td>Isolated</td><td>RDS primary instance</td></tr>
+                <tr><td>DB-AZ1b</td><td>172.32.21.0/24</td><td>Isolated</td><td>RDS standby (Multi-AZ failover)</td></tr>
             </table>
+            <p class="note">
+                Each subnet is sized for 254 usable IP addresses. Reserved IPs include .1 (VPC router), 
+                .2 (DNS), .3 (future), and .255 (broadcast).
+            </p>
         </div>
         <div class="card">
-            <h2>Security Controls</h2>
+            <h2>Security Control Layers</h2>
             <ul class="bullet-list">
-                <li>Only the admin tier has controlled ingress from the internet (via bastion or VPN).</li>
-                <li>Application tier cannot be reached directly from the internet or student devices.</li>
-                <li>Database tier is fully private; only app-tier security groups can reach RDS ports.</li>
-                <li>Network ACLs restrict lateral movement between subnets.</li>
-                <li>Security groups favor SG-to-SG referencing over IP-based rules.</li>
-                <li>All data at rest in RDS and S3 is encrypted via AWS KMS.</li>
+                <li><strong>Internet Gateway:</strong> Attached only to admin tier route tables; application and database tiers have no direct internet routing</li>
+                <li><strong>NAT Gateways:</strong> Deployed in each AZ admin subnet to enable outbound internet for private subnets (software updates, API calls)</li>
+                <li><strong>Network ACLs:</strong> Stateless firewall rules at subnet boundaries preventing unauthorized lateral movement between tiers</li>
+                <li><strong>Security Groups:</strong> Stateful firewall rules using security group referencing rather than IP-based rules for tighter control</li>
+                <li><strong>VPC Flow Logs:</strong> Capture accepted and rejected traffic at ENI level with CloudWatch Logs integration for real-time monitoring</li>
+                <li><strong>S3 Gateway Endpoint:</strong> Private connectivity to S3 for backups and logs without traversing public internet</li>
+                <li><strong>Systems Manager Endpoint:</strong> PrivateLink-based access to Session Manager eliminating need for SSH key management</li>
             </ul>
         </div>
     </section>
 
     <section class="card">
-        <h2>Data Flow for Student Information</h2>
+        <h2>Security Group Architecture</h2>
+        <p>
+            Security groups implement a zero-trust model where all traffic is denied by default, and only explicitly 
+            required communication paths are permitted. Groups reference each other by security group ID rather than 
+            IP CIDR blocks, enabling automatic updates when instances are added or removed.
+        </p>
+        <table class="summary-table">
+            <tr><th>Security Group</th><th>Ingress Rules</th><th>Egress Rules</th><th>Purpose</th></tr>
+            <tr>
+                <td>bastion-sg</td>
+                <td>TCP 22 from corporate IP ranges<br>TCP 443 from VPN CIDR</td>
+                <td>TCP 22 to app-sg<br>TCP 443 to app-sg</td>
+                <td>SSH access to application tier</td>
+            </tr>
+            <tr>
+                <td>app-sg</td>
+                <td>TCP 22 from bastion-sg<br>TCP 8443 from alb-sg<br>TCP 443 from vpce-sg</td>
+                <td>TCP 5432 to db-sg<br>TCP 443 to 0.0.0.0/0 (NAT)</td>
+                <td>Application server access</td>
+            </tr>
+            <tr>
+                <td>alb-sg</td>
+                <td>TCP 443 from 0.0.0.0/0</td>
+                <td>TCP 8443 to app-sg</td>
+                <td>Application Load Balancer</td>
+            </tr>
+            <tr>
+                <td>db-sg</td>
+                <td>TCP 5432 from app-sg only</td>
+                <td>None (response traffic only)</td>
+                <td>PostgreSQL RDS instances</td>
+            </tr>
+            <tr>
+                <td>vpce-sg</td>
+                <td>TCP 443 from app-sg<br>TCP 443 from bastion-sg</td>
+                <td>None</td>
+                <td>VPC Endpoints (Systems Manager)</td>
+            </tr>
+        </table>
+    </section>
+
+    <section class="card">
+        <h2>Data Flow: Student Information Access</h2>
         <ol class="bullet-list">
-            <li>Authorized staff connect to the admin tier using secure channels (VPN / bastion).</li>
-            <li>Application services in the app tier process student-related workflows.</li>
-            <li>Application services read/write student records to the RDS PostgreSQL instance in the DB tier.</li>
-            <li>Reports or exports are written to an encrypted S3 bucket with strict IAM policies.</li>
-            <li>CloudTrail and VPC flow logs capture access and network activity for audit.</li>
+            <li><strong>Authentication:</strong> Authorized staff authenticate via AWS IAM Identity Center (SSO) with MFA enforcement</li>
+            <li><strong>Network Access:</strong> Users connect to bastion host in admin subnet through AWS Systems Manager Session Manager (no SSH keys required)</li>
+            <li><strong>Application Layer:</strong> Requests route through application tier where ECS Fargate containers validate permissions against IAM policies</li>
+            <li><strong>Database Query:</strong> Application services establish encrypted connections (SSL/TLS) to RDS PostgreSQL instances in isolated database subnets</li>
+            <li><strong>Data Retrieval:</strong> Student records are queried with row-level security enforcing column-level access restrictions based on user role</li>
+            <li><strong>Report Generation:</strong> Approved data exports are written to S3 bucket with KMS encryption, bucket policies preventing public access</li>
+            <li><strong>Audit Trail:</strong> All actions logged to CloudTrail with log file integrity validation; VPC Flow Logs capture network-level forensics</li>
+            <li><strong>Monitoring:</strong> CloudWatch metrics and alarms detect anomalies including failed login attempts, unusual data access patterns, and network intrusions</li>
         </ol>
+    </section>
+
+    <section class="grid two-columns">
+        <div class="card">
+            <h2>Encryption Implementation</h2>
+            <table class="summary-table">
+                <tr><th>Data Location</th><th>Encryption Method</th><th>Key Management</th></tr>
+                <tr><td>RDS Database</td><td>AES-256 at rest</td><td>KMS CMK with auto-rotation</td></tr>
+                <tr><td>RDS Snapshots</td><td>AES-256 at rest</td><td>Same KMS key as source DB</td></tr>
+                <tr><td>RDS Connections</td><td>TLS 1.2+ in transit</td><td>RDS-managed certificates</td></tr>
+                <tr><td>S3 Buckets</td><td>AES-256 (SSE-KMS)</td><td>KMS CMK with bucket policy enforcement</td></tr>
+                <tr><td>S3 Data Transfer</td><td>TLS 1.2+ in transit</td><td>SSL/TLS via S3 Gateway Endpoint</td></tr>
+                <tr><td>EBS Volumes</td><td>AES-256 at rest</td><td>KMS CMK with volume-level encryption</td></tr>
+                <tr><td>CloudTrail Logs</td><td>AES-256 (SSE-KMS)</td><td>Dedicated KMS key with restricted access</td></tr>
+            </table>
+        </div>
+        <div class="card">
+            <h2>High Availability Configuration</h2>
+            <ul class="bullet-list">
+                <li><strong>Multi-AZ RDS:</strong> Automatic failover to standby instance in separate AZ within 60 seconds of primary failure</li>
+                <li><strong>NAT Gateway Redundancy:</strong> One NAT Gateway per AZ ensuring continued outbound internet access during AZ outage</li>
+                <li><strong>Application Tier:</strong> ECS tasks distributed across both AZs with auto-scaling policies maintaining minimum 4 healthy tasks</li>
+                <li><strong>Load Balancing:</strong> Application Load Balancer health checks route traffic only to healthy targets across all AZs</li>
+                <li><strong>Automated Backups:</strong> RDS automated backups retained for 30 days with point-in-time recovery capability</li>
+                <li><strong>Cross-Region Replication:</strong> S3 cross-region replication enabled for critical student data exports to us-west-2</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Network Access Control Lists (NACLs)</h2>
+        <p>
+            NACLs provide an additional stateless firewall layer at the subnet boundary, complementing security groups 
+            with explicit allow and deny rules. These rules prevent unauthorized cross-tier communication even if 
+            security group configurations are misconfigured.
+        </p>
+        <table class="summary-table">
+            <tr><th>NACL Name</th><th>Associated Subnets</th><th>Key Inbound Rules</th><th>Key Outbound Rules</th></tr>
+            <tr>
+                <td>admin-nacl</td>
+                <td>Admin-AZ1a, Admin-AZ1b</td>
+                <td>Allow 443, 22 from corporate IPs<br>Allow 1024-65535 (ephemeral)</td>
+                <td>Allow all to RFC1918 ranges<br>Allow 443, 80 to 0.0.0.0/0</td>
+            </tr>
+            <tr>
+                <td>app-nacl</td>
+                <td>App-AZ1a, App-AZ1b</td>
+                <td>Allow 8443 from admin subnets<br>Allow 443 from admin subnets<br>Deny all from 0.0.0.0/0</td>
+                <td>Allow 5432 to DB subnets<br>Allow 443 to NAT Gateway IPs<br>Deny all others</td>
+            </tr>
+            <tr>
+                <td>db-nacl</td>
+                <td>DB-AZ1a, DB-AZ1b</td>
+                <td>Allow 5432 from app subnets only<br>Deny all others</td>
+                <td>Allow ephemeral to app subnets<br>Deny all others</td>
+            </tr>
+        </table>
+    </section>
+
+    <section class="card">
+        <h2>Compliance & Audit Readiness</h2>
+        <ul class="bullet-list">
+            <li><strong>FERPA Alignment:</strong> Network architecture implements required safeguards for educational records including access controls, audit trails, and encryption</li>
+            <li><strong>CloudTrail Configuration:</strong> Management events and data events logged with integrity validation enabled preventing tampering or deletion</li>
+            <li><strong>VPC Flow Logs:</strong> All accepted and rejected traffic captured at 1-minute intervals providing network forensics for security investigations</li>
+            <li><strong>S3 Access Logging:</strong> Every object access logged including requester identity, timestamp, and action performed</li>
+            <li><strong>RDS Audit Logging:</strong> PostgreSQL log_statement=all captures every SQL query with query parameters for audit review</li>
+            <li><strong>GuardDuty Integration:</strong> Threat detection analyzing VPC flow logs, CloudTrail events, and DNS logs for malicious activity</li>
+            <li><strong>Security Hub:</strong> Centralized security findings with automated compliance checks against CIS AWS Foundations Benchmark</li>
+            <li><strong>Config Rules:</strong> Continuous monitoring of VPC configurations detecting drift from approved architecture baseline</li>
+        </ul>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>Secure AWS VPC Architecture • Mohammad Khan • March 10, 2024</p>
+    <p>Enterprise VPC Architecture • Mohammad Khan • March 10, 2024</p>
 </footer>
 </body>
 </html>
