@@ -1,0 +1,8 @@
+Website Render Preview
+----------------------
+Secure AWS VPC & IAM Automation Project
+Author: Mohammad Khan
+
+Summary:
+This project contains a secure AWS VPC, encrypted database tier, and IAM automation.
+The website is a faculty-facing presentation of the results.
