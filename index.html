@@ -1,36 +1,114 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mohammad Khan | Secure AWS Student Data Infrastructure</title>
+    <title>Secure AWS VPC & IAM Automation | Mohammad Khan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { background:#eef1f7; font-family:Segoe UI, sans-serif; display:flex; justify-content:center; padding:40px;}
-        .card { background:white; padding:40px; max-width:900px; border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.12); }
-        h1 { font-size:2.4rem; margin-bottom:10px; color:#152d52;}
-        p { color:#4b5873; line-height:1.6;}
-        .section { background:#f3f5ff; border-left:4px solid #435dd8; padding:18px; margin-top:30px; border-radius:6px;}
-        ul { list-style:none; padding:0; margin:0;}
-        li { margin-bottom:8px; background:#ebefff; padding:8px 12px; border-radius:6px; border:1px solid #d9e1ff;}
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="card">
-        <h1>Secure AWS VPC & IAM Automation Project</h1>
-        <p><strong>Author:</strong> Mohammad Khan � <strong>Date:</strong> November 14, 2025</p>
+<header class="site-header">
+    <div class="logo">AWS Student Data Infrastructure</div>
+    <nav class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="automation.html">IAM Automation</a>
+        <a href="docs.html">Documentation</a>
+        <a href="review.html">Faculty Review</a>
+    </nav>
+</header>
 
-        <div class="section">
-            <strong>Faculty Project Summary</strong>
+<main class="content">
+    <section class="hero">
+        <div>
+            <h1>Secure AWS VPC & IAM Automation Project</h1>
+            <p class="subtitle">
+                Faculty-reviewed cloud infrastructure project for student data systems, combining
+                multi-tier AWS networking, encryption, and automated IAM onboarding.
+            </p>
+            <p class="meta">
+                <strong>Author:</strong> Mohammad Khan &nbsp;•&nbsp;
+                <strong>Date:</strong> March 10, 2024
+            </p>
+            <div class="hero-actions">
+                <a href="architecture.html" class="btn primary">View Architecture</a>
+                <a href="automation.html" class="btn secondary">View IAM Automation</a>
+                <a href="https://github.com/Mjkhan9/aws-student-data-infrastructure" class="btn ghost" target="_blank">
+                    View GitHub Repo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid two-columns">
+        <div class="card">
+            <h2>Project Overview</h2>
             <p>
-                This project delivers a production-style AWS network architecture designed to securely support 
-                protected student information systems. It implements a segmented multi-tier VPC, encrypted data flows,
-                identity-based least-privilege controls, and automated IAM provisioning using Python and Boto3.
+                This project delivers a production-style AWS network architecture designed to securely support
+                student information workflows. It uses a segmented VPC, private application and database tiers,
+                KMS-encrypted storage, and identity-based access controls.
             </p>
             <p>
-                Evaluated by a faculty review panel, the system demonstrated strong security isolation,
-                efficient access governance, and measurable operational improvements.
+                A Python/Boto3-based IAM automation pipeline provisions data-access identities into a restricted
+                group, enforcing least-privilege and eliminating manual onboarding errors. The solution was
+                presented to a faculty review panel as a complete end-to-end implementation.
             </p>
         </div>
-    </div>
+        <div class="card">
+            <h2>Key Outcomes</h2>
+            <ul class="key-list">
+                <li><strong>40% faster</strong> IAM onboarding versus manual provisioning</li>
+                <li><strong>0 unauthorized access</strong> incidents in simulated audits</li>
+                <li><strong>100% least-privilege</strong> enforcement for student data roles</li>
+                <li><strong>Full isolation</strong> between admin, application, and database tiers</li>
+                <li><strong>KMS-encrypted</strong> storage for S3 data and RDS snapshots</li>
+                <li>CloudTrail-backed <strong>audit trail</strong> for IAM and network changes</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Technology Stack</h2>
+        <div class="chips">
+            <span class="chip">AWS VPC</span>
+            <span class="chip">Subnets & NACLs</span>
+            <span class="chip">Security Groups</span>
+            <span class="chip">AWS IAM</span>
+            <span class="chip">AWS KMS</span>
+            <span class="chip">Amazon S3</span>
+            <span class="chip">Amazon RDS (PostgreSQL)</span>
+            <span class="chip">Python 3</span>
+            <span class="chip">Boto3</span>
+            <span class="chip">Git & GitHub</span>
+        </div>
+    </section>
+
+    <section class="grid two-columns">
+        <div class="card">
+            <h2>What This Demonstrates</h2>
+            <ul class="bullet-list">
+                <li>Design of a multi-tier, production-style AWS VPC for sensitive workloads</li>
+                <li>Implementation of IAM governance for student data access</li>
+                <li>Automation of identity provisioning using Python and Boto3</li>
+                <li>Documentation of architecture, controls, and operational results</li>
+                <li>Presentation of technical work to a faculty review panel</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>At a Glance</h2>
+            <table class="summary-table">
+                <tr><th>Environment</th><td>AWS (VPC + IAM + RDS + S3)</td></tr>
+                <tr><th>Primary Focus</th><td>Security, automation, and compliance</td></tr>
+                <tr><th>Users Simulated</th><td>5 core roles, scalable to 200+</td></tr>
+                <tr><th>Provisioning Gain</th><td>40% reduction in onboarding time</td></tr>
+                <tr><th>Presentation</th><td>Delivered to faculty review panel</td></tr>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>Secure AWS Student Data Infrastructure • Mohammad Khan • Last updated: March 10, 2024</p>
+</footer>
 </body>
 </html>

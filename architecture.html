@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AWS VPC Architecture | Mohammad Khan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="logo">AWS Student Data Infrastructure</div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html" class="active">Architecture</a>
+        <a href="automation.html">IAM Automation</a>
+        <a href="docs.html">Documentation</a>
+        <a href="review.html">Faculty Review</a>
+    </nav>
+</header>
+
+<main class="content">
+    <section class="card">
+        <h1>AWS VPC Architecture</h1>
+        <p>
+            The network design follows a three-tier VPC model with dedicated segments for administration,
+            application workloads, and the database layer. The goal is to protect student data while enabling
+            controlled access for authorized systems and users.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>VPC Layout</h2>
+        <p><strong>VPC CIDR:</strong> 172.32.0.0/16</p>
+        <pre class="diagram">
++-----------------------------------------------------------+
+|                    VPC: 172.32.0.0/16                     |
+|                                                           |
+|  +-----------------+   +-----------------+                |
+|  | Admin Subnet A  |   | Admin Subnet B  |                |
+|  | 172.32.1.0/24   |   | 172.32.2.0/24   |  Bastion,      |
+|  | Jump hosts,     |   | Mgmt tooling    |  monitoring    |
+|  +-----------------+   +-----------------+                |
+|                                                           |
+|  +-----------------+   +-----------------+                |
+|  | App Subnet A    |   | App Subnet B    |  ECS/EC2 app   |
+|  | 172.32.10.0/24  |   | 172.32.11.0/24  |  layer         |
+|  +-----------------+   +-----------------+                |
+|                                                           |
+|  +-----------------+   +-----------------+                |
+|  | DB Subnet A     |   | DB Subnet B     |  RDS (Postgres)|
+|  | 172.32.20.0/24  |   | 172.32.21.0/24  |  fully private |
+|  +-----------------+   +-----------------+                |
++-----------------------------------------------------------+
+        </pre>
+    </section>
+
+    <section class="grid two-columns">
+        <div class="card">
+            <h2>Subnet Design</h2>
+            <table class="summary-table">
+                <tr><th>Tier</th><th>Subnet</th><th>CIDR</th><th>Purpose</th></tr>
+                <tr><td>Admin</td><td>Admin Subnet A</td><td>172.32.1.0/24</td><td>Jump host, admin access</td></tr>
+                <tr><td>Admin</td><td>Admin Subnet B</td><td>172.32.2.0/24</td><td>Monitoring, tooling</td></tr>
+                <tr><td>App</td><td>App Subnet A</td><td>172.32.10.0/24</td><td>Core application services</td></tr>
+                <tr><td>App</td><td>App Subnet B</td><td>172.32.11.0/24</td><td>Horizontally scaled services</td></tr>
+                <tr><td>DB</td><td>DB Subnet A</td><td>172.32.20.0/24</td><td>Primary RDS instance</td></tr>
+                <tr><td>DB</td><td>DB Subnet B</td><td>172.32.21.0/24</td><td>Standby / multi-AZ</td></tr>
+            </table>
+        </div>
+        <div class="card">
+            <h2>Security Controls</h2>
+            <ul class="bullet-list">
+                <li>Only the admin tier has controlled ingress from the internet (via bastion or VPN).</li>
+                <li>Application tier cannot be reached directly from the internet or student devices.</li>
+                <li>Database tier is fully private; only app-tier security groups can reach RDS ports.</li>
+                <li>Network ACLs restrict lateral movement between subnets.</li>
+                <li>Security groups favor SG-to-SG referencing over IP-based rules.</li>
+                <li>All data at rest in RDS and S3 is encrypted via AWS KMS.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Data Flow for Student Information</h2>
+        <ol class="bullet-list">
+            <li>Authorized staff connect to the admin tier using secure channels (VPN / bastion).</li>
+            <li>Application services in the app tier process student-related workflows.</li>
+            <li>Application services read/write student records to the RDS PostgreSQL instance in the DB tier.</li>
+            <li>Reports or exports are written to an encrypted S3 bucket with strict IAM policies.</li>
+            <li>CloudTrail and VPC flow logs capture access and network activity for audit.</li>
+        </ol>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>Secure AWS VPC Architecture • Mohammad Khan • March 10, 2024</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Technical Documentation | Mohammad Khan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="logo">AWS Student Data Infrastructure</div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="automation.html">IAM Automation</a>
+        <a href="docs.html" class="active">Documentation</a>
+        <a href="review.html">Faculty Review</a>
+    </nav>
+</header>
+
+<main class="content">
+    <section class="card">
+        <h1>Technical Documentation</h1>
+        <p>
+            This page summarizes the AWS resources, IAM configuration, and project structure used to implement
+            the secure student data infrastructure and automation pipeline.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>AWS Resources Implemented</h2>
+        <table class="summary-table">
+            <tr><th>Component</th><th>Example Name</th><th>Purpose</th></tr>
+            <tr><td>VPC</td><td>student-data-vpc</td><td>Isolated network for all workloads</td></tr>
+            <tr><td>Subnets</td><td>student-admin-a/b, student-app-a/b, student-db-a/b</td><td>Segmented tiers by role</td></tr>
+            <tr><td>Security Groups</td><td>admin-sg, app-sg, db-sg</td><td>Control east-west and north-south traffic</td></tr>
+            <tr><td>NACLs</td><td>student-admin-nacl, student-app-nacl, student-db-nacl</td><td>Additional subnet-level controls</td></tr>
+            <tr><td>RDS</td><td>student-records-rds</td><td>PostgreSQL instance for student data</td></tr>
+            <tr><td>S3</td><td>student-data-reports-bucket</td><td>Encrypted storage for curated exports</td></tr>
+            <tr><td>KMS</td><td>alias/student-data-key</td><td>Customer-managed key for encryption</td></tr>
+            <tr><td>IAM Group</td><td>StudentDataRestrictedAccess</td><td>Group for controlled data readers</td></tr>
+        </table>
+    </section>
+
+    <section class="grid two-columns">
+        <div class="card">
+            <h2>Repository Structure</h2>
+            <pre class="code-block">
+aws-student-data-infrastructure/
+├─ index.html                 # Project landing page
+├─ architecture.html          # VPC and security architecture
+├─ automation.html            # IAM automation overview
+├─ docs.html                  # Technical documentation (this page)
+├─ review.html                # Faculty review findings
+├─ style.css                  # Shared styling
+├─ iam_provisioner.py         # Python IAM automation script
+├─ architecture_summary.md    # Written architecture summary
+├─ execution_output.txt       # Captured script output
+├─ faculty_review_report.md   # Faculty review narrative
+├─ website_output_preview.txt # Text preview of landing page
+            </pre>
+        </div>
+        <div class="card">
+            <h2>Running the Automation Script</h2>
+            <ol class="bullet-list">
+                <li>Install Python 3.x on your local machine.</li>
+                <li>Optionally, install Boto3 with <code>pip install boto3</code>.</li>
+                <li>Clone or download this repository.</li>
+                <li>Open a terminal in the project directory.</li>
+                <li>Run <code>python iam_provisioner.py</code>.</li>
+            </ol>
+            <p class="note">
+                By default, the script runs in a safe demo mode that does not require AWS credentials.
+                In a live environment, demo mode can be disabled and IAM changes will be applied directly
+                to the configured AWS account.
+            </p>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Security & Compliance Considerations</h2>
+        <ul class="bullet-list">
+            <li>Principle of least privilege applied to all IAM roles and groups.</li>
+            <li>Student data isolated to a private RDS subnet with no direct internet exposure.</li>
+            <li>All at-rest data protected using AWS KMS-managed or customer-managed keys.</li>
+            <li>CloudTrail enabled to capture IAM, RDS, and VPC configuration events.</li>
+            <li>Network-level separation between admin tools and application/data tiers.</li>
+        </ul>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>Technical Documentation • Mohammad Khan • March 10, 2024</p>
+</footer>
+</body>
+</html>

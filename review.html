@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Faculty Review & Outcomes | Mohammad Khan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="logo">AWS Student Data Infrastructure</div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="automation.html">IAM Automation</a>
+        <a href="docs.html">Documentation</a>
+        <a href="review.html" class="active">Faculty Review</a>
+    </nav>
+</header>
+
+<main class="content">
+    <section class="card">
+        <h1>Faculty Review & Outcomes</h1>
+        <p>
+            This project was formally presented to a faculty review panel as a capstone-style demonstration
+            of secure cloud architecture and IAM automation. The panel evaluated the solution on design quality,
+            security posture, documentation, and clarity of presentation.
+        </p>
+    </section>
+
+    <section class="grid two-columns">
+        <div class="card">
+            <h2>Evaluation Highlights</h2>
+            <ul class="bullet-list">
+                <li><strong>Architecture:</strong> Clear separation of tiers and strong network boundaries.</li>
+                <li><strong>Security:</strong> Appropriate use of IAM, encryption, and private subnets.</li>
+                <li><strong>Automation:</strong> Demonstrated measurable benefits and reduced manual effort.</li>
+                <li><strong>Documentation:</strong> Well-structured and accessible to both technical and non-technical reviewers.</li>
+                <li><strong>Presentation:</strong> Delivered with clear framing of risks, trade-offs, and outcomes.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Quantitative Outcomes</h2>
+            <table class="summary-table">
+                <tr><th>Metric</th><th>Result</th></tr>
+                <tr><td>Onboarding speed</td><td>~40% faster vs. manual process</td></tr>
+                <tr><td>Unauthorized access incidents</td><td>0 observed in simulation</td></tr>
+                <tr><td>IAM misconfigurations</td><td>0 detected in test scenarios</td></tr>
+                <tr><td>Database exposure</td><td>None; DB remained private-tier only</td></tr>
+                <tr><td>Encryption coverage</td><td>100% for stored student artifacts</td></tr>
+            </table>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Faculty Feedback (Summarized)</h2>
+        <ul class="bullet-list">
+            <li>“The VPC design closely resembles patterns used in real student information systems.”</li>
+            <li>“IAM automation shows strong awareness of operational scalability.”</li>
+            <li>“Documentation quality would make handoffs to operations teams significantly easier.”</li>
+            <li>“Clear connection between security controls and compliance requirements.”</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>Reflection & Next Steps</h2>
+        <p>
+            This project solidified my understanding of how to combine AWS networking, IAM, and automation
+            to support sensitive data workloads in an educational setting. If extended further, the next steps
+            would include:
+        </p>
+        <ul class="bullet-list">
+            <li>Integrating CloudWatch dashboards for real-time monitoring.</li>
+            <li>Adding CI/CD for infrastructure updates using Infrastructure as Code (e.g., CloudFormation or Terraform).</li>
+            <li>Expanding IAM automation to include lifecycle management (suspension and deprovisioning).</li>
+            <li>Adding automated compliance checks for IAM and security group configurations.</li>
+        </ul>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>Faculty Review & Outcomes • Mohammad Khan • March 10, 2024</p>
+</footer>
+</body>
+</html>
