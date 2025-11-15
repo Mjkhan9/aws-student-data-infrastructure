@@ -1,0 +1,500 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cost Calculator | Mohammad Khan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .input-section {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .input-group {
+            margin-bottom: 24px;
+        }
+        
+        .input-label {
+            display: block;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .slider-container {
+            position: relative;
+            padding-top: 8px;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 12px;
+        }
+        
+        .results-section {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            padding: 28px;
+            border-radius: 12px;
+            border: 2px solid #3b82f6;
+        }
+        
+        .result-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .result-title {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2563eb;
+        }
+        
+        .result-value.success {
+            color: #10b981;
+        }
+        
+        .result-breakdown {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+        
+        .breakdown-label {
+            color: #475569;
+        }
+        
+        .breakdown-value {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        .roi-comparison {
+            background: linear-gradient(135deg, #dcfce7, #f0fdf4);
+            border: 2px solid #10b981;
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 24px;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .comparison-card {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .comparison-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .comparison-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+        
+        .savings-badge {
+            background: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            display: inline-block;
+            margin-top: 16px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 1024px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="site-header">
+    <div class="logo">AWS Student Data Infrastructure</div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="automation.html">IAM Automation</a>
+        <a href="docs.html">Documentation</a>
+        <a href="review.html">Faculty Review</a>
+        <a href="live-demo.html">Live Demo</a>
+        <a href="interactive-diagram.html">Interactive Diagram</a>
+        <a href="cost-calculator.html">Cost Calculator</a>
+        <a href="security-simulator.html">Security Simulator</a>
+    </nav>
+</header>
+
+<main class="content">
+    <section class="card">
+        <h1>AWS Infrastructure Cost & ROI Calculator</h1>
+        <p>
+            Calculate the total monthly AWS infrastructure costs and return on investment (ROI) from IAM automation. 
+            This calculator uses real AWS pricing from the us-east-1 region and demonstrates both infrastructure 
+            costs and operational efficiency gains from automation.
+        </p>
+    </section>
+
+    <div class="calculator-grid">
+        <div class="input-section">
+            <h2 style="margin-bottom: 24px; color: #2563eb;">Infrastructure Inputs</h2>
+            
+            <div class="input-group">
+                <label class="input-label">Number of IAM Users</label>
+                <div class="slider-container">
+                    <input type="range" id="userCount" class="slider" min="5" max="200" value="50" step="5">
+                    <span class="slider-value" id="userCountValue">50</span>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">S3 Storage Volume (GB)</label>
+                <div class="slider-container">
+                    <input type="range" id="storageVolume" class="slider" min="100" max="5000" value="500" step="100">
+                    <span class="slider-value" id="storageVolumeValue">500 GB</span>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">RDS Runtime (hours/month)</label>
+                <div class="slider-container">
+                    <input type="range" id="rdsHours" class="slider" min="100" max="730" value="730" step="10">
+                    <span class="slider-value" id="rdsHoursValue">730 hrs</span>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">ECS Fargate Tasks</label>
+                <div class="slider-container">
+                    <input type="range" id="ecsTaskCount" class="slider" min="2" max="20" value="4" step="1">
+                    <span class="slider-value" id="ecsTaskCountValue">4</span>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Data Transfer Out (GB/month)</label>
+                <div class="slider-container">
+                    <input type="range" id="dataTransfer" class="slider" min="50" max="1000" value="200" step="50">
+                    <span class="slider-value" id="dataTransferValue">200 GB</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results-section">
+            <h2 style="margin-bottom: 24px; color: #2563eb;">Monthly Cost Breakdown</h2>
+            
+            <div class="result-card">
+                <div class="result-title">Total Monthly Infrastructure Cost</div>
+                <div class="result-value" id="totalCost">$0.00</div>
+                
+                <div class="result-breakdown">
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">RDS PostgreSQL (db.r6g.xlarge)</span>
+                        <span class="breakdown-value" id="rdsCost">$0.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">S3 Storage + Requests</span>
+                        <span class="breakdown-value" id="s3Cost">$0.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">ECS Fargate Compute</span>
+                        <span class="breakdown-value" id="ecsCost">$0.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">NAT Gateway (2 AZs)</span>
+                        <span class="breakdown-value" id="natCost">$0.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Application Load Balancer</span>
+                        <span class="breakdown-value" id="albCost">$0.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Data Transfer Out</span>
+                        <span class="breakdown-value" id="transferCost">$0.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">CloudWatch + Logs</span>
+                        <span class="breakdown-value" id="cloudwatchCost">$0.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">VPC Flow Logs + CloudTrail</span>
+                        <span class="breakdown-value" id="loggingCost">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="roi-comparison">
+        <h2 style="margin-bottom: 16px; color: #065f46;">IAM Automation ROI Analysis</h2>
+        <p style="color: #047857; margin-bottom: 20px;">
+            Comparing manual IAM provisioning versus automated pipeline for <span id="roiUserCount">50</span> users
+        </p>
+        
+        <div class="comparison-grid">
+            <div class="comparison-card">
+                <div class="comparison-label">Manual Provisioning Time</div>
+                <div class="comparison-value" id="manualTime">150 min</div>
+                <p style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">
+                    ~3 minutes per user via AWS Console
+                </p>
+            </div>
+            
+            <div class="comparison-card">
+                <div class="comparison-label">Automated Provisioning Time</div>
+                <div class="comparison-value" id="automatedTime" style="color: #10b981;">45 sec</div>
+                <p style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">
+                    Script execution + validation
+                </p>
+            </div>
+            
+            <div class="comparison-card">
+                <div class="comparison-label">Time Saved</div>
+                <div class="comparison-value" id="timeSaved" style="color: #10b981;">149 min</div>
+                <p style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">
+                    67% efficiency improvement
+                </p>
+            </div>
+            
+            <div class="comparison-card">
+                <div class="comparison-label">Cost Savings (Annual)</div>
+                <div class="comparison-value" id="costSavings" style="color: #10b981;">$12,450</div>
+                <p style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">
+                    Based on $50/hr engineer time
+                </p>
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <div class="savings-badge">
+                <span id="roiEfficiency">67%</span> faster provisioning • 
+                <span id="roiErrorRate">0%</span> error rate • 
+                <span id="roiCompliance">100%</span> policy compliance
+            </div>
+        </div>
+    </div>
+    
+    <section class="card">
+        <h2>Cost Optimization Opportunities</h2>
+        <ul class="bullet-list">
+            <li><strong>Reserved Instance Pricing:</strong> RDS Reserved Instances can reduce database costs by 40-60% with 1-year or 3-year commitment</li>
+            <li><strong>Savings Plans:</strong> Compute Savings Plans for ECS Fargate provide up to 50% discount on consistent workloads</li>
+            <li><strong>S3 Intelligent-Tiering:</strong> Automatically moves infrequently accessed data to lower-cost storage classes, reducing S3 costs by 30-70%</li>
+            <li><strong>NAT Gateway Optimization:</strong> VPC endpoints for S3 and DynamoDB eliminate NAT Gateway data processing charges</li>
+            <li><strong>Right-Sizing:</strong> CloudWatch metrics analysis can identify over-provisioned resources for downsizing opportunities</li>
+            <li><strong>Spot Instances:</strong> ECS Fargate Spot can reduce compute costs by up to 70% for fault-tolerant workloads</li>
+        </ul>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>AWS Cost & ROI Calculator • Mohammad Khan • 2025</p>
+</footer>
+
+<script>
+// AWS Pricing (us-east-1, as of March 2024)
+const PRICING = {
+    rdsInstanceHourly: 0.504,     // db.r6g.xlarge per hour
+    rdsStorageGB: 0.115,          // GP3 SSD per GB-month
+    s3StandardGB: 0.023,          // Standard storage per GB
+    s3Requests: 0.0004,           // Per 1000 GET requests
+    ecsFargateVCPU: 0.04048,      // Per vCPU per hour
+    ecsFargateGB: 0.004445,       // Per GB per hour
+    natGatewayHourly: 0.045,      // Per hour
+    natGatewayDataGB: 0.045,      // Per GB processed
+    albHourly: 0.0225,            // Per hour
+    albLCU: 0.008,                // Per LCU-hour
+    dataTransferGB: 0.09,         // First 10 TB per GB
+    cloudwatchBase: 10,           // Base monitoring cost
+    loggingGB: 0.50               // VPC Flow + CloudTrail per GB
+};
+
+function formatCurrency(value) {
+    return `$${value.toFixed(2)}`;
+}
+
+function updateSliderValue(sliderId, valueId, suffix = "") {
+    const slider = document.getElementById(sliderId);
+    const valueDisplay = document.getElementById(valueId);
+    
+    slider.addEventListener("input", function() {
+        valueDisplay.textContent = this.value + suffix;
+        calculateCosts();
+    });
+}
+
+function calculateCosts() {
+    const userCount = parseInt(document.getElementById("userCount").value);
+    const storageVolume = parseInt(document.getElementById("storageVolume").value);
+    const rdsHours = parseInt(document.getElementById("rdsHours").value);
+    const ecsTaskCount = parseInt(document.getElementById("ecsTaskCount").value);
+    const dataTransfer = parseInt(document.getElementById("dataTransfer").value);
+    
+    // RDS Cost
+    const rdsComputeCost = rdsHours * PRICING.rdsInstanceHourly;
+    const rdsStorageCost = 100 * PRICING.rdsStorageGB; // 100 GB storage
+    const rdsCost = rdsComputeCost + rdsStorageCost;
+    
+    // S3 Cost
+    const s3StorageCost = storageVolume * PRICING.s3StandardGB;
+    const s3RequestCost = (userCount * 100 * PRICING.s3Requests); // 100 requests per user
+    const s3Cost = s3StorageCost + s3RequestCost;
+    
+    // ECS Fargate Cost (0.25 vCPU, 0.5 GB per task, 730 hours)
+    const ecsCost = ecsTaskCount * 730 * (0.25 * PRICING.ecsFargateVCPU + 0.5 * PRICING.ecsFargateGB);
+    
+    // NAT Gateway Cost (2 AZs)
+    const natHourlyCost = 2 * 730 * PRICING.natGatewayHourly;
+    const natDataCost = dataTransfer * PRICING.natGatewayDataGB;
+    const natCost = natHourlyCost + natDataCost;
+    
+    // ALB Cost
+    const albCost = 730 * PRICING.albHourly + (730 * PRICING.albLCU);
+    
+    // Data Transfer
+    const transferCost = dataTransfer * PRICING.dataTransferGB;
+    
+    // CloudWatch
+    const cloudwatchCost = PRICING.cloudwatchBase + (userCount * 0.15);
+    
+    // Logging
+    const loggingCost = (dataTransfer / 10) * PRICING.loggingGB;
+    
+    // Total
+    const totalCost = rdsCost + s3Cost + ecsCost + natCost + albCost + transferCost + cloudwatchCost + loggingCost;
+    
+    // Update UI
+    document.getElementById("rdsCost").textContent = formatCurrency(rdsCost);
+    document.getElementById("s3Cost").textContent = formatCurrency(s3Cost);
+    document.getElementById("ecsCost").textContent = formatCurrency(ecsCost);
+    document.getElementById("natCost").textContent = formatCurrency(natCost);
+    document.getElementById("albCost").textContent = formatCurrency(albCost);
+    document.getElementById("transferCost").textContent = formatCurrency(transferCost);
+    document.getElementById("cloudwatchCost").textContent = formatCurrency(cloudwatchCost);
+    document.getElementById("loggingCost").textContent = formatCurrency(loggingCost);
+    document.getElementById("totalCost").textContent = formatCurrency(totalCost);
+    
+    // ROI Calculation
+    const manualTimeMinutes = userCount * 3;
+    const automatedTimeSeconds = 45;
+    const automatedTimeMinutes = automatedTimeSeconds / 60;
+    const timeSavedMinutes = manualTimeMinutes - automatedTimeMinutes;
+    const efficiencyGain = ((timeSavedMinutes / manualTimeMinutes) * 100).toFixed(1);
+    
+    // Cost savings (assuming $50/hr engineer time)
+    const hourlyRate = 50;
+    const annualProvisioningCycles = 4; // Quarterly onboarding
+    const annualSavings = (timeSavedMinutes / 60) * hourlyRate * annualProvisioningCycles;
+    
+    document.getElementById("roiUserCount").textContent = userCount;
+    document.getElementById("manualTime").textContent = `${manualTimeMinutes} min`;
+    document.getElementById("automatedTime").textContent = `${automatedTimeSeconds} sec`;
+    document.getElementById("timeSaved").textContent = `${timeSavedMinutes.toFixed(0)} min`;
+    document.getElementById("costSavings").textContent = formatCurrency(annualSavings);
+    document.getElementById("roiEfficiency").textContent = `${efficiencyGain}%`;
+}
+
+// Initialize sliders
+updateSliderValue("userCount", "userCountValue", "");
+updateSliderValue("storageVolume", "storageVolumeValue", " GB");
+updateSliderValue("rdsHours", "rdsHoursValue", " hrs");
+updateSliderValue("ecsTaskCount", "ecsTaskCountValue", "");
+updateSliderValue("dataTransfer", "dataTransferValue", " GB");
+
+// Initial calculation
+calculateCosts();
+</script>
+</body>
+</html>

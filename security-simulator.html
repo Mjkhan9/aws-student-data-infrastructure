@@ -1,0 +1,562 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Security Attack Simulator | Mohammad Khan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .simulator-container {
+            background: #0f172a;
+            padding: 32px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .attack-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .attack-button {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            border: 2px solid #7f1d1d;
+            padding: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-family: inherit;
+        }
+        
+        .attack-button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(220, 38, 38, 0.4);
+        }
+        
+        .attack-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .attack-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        
+        .attack-desc {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
+        .visualization {
+            position: relative;
+            height: 400px;
+            background: #1e293b;
+            border-radius: 8px;
+            border: 2px solid #334155;
+        }
+        
+        .network-layer {
+            position: absolute;
+            padding: 16px;
+            border-radius: 6px;
+            border: 2px solid;
+            transition: all 0.5s ease;
+        }
+        
+        .layer-internet {
+            top: 20px;
+            left: 20px;
+            width: 200px;
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+        
+        .layer-admin {
+            top: 100px;
+            left: 20px;
+            width: 200px;
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+        
+        .layer-app {
+            top: 180px;
+            left: 20px;
+            width: 200px;
+            background: #e0e7ff;
+            border-color: #6366f1;
+        }
+        
+        .layer-db {
+            top: 260px;
+            left: 20px;
+            width: 200px;
+            background: #fce7f3;
+            border-color: #ec4899;
+        }
+        
+        .attacker {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #dc2626;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.6);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .attacker.active {
+            opacity: 1;
+        }
+        
+        .defense-layer {
+            position: absolute;
+            background: rgba(16, 185, 129, 0.2);
+            border: 3px solid #10b981;
+            border-radius: 8px;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        
+        .defense-layer.active {
+            opacity: 1;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+        }
+        
+        .block-indicator {
+            position: absolute;
+            background: #dc2626;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .block-indicator.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .log-panel {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 4px;
+            font-family: "Courier New", monospace;
+            font-size: 0.85rem;
+            opacity: 0;
+            animation: logFadeIn 0.3s forwards;
+        }
+        
+        @keyframes logFadeIn {
+            to { opacity: 1; }
+        }
+        
+        .log-info {
+            background: #1e40af;
+            color: #dbeafe;
+        }
+        
+        .log-warning {
+            background: #f59e0b;
+            color: #fef3c7;
+        }
+        
+        .log-error {
+            background: #dc2626;
+            color: #fee2e2;
+        }
+        
+        .log-success {
+            background: #10b981;
+            color: #d1fae5;
+        }
+        
+        .defense-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            border: 2px solid #10b981;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #065f46;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: #047857;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .defense-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .attack-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="site-header">
+    <div class="logo">AWS Student Data Infrastructure</div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="automation.html">IAM Automation</a>
+        <a href="docs.html">Documentation</a>
+        <a href="review.html">Faculty Review</a>
+        <a href="live-demo.html">Live Demo</a>
+        <a href="interactive-diagram.html">Interactive Diagram</a>
+        <a href="cost-calculator.html">Cost Calculator</a>
+        <a href="security-simulator.html">Security Simulator</a>
+    </nav>
+</header>
+
+<main class="content">
+    <section class="card">
+        <h1>Security Attack Simulator</h1>
+        <p>
+            This interactive simulator demonstrates how the multi-layer security architecture blocks common attack 
+            vectors. Select an attack scenario below to watch defense mechanisms activate in real-time, showing 
+            security groups, NACLs, IAM policies, and encryption working together to protect student data.
+        </p>
+    </section>
+
+    <div class="defense-stats">
+        <div class="stat-card">
+            <div class="stat-value" id="attacksBlocked">0</div>
+            <div class="stat-label">Attacks Blocked</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="layersActive">0</div>
+            <div class="stat-label">Defense Layers</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Success Rate</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Breaches</div>
+        </div>
+    </div>
+
+    <div class="attack-buttons">
+        <button class="attack-button" onclick="simulateAttack('direct-db')">
+            <div class="attack-title">🎯 Direct Database Access</div>
+            <div class="attack-desc">Attempt to connect to RDS from internet</div>
+        </button>
+        
+        <button class="attack-button" onclick="simulateAttack('lateral-movement')">
+            <div class="attack-title">↔️ Lateral Movement</div>
+            <div class="attack-desc">Try to move from app tier to admin tier</div>
+        </button>
+        
+        <button class="attack-button" onclick="simulateAttack('privilege-escalation')">
+            <div class="attack-title">⬆️ IAM Privilege Escalation</div>
+            <div class="attack-desc">Attempt to attach admin policy to user</div>
+        </button>
+        
+        <button class="attack-button" onclick="simulateAttack('s3-public')">
+            <div class="attack-title">🌐 S3 Public Exposure</div>
+            <div class="attack-desc">Try to make bucket public-read</div>
+        </button>
+        
+        <button class="attack-button" onclick="simulateAttack('unencrypted-data')">
+            <div class="attack-title">🔓 Unencrypted Data Access</div>
+            <div class="attack-desc">Access data without encryption key</div>
+        </button>
+        
+        <button class="attack-button" onclick="simulateAttack('sg-misconfiguration')">
+            <div class="attack-title">🔥 Security Group Bypass</div>
+            <div class="attack-desc">Exploit 0.0.0.0/0 rules</div>
+        </button>
+    </div>
+
+    <div class="simulator-container">
+        <div class="visualization" id="visualization">
+            <div class="network-layer layer-internet">
+                <strong>Internet</strong><br>
+                <small>Untrusted Network</small>
+            </div>
+            <div class="network-layer layer-admin">
+                <strong>Admin Tier</strong><br>
+                <small>172.32.1.0/24</small>
+            </div>
+            <div class="network-layer layer-app">
+                <strong>App Tier</strong><br>
+                <small>172.32.10.0/24</small>
+            </div>
+            <div class="network-layer layer-db">
+                <strong>DB Tier</strong><br>
+                <small>172.32.20.0/24</small>
+            </div>
+            
+            <div class="attacker" id="attacker">⚠️</div>
+            <div class="block-indicator" id="blockIndicator">❌ BLOCKED</div>
+        </div>
+    </div>
+
+    <div class="log-panel" id="logPanel">
+        <div style="color: #94a3b8; font-weight: 600; margin-bottom: 12px;">Security Event Log</div>
+        <div id="logEntries"></div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>Security Attack Simulator • Mohammad Khan • 2025</p>
+</footer>
+
+<script>
+let attackCount = 0;
+let isSimulating = false;
+
+const attackScenarios = {
+    "direct-db": {
+        title: "Direct Database Access from Internet",
+        steps: [
+            { type: "info", message: "🎯 Attack: External IP attempting connection to RDS PostgreSQL port 5432" },
+            { type: "warning", message: "⚠️ Source: 203.0.113.45 → Target: 172.32.20.15:5432" },
+            { type: "info", message: "🔍 Checking route tables..." },
+            { type: "success", message: "✓ Database subnet has NO internet gateway route" },
+            { type: "success", message: "✓ Database instances have NO public IP addresses" },
+            { type: "info", message: "🔍 Checking security group db-sg..." },
+            { type: "success", message: "✓ Security group only allows TCP 5432 from app-sg (not IP ranges)" },
+            { type: "info", message: "🔍 Checking Network ACL..." },
+            { type: "success", message: "✓ NACL denies all inbound traffic except from app subnet CIDR" },
+            { type: "error", message: "❌ ATTACK BLOCKED: No route exists from internet to database tier" }
+        ],
+        defensePositions: [
+            { left: 240, top: 280, width: 180, height: 80 }
+        ]
+    },
+    "lateral-movement": {
+        title: "Lateral Movement: App Tier → Admin Tier",
+        steps: [
+            { type: "info", message: "↔️ Attack: Compromised app server attempting SSH to admin tier" },
+            { type: "warning", message: "⚠️ Source: 172.32.10.42 → Target: 172.32.1.25:22" },
+            { type: "info", message: "🔍 Checking security groups..." },
+            { type: "success", message: "✓ bastion-sg ingress: Only allows corporate IPs, not app tier" },
+            { type: "info", message: "🔍 Checking Network ACL rules..." },
+            { type: "success", message: "✓ admin-nacl: Explicit deny for traffic from app subnets" },
+            { type: "info", message: "🔍 Checking route tables..." },
+            { type: "success", message: "✓ No routes exist between app and admin tiers" },
+            { type: "error", message: "❌ ATTACK BLOCKED: Security groups prevent cross-tier access" }
+        ],
+        defensePositions: [
+            { left: 240, top: 110, width: 180, height: 70 }
+        ]
+    },
+    "privilege-escalation": {
+        title: "IAM Privilege Escalation Attempt",
+        steps: [
+            { type: "info", message: "⬆️ Attack: User attempting to attach AdministratorAccess policy" },
+            { type: "warning", message: "⚠️ Action: iam:AttachUserPolicy → Policy: AdministratorAccess" },
+            { type: "info", message: "🔍 Checking IAM permissions..." },
+            { type: "success", message: "✓ User is in StudentDataRestrictedAccess group (read-only)" },
+            { type: "info", message: "🔍 Evaluating IAM policies..." },
+            { type: "success", message: "✓ User has NO iam:AttachUserPolicy permission" },
+            { type: "success", message: "✓ User has NO iam:AttachGroupPolicy permission" },
+            { type: "info", message: "🔍 Checking MFA enforcement..." },
+            { type: "success", message: "✓ Sensitive actions require MFA (not provided)" },
+            { type: "info", message: "📝 CloudTrail logging unauthorized action attempt" },
+            { type: "error", message: "❌ ATTACK BLOCKED: AccessDenied - Insufficient IAM permissions" }
+        ],
+        defensePositions: []
+    },
+    "s3-public": {
+        title: "S3 Bucket Public Exposure Attempt",
+        steps: [
+            { type: "info", message: "🌐 Attack: Attempting to set s3:PutBucketAcl to public-read" },
+            { type: "warning", message: "⚠️ Target: student-data-reports-production" },
+            { type: "info", message: "🔍 Checking S3 Block Public Access..." },
+            { type: "success", message: "✓ BlockPublicAcls: ENABLED (account-level)" },
+            { type: "success", message: "✓ BlockPublicPolicy: ENABLED (bucket-level)" },
+            { type: "success", message: "✓ IgnorePublicAcls: ENABLED" },
+            { type: "success", message: "✓ RestrictPublicBuckets: ENABLED" },
+            { type: "info", message: "🔍 Checking bucket policy..." },
+            { type: "success", message: "✓ Explicit deny for public access in bucket policy" },
+            { type: "info", message: "📝 S3 access logging recording attempt" },
+            { type: "error", message: "❌ ATTACK BLOCKED: S3 Block Public Access prevents exposure" }
+        ],
+        defensePositions: [
+            { left: 660, top: 360, width: 460, height: 100 }
+        ]
+    },
+    "unencrypted-data": {
+        title: "Unencrypted Data Access Attempt",
+        steps: [
+            { type: "info", message: "🔓 Attack: Attempting to read RDS snapshot without decryption key" },
+            { type: "warning", message: "⚠️ Snapshot: student-records-snapshot-2025-11-15" },
+            { type: "info", message: "🔍 Checking encryption status..." },
+            { type: "success", message: "✓ Snapshot encrypted with KMS key: alias/student-data-key" },
+            { type: "info", message: "🔍 Checking KMS key permissions..." },
+            { type: "success", message: "✓ Key policy: Only specific IAM roles can decrypt" },
+            { type: "success", message: "✓ Attacker role: NOT in key policy grant list" },
+            { type: "info", message: "🔍 Attempting kms:Decrypt operation..." },
+            { type: "success", message: "✓ MFA required for decrypt operations (not provided)" },
+            { type: "info", message: "📝 CloudTrail logging unauthorized decrypt attempt" },
+            { type: "error", message: "❌ ATTACK BLOCKED: KMS denies decrypt without proper credentials" }
+        ],
+        defensePositions: [
+            { left: 910, top: 140, width: 210, height: 160 }
+        ]
+    },
+    "sg-misconfiguration": {
+        title: "Security Group Misconfiguration Exploit",
+        steps: [
+            { type: "info", message: "🔥 Attack: Searching for 0.0.0.0/0 security group rules" },
+            { type: "warning", message: "⚠️ Target: Any security group with overly permissive rules" },
+            { type: "info", message: "🔍 Scanning all security groups..." },
+            { type: "success", message: "✓ Admin tier SGs: Only specific corporate IP ranges allowed" },
+            { type: "success", message: "✓ App tier SGs: Use security group referencing (not IPs)" },
+            { type: "success", message: "✓ DB tier SGs: Only app-sg can reach port 5432" },
+            { type: "info", message: "🔍 Checking for 0.0.0.0/0 rules..." },
+            { type: "success", message: "✓ Zero instances of 0.0.0.0/0 on ingress rules" },
+            { type: "success", message: "✓ ALB-sg allows 443 from internet (by design, protected by WAF)" },
+            { type: "info", message: "🔍 AWS Config continuous monitoring active" },
+            { type: "error", message: "❌ ATTACK BLOCKED: No exploitable security group misconfigurations" }
+        ],
+        defensePositions: [
+            { left: 240, top: 110, width: 180, height: 230 }
+        ]
+    }
+};
+
+function addLogEntry(type, message) {
+    const logEntries = document.getElementById("logEntries");
+    const entry = document.createElement("div");
+    entry.className = `log-entry log-${type}`;
+    entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+    logEntries.appendChild(entry);
+    logEntries.scrollTop = logEntries.scrollHeight;
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function simulateAttack(attackType) {
+    if (isSimulating) return;
+    isSimulating = true;
+    
+    // Disable all buttons
+    document.querySelectorAll(".attack-button").forEach(btn => btn.disabled = true);
+    
+    const scenario = attackScenarios[attackType];
+    const attacker = document.getElementById("attacker");
+    const blockIndicator = document.getElementById("blockIndicator");
+    const logEntries = document.getElementById("logEntries");
+    
+    // Clear previous logs
+    logEntries.innerHTML = "";
+    
+    // Clear previous defenses
+    document.querySelectorAll(".defense-layer").forEach(el => el.remove());
+    
+    // Show attacker
+    attacker.style.left = "400px";
+    attacker.style.top = "20px";
+    attacker.classList.add("active");
+    
+    addLogEntry("info", `═══ ${scenario.title} ═══`);
+    await sleep(1000);
+    
+    // Execute attack steps
+    for (let i = 0; i < scenario.steps.length; i++) {
+        const step = scenario.steps[i];
+        addLogEntry(step.type, step.message);
+        
+        // Move attacker down
+        if (i % 3 === 0 && i > 0) {
+            attacker.style.top = `${20 + (i * 15)}px`;
+        }
+        
+        await sleep(800);
+    }
+    
+    // Show defense layers
+    if (scenario.defensePositions.length > 0) {
+        for (const pos of scenario.defensePositions) {
+            const defense = document.createElement("div");
+            defense.className = "defense-layer active";
+            defense.style.left = `${pos.left}px`;
+            defense.style.top = `${pos.top}px`;
+            defense.style.width = `${pos.width}px`;
+            defense.style.height = `${pos.height}px`;
+            document.getElementById("visualization").appendChild(defense);
+        }
+    }
+    
+    await sleep(500);
+    
+    // Show block indicator
+    blockIndicator.style.left = "400px";
+    blockIndicator.style.top = "200px";
+    blockIndicator.classList.add("show");
+    
+    await sleep(2000);
+    
+    // Hide elements
+    blockIndicator.classList.remove("show");
+    attacker.classList.remove("active");
+    
+    // Update stats
+    attackCount++;
+    document.getElementById("attacksBlocked").textContent = attackCount;
+    document.getElementById("layersActive").textContent = Math.min(attackCount, 6);
+    
+    await sleep(500);
+    
+    // Re-enable buttons
+    document.querySelectorAll(".attack-button").forEach(btn => btn.disabled = false);
+    isSimulating = false;
+}
+
+// Initial log message
+addLogEntry("info", "Security simulator ready. Select an attack to begin.");
+</script>
+</body>
+</html>
