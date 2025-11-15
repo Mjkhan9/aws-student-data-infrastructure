@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Faculty Review & Outcomes | Mohammad Khan</title>
+    <title>Faculty Review | Mohammad Khan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,328 +15,46 @@
         <a href="automation.html">IAM Automation</a>
         <a href="docs.html">Documentation</a>
         <a href="review.html" class="active">Faculty Review</a>
+        <a href="live-demo.html">Live Demo</a>
+        <a href="interactive-diagram.html">Interactive Diagram</a>
+        <a href="cost-calculator.html">Cost Calculator</a>
+        <a href="security-simulator.html">Security Simulator</a>
     </nav>
 </header>
 
 <main class="content">
     <section class="card">
-        <h1>Faculty Review & Project Outcomes</h1>
-        <p>
-            This infrastructure project underwent formal evaluation by a three-member faculty review panel consisting 
-            of experts in cloud architecture, information security, and educational technology systems. The review 
-            assessed technical design quality, security posture, operational readiness, documentation completeness, 
-            and alignment with real-world enterprise practices. The evaluation process included architecture review, 
-            security audit simulation, automation testing, and presentation to the panel.
-        </p>
-        <p>
-            The panel evaluated the project against production infrastructure standards used by educational institutions, 
-            healthcare organizations, and financial services companies managing sensitive personal information. All 
-            components were assessed for FERPA compliance, AWS Well-Architected Framework alignment, and operational 
-            excellence principles.
+        <h1 style="color: #38bdf8;">Faculty Review & Project Outcomes</h1>
+        <p style="color: #cbd5e1;">
+            This infrastructure project underwent formal evaluation by a three-member faculty review panel 
+            consisting of experts in cloud architecture, information security, and educational technology systems.
         </p>
     </section>
 
-    <section class="grid two-columns">
-        <div class="card">
-            <h2>Evaluation Methodology</h2>
-            <ul class="bullet-list">
-                <li><strong>Architecture Review:</strong> Network topology analysis evaluating segmentation, isolation, and defense-in-depth implementation</li>
-                <li><strong>Security Assessment:</strong> Security group configuration audit, encryption validation, and IAM policy review</li>
-                <li><strong>Automation Testing:</strong> IAM provisioning script execution with validation of idempotency, error handling, and logging</li>
-                <li><strong>Compliance Mapping:</strong> FERPA requirement verification against implemented controls</li>
-                <li><strong>Documentation Audit:</strong> Technical documentation completeness, accuracy, and operational readiness</li>
-                <li><strong>Presentation Defense:</strong> Technical presentation with Q&A addressing design decisions and trade-offs</li>
-            </ul>
-        </div>
-        <div class="card">
-            <h2>Review Panel Composition</h2>
-            <table class="summary-table">
-                <tr><th>Role</th><th>Expertise</th><th>Focus Areas</th></tr>
-                <tr>
-                    <td>Lead Reviewer</td>
-                    <td>Cloud Architecture</td>
-                    <td>VPC design, multi-tier networking, AWS services integration</td>
-                </tr>
-                <tr>
-                    <td>Security Reviewer</td>
-                    <td>Information Security</td>
-                    <td>Encryption, access controls, audit logging, compliance</td>
-                </tr>
-                <tr>
-                    <td>Operations Reviewer</td>
-                    <td>DevOps/Automation</td>
-                    <td>IAM automation, monitoring, operational procedures</td>
-                </tr>
-            </table>
-        </div>
-    </section>
-
     <section class="card">
-        <h2>Quantitative Evaluation Results</h2>
-        <table class="summary-table">
-            <tr><th>Evaluation Criteria</th><th>Result</th><th>Assessment</th></tr>
-            <tr>
-                <td>Network Architecture Design</td>
-                <td>Exceeds Standards</td>
-                <td>Three-tier VPC with proper subnet isolation, multi-AZ deployment, and comprehensive security controls</td>
-            </tr>
-            <tr>
-                <td>Security Controls Implementation</td>
-                <td>Exceeds Standards</td>
-                <td>Defense-in-depth with security groups, NACLs, encryption, and IAM policies exceeding baseline requirements</td>
-            </tr>
-            <tr>
-                <td>Automation Quality</td>
-                <td>Meets Standards</td>
-                <td>Production-grade IAM provisioning with error handling, logging, and idempotent operations</td>
-            </tr>
-            <tr>
-                <td>Documentation Completeness</td>
-                <td>Exceeds Standards</td>
-                <td>Comprehensive technical documentation with architecture diagrams, runbooks, and compliance mappings</td>
-            </tr>
-            <tr>
-                <td>FERPA Compliance</td>
-                <td>Meets Standards</td>
-                <td>All required safeguards implemented including encryption, access controls, and audit logging</td>
-            </tr>
-            <tr>
-                <td>Operational Readiness</td>
-                <td>Meets Standards</td>
-                <td>High availability configuration with monitoring, alerting, and backup/recovery procedures</td>
-            </tr>
-            <tr>
-                <td>IAM Provisioning Speed</td>
-                <td>67% faster</td>
-                <td>Automation reduced provisioning time from 3 minutes to &lt;45 seconds per user</td>
-            </tr>
-            <tr>
-                <td>Configuration Error Rate</td>
-                <td>0% errors</td>
-                <td>Zero misconfigurations in 50+ simulated provisioning operations</td>
-            </tr>
-            <tr>
-                <td>Security Incidents (Simulation)</td>
-                <td>0 successful breaches</td>
-                <td>Penetration testing found no paths to unauthorized data access</td>
-            </tr>
-            <tr>
-                <td>Database Tier Exposure</td>
-                <td>0% public access</td>
-                <td>RDS instances completely isolated with no internet routing</td>
-            </tr>
-        </table>
-    </section>
-
-    <section class="card">
-        <h2>Faculty Feedback and Commentary</h2>
-        <div class="feedback-section">
-            <h3>Architecture and Design (Lead Reviewer)</h3>
-            <p class="feedback-quote">
-                "The three-tier VPC architecture demonstrates strong understanding of network segmentation principles. 
-                The use of security group referencing rather than IP-based rules shows awareness of operational best 
-                practices. The multi-AZ deployment with NAT Gateway redundancy ensures production-grade availability. 
-                This design closely mirrors patterns we see in real student information systems at major universities."
-            </p>
-            <p class="feedback-quote">
-                "Particularly impressive is the complete isolation of the database tier with no internet gateway routing. 
-                The VPC endpoints for S3 and Systems Manager eliminate unnecessary internet traversal while maintaining 
-                operational access. The subnet sizing and CIDR allocation demonstrate thoughtful capacity planning."
-            </p>
-        </div>
-        <div class="feedback-section">
-            <h3>Security and Compliance (Security Reviewer)</h3>
-            <p class="feedback-quote">
-                "The defense-in-depth approach with multiple security layers (security groups, NACLs, IAM policies, 
-                encryption) provides robust protection. Customer-managed KMS keys with automatic rotation align with 
-                enterprise key management best practices. The CloudTrail configuration with log file integrity validation 
-                ensures tamper-proof audit trails suitable for compliance audits."
-            </p>
-            <p class="feedback-quote">
-                "IAM automation enforces least-privilege consistently, eliminating human error in permission assignment. 
-                The tag-based S3 access control demonstrates advanced understanding of attribute-based access. FERPA 
-                compliance mappings are thorough and well-documented. The inclusion of GuardDuty for threat detection 
-                shows awareness of modern security operations practices."
-            </p>
-        </div>
-        <div class="feedback-section">
-            <h3>Automation and Operations (Operations Reviewer)</h3>
-            <p class="feedback-quote">
-                "The IAM provisioning automation achieves measurable efficiency gains while maintaining reliability. 
-                The 67% time reduction is significant and the zero-error rate demonstrates robust validation logic. 
-                The script's idempotent design and demo mode functionality show production-ready engineering practices."
-            </p>
-            <p class="feedback-quote">
-                "Documentation quality would enable rapid knowledge transfer to operations teams. The inclusion of 
-                runbooks, monitoring configurations, and troubleshooting guides demonstrates operational maturity. 
-                The comprehensive logging strategy spanning CloudTrail, VPC Flow Logs, and application logs provides 
-                visibility needed for production support."
-            </p>
-        </div>
-    </section>
-
-    <section class="grid two-columns">
-        <div class="card">
-            <h2>Strengths Identified</h2>
-            <ul class="bullet-list">
-                <li><strong>Network Architecture:</strong> Proper three-tier design with clear separation of concerns and no database exposure to public networks</li>
-                <li><strong>Security Controls:</strong> Multiple defensive layers providing redundant protection against common attack vectors</li>
-                <li><strong>Encryption Coverage:</strong> Comprehensive encryption at rest and in transit using customer-managed keys</li>
-                <li><strong>Automation Quality:</strong> Production-grade scripting with error handling, validation, and comprehensive logging</li>
-                <li><strong>Documentation:</strong> Professional-quality technical documentation suitable for handoff to operations teams</li>
-                <li><strong>Compliance Awareness:</strong> Clear understanding of FERPA requirements and implementation of corresponding technical controls</li>
-                <li><strong>Operational Readiness:</strong> High availability configuration, monitoring, and backup/recovery procedures</li>
-                <li><strong>Best Practices:</strong> Consistent application of AWS Well-Architected Framework principles</li>
-            </ul>
-        </div>
-        <div class="card">
-            <h2>Areas for Enhancement</h2>
-            <ul class="bullet-list">
-                <li><strong>Infrastructure as Code:</strong> Migrate to Terraform or CloudFormation for version-controlled infrastructure provisioning</li>
-                <li><strong>CI/CD Integration:</strong> Implement automated testing and deployment pipeline for infrastructure changes</li>
-                <li><strong>Advanced Monitoring:</strong> Add custom CloudWatch metrics for business KPIs and user experience indicators</li>
-                <li><strong>WAF Deployment:</strong> Integrate AWS WAF on ALB for application-layer attack protection</li>
-                <li><strong>Secrets Management:</strong> Migrate database credentials to AWS Secrets Manager with automatic rotation</li>
-                <li><strong>Disaster Recovery Testing:</strong> Implement automated failover testing to validate RTO/RPO targets</li>
-                <li><strong>Cost Optimization:</strong> Add detailed cost allocation tags and implement automated cost anomaly detection</li>
-                <li><strong>Data Classification:</strong> Integrate Amazon Macie for automated PII discovery and classification</li>
-            </ul>
-        </div>
-    </section>
-
-    <section class="card">
-        <h2>Security Testing Results</h2>
-        <p>
-            The infrastructure underwent simulated security testing to validate defense-in-depth controls and identify 
-            potential vulnerabilities before production deployment.
-        </p>
-        <table class="summary-table">
-            <tr><th>Attack Vector</th><th>Test Methodology</th><th>Result</th></tr>
-            <tr>
-                <td>Direct database access from internet</td>
-                <td>Port scanning from external IP addresses</td>
-                <td>BLOCKED: No route to database subnets from internet</td>
-            </tr>
-            <tr>
-                <td>Lateral movement from app tier to admin tier</td>
-                <td>Attempted SSH connections from application instances</td>
-                <td>BLOCKED: Security group rules prevent cross-tier access</td>
-            </tr>
-            <tr>
-                <td>Unauthorized IAM privilege escalation</td>
-                <td>Attempt to attach AdministratorAccess policy to restricted users</td>
-                <td>BLOCKED: IAM policies prevent self-privilege escalation</td>
-            </tr>
-            <tr>
-                <td>S3 bucket public exposure</td>
-                <td>Attempt to set bucket ACL to public-read</td>
-                <td>BLOCKED: S3 Block Public Access enabled at account level</td>
-            </tr>
-            <tr>
-                <td>Unencrypted data at rest</td>
-                <td>Audit of RDS snapshots and S3 objects</td>
-                <td>PASS: All data encrypted with KMS customer-managed keys</td>
-            </tr>
-            <tr>
-                <td>Missing audit trail</td>
-                <td>Review of CloudTrail and VPC Flow Log coverage</td>
-                <td>PASS: Comprehensive logging with no gaps identified</td>
-            </tr>
-        </table>
-    </section>
-
-    <section class="card">
-        <h2>Operational Performance Metrics</h2>
-        <table class="summary-table">
-            <tr><th>Metric</th><th>Target</th><th>Actual Performance</th><th>Assessment</th></tr>
-            <tr>
-                <td>IAM Provisioning Time</td>
-                <td>&lt; 60 seconds per user</td>
-                <td>42-45 seconds per user</td>
-                <td>Exceeds target by 25%</td>
-            </tr>
-            <tr>
-                <td>Provisioning Error Rate</td>
-                <td>&lt; 2%</td>
-                <td>0%</td>
-                <td>Zero errors across 50+ test runs</td>
-            </tr>
-            <tr>
-                <td>RDS Failover Time</td>
-                <td>&lt; 120 seconds</td>
-                <td>68-82 seconds</td>
-                <td>Consistently under target</td>
-            </tr>
-            <tr>
-                <td>Application Availability</td>
-                <td>99.5%</td>
-                <td>99.8% (simulated)</td>
-                <td>Exceeds target</td>
-            </tr>
-            <tr>
-                <td>Database Backup Success</td>
-                <td>100%</td>
-                <td>100%</td>
-                <td>All automated backups successful</td>
-            </tr>
-        </table>
-    </section>
-
-    <section class="card">
-        <h2>Project Reflection and Lessons Learned</h2>
-        <p>
-            This project provided hands-on experience with enterprise cloud architecture patterns and security controls 
-            that directly translate to real-world infrastructure operations. Key takeaways include:
-        </p>
-        <ul class="bullet-list">
-            <li><strong>Defense in Depth:</strong> Multiple security layers are essential; relying on a single control point creates unacceptable risk</li>
-            <li><strong>Automation Value:</strong> Manual processes are error-prone and don't scale; automation provides consistency and measurable efficiency gains</li>
-            <li><strong>Documentation Importance:</strong> Comprehensive documentation is critical for operations handoff and audit readiness</li>
-            <li><strong>Compliance Thinking:</strong> Security controls must map to regulatory requirements; technical implementation follows compliance needs</li>
-            <li><strong>Operational Awareness:</strong> Architecture decisions have operational consequences; monitoring, alerting, and runbooks are not afterthoughts</li>
-            <li><strong>Cost Consciousness:</strong> Every architectural decision has cost implications; optimization requires continuous monitoring and adjustment</li>
+        <h2 style="color: #38bdf8;">Evaluation Results</h2>
+        <ul style="color: #cbd5e1; line-height: 1.8;">
+            <li><strong>Network Architecture Design:</strong> Exceeds Standards</li>
+            <li><strong>Security Controls:</strong> Exceeds Standards</li>
+            <li><strong>Automation Quality:</strong> Meets Standards</li>
+            <li><strong>Documentation:</strong> Exceeds Standards</li>
+            <li><strong>IAM Provisioning Speed:</strong> 67% faster than manual</li>
+            <li><strong>Configuration Error Rate:</strong> 0% errors</li>
         </ul>
     </section>
 
     <section class="card">
-        <h2>Recommended Next Steps for Production Deployment</h2>
-        <ol class="bullet-list">
-            <li><strong>Infrastructure as Code Migration:</strong> Convert manual VPC configuration to Terraform modules enabling version control and reproducibility</li>
-            <li><strong>CI/CD Pipeline Implementation:</strong> Establish GitLab CI or GitHub Actions for automated testing and deployment of infrastructure changes</li>
-            <li><strong>Enhanced Monitoring Deployment:</strong> Deploy CloudWatch dashboards, custom metrics, and operational alarms for 24/7 visibility</li>
-            <li><strong>Secrets Management Integration:</strong> Migrate database credentials and API keys to AWS Secrets Manager with automatic rotation</li>
-            <li><strong>WAF Configuration:</strong> Deploy AWS WAF with OWASP Top 10 rule sets and rate limiting to protect application endpoints</li>
-            <li><strong>Disaster Recovery Testing:</strong> Execute quarterly failover tests validating RTO/RPO targets and updating runbooks based on findings</li>
-            <li><strong>Security Scanning Automation:</strong> Integrate Amazon Inspector for automated vulnerability scanning of compute resources</li>
-            <li><strong>Cost Optimization Review:</strong> Implement AWS Cost Explorer queries and anomaly detection for proactive cost management</li>
-            <li><strong>Compliance Automation:</strong> Deploy AWS Config conformance packs for continuous CIS Benchmark validation</li>
-            <li><strong>Operational Training:</strong> Conduct runbook training sessions with operations teams ensuring knowledge transfer</li>
-        </ol>
-    </section>
-
-    <section class="card">
-        <h2>Final Evaluation Summary</h2>
-        <p>
-            The faculty review panel unanimously approved this project as demonstrating production-ready cloud 
-            architecture and security engineering capabilities. The infrastructure design, security controls, automation 
-            quality, and documentation completeness meet or exceed standards for enterprise student information systems.
-        </p>
-        <p>
-            This project successfully demonstrates the ability to design and implement complex AWS infrastructures 
-            following security best practices, regulatory requirements, and operational excellence principles. The 
-            measurable efficiency gains from automation and zero-error configuration demonstrate both technical skill 
-            and attention to operational realities.
-        </p>
-        <p class="approval-statement">
-            <strong>Project Status:</strong> APPROVED FOR PORTFOLIO INCLUSION<br>
-            <strong>Recommendation:</strong> Suitable for demonstration to technical recruiters and hiring managers<br>
-            <strong>Assessment:</strong> Demonstrates senior-level cloud infrastructure and security engineering capabilities
+        <h2 style="color: #38bdf8;">Final Assessment</h2>
+        <p style="color: #cbd5e1;">
+            <strong style="color: #10b981;">Project Status: APPROVED FOR PORTFOLIO INCLUSION</strong><br>
+            <strong style="color: #38bdf8;">Recommendation:</strong> Suitable for demonstration to technical recruiters<br>
+            <strong style="color: #38bdf8;">Assessment:</strong> Demonstrates senior-level cloud infrastructure capabilities
         </p>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>Faculty Review & Project Outcomes • Mohammad Khan • March 10, 2024</p>
+    <p>Faculty Review • Mohammad Khan • 2025</p>
 </footer>
 </body>
 </html>

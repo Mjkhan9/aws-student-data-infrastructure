@@ -1,221 +1,70 @@
 ﻿<!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
+    <meta charset="UTF-8">
     <title>Architecture | Mohammad Khan</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <link rel='stylesheet' href='style.css'>
-
-    <style>
-        .arch-card {
-            background: white;
-            padding: 32px;
-            border-radius: 12px;
-            border: 1px solid #d1d5db;
-            margin-bottom: 32px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        }
-        .arch-card h2 {
-            font-size: 1.7rem;
-            margin-bottom: 14px;
-            color: #1e40af;
-        }
-        .arch-card p {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: #374151;
-        }
-        .tier-box {
-            background: #f8fafc;
-            border-left: 4px solid #2563eb;
-            padding: 16px;
-            border-radius: 8px;
-            margin: 18px 0;
-        }
-        .diagram-preview {
-            width: 100%;
-            border-radius: 12px;
-            margin-top: 10px;
-            border: 2px solid #cbd5e1;
-        }
-        .cta-button {
-            display: inline-block;
-            margin-top: 18px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            background: #2563eb;
-            color: white;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.3s ease;
-        }
-        .cta-button:hover {
-            background: #1e3a8a;
-        }
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 26px;
-            margin-top: 20px;
-        }
-        .list {
-            padding-left: 20px;
-        }
-        .list li { margin-bottom: 8px; }
-        @media (max-width: 900px) {
-            .grid-2 { grid-template-columns: 1fr; }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-<header class='site-header'>
-    <div class='logo'>AWS Student Data Infrastructure</div>
-    <nav class='nav-links'>
-        <a href='index.html'>Home</a>
-        <a href='architecture.html' class='active'>Architecture</a>
-        <a href='automation.html'>IAM Automation</a>
-        <a href='docs.html'>Documentation</a>
-        <a href='review.html'>Faculty Review</a>
+<header class="site-header">
+    <div class="logo">AWS Student Data Infrastructure</div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html" class="active">Architecture</a>
+        <a href="automation.html">IAM Automation</a>
+        <a href="docs.html">Documentation</a>
+        <a href="review.html">Faculty Review</a>
+        <a href="live-demo.html">Live Demo</a>
+        <a href="interactive-diagram.html">Interactive Diagram</a>
+        <a href="cost-calculator.html">Cost Calculator</a>
+        <a href="security-simulator.html">Security Simulator</a>
     </nav>
 </header>
 
-<main class='content'>
-
-    <!-- OVERVIEW -->
-    <section class='arch-card'>
-        <h2>System Architecture Overview</h2>
-        <p>
+<main class="content">
+    <section class="card">
+        <h1 style="color: #38bdf8;">System Architecture Overview</h1>
+        <p style="color: #cbd5e1;">
             The AWS Student Data Infrastructure uses a secure, scalable, three-tier VPC architecture designed 
             for academic data processing. The environment isolates administrative tools, application services, 
-            and database workloads while enforcing AWS best practices for IAM, networking, encryption, and 
-            audit logging.
+            and database workloads while enforcing AWS best practices.
         </p>
-        <a href='interactive-diagram.html' class='cta-button'>Open Interactive Architecture Diagram →</a>
     </section>
 
-    <!-- NETWORK LAYOUT -->
-    <section class='arch-card'>
-        <h2>Three-Tier VPC Layout</h2>
-
-        <p>The VPC is divided into isolated network segments:</p>
-
-        <div class='tier-box'>
-            <strong>Public Tier (172.32.0.0/24)</strong><br>
-            - Contains NAT Gateway and Bastion Host<br>
-            - Restricted to corporate IP ranges<br>
-            - No workloads or databases reside here
+    <section class="card">
+        <h2 style="color: #38bdf8;">Three-Tier VPC Layout</h2>
+        <p style="color: #cbd5e1;">The VPC is divided into isolated network segments:</p>
+        
+        <div style="background: #0f172a; border-left: 4px solid #38bdf8; padding: 16px; margin: 16px 0; border-radius: 6px;">
+            <strong style="color: #38bdf8;">Public Tier (172.32.0.0/24)</strong><br>
+            <span style="color: #cbd5e1;">Contains NAT Gateway and Bastion Host</span>
         </div>
-
-        <div class='tier-box'>
-            <strong>Application Tier (172.32.10.0/24)</strong><br>
-            - Hosts application compute resources (EC2/Lambda)<br>
-            - Allowed outbound internet via NAT<br>
-            - Can access DB tier via SG references
+        
+        <div style="background: #0f172a; border-left: 4px solid #38bdf8; padding: 16px; margin: 16px 0; border-radius: 6px;">
+            <strong style="color: #38bdf8;">Application Tier (172.32.10.0/24)</strong><br>
+            <span style="color: #cbd5e1;">Hosts application compute resources (EC2/Lambda)</span>
         </div>
-
-        <div class='tier-box'>
-            <strong>Database Tier (172.32.20.0/24)</strong><br>
-            - Private-only, no internet gateway route<br>
-            - Contains encrypted RDS PostgreSQL<br>
-            - Only reachable via app-sg → db-sg rules
+        
+        <div style="background: #0f172a; border-left: 4px solid #38bdf8; padding: 16px; margin: 16px 0; border-radius: 6px;">
+            <strong style="color: #38bdf8;">Database Tier (172.32.20.0/24)</strong><br>
+            <span style="color: #cbd5e1;">Private-only, no internet gateway route</span>
         </div>
     </section>
 
-    <!-- SECURITY GROUPS -->
-    <section class='arch-card'>
-        <h2>Security Group Model</h2>
-        <p>
-            Security groups are used instead of IP-based firewalling for trusted traffic. Every tier follows 
-            least privilege principles with directional SG-to-SG rules.
-        </p>
-
-        <ul class='list'>
-            <li><strong>admin-sg:</strong> SSH allowed only from corporate IPs</li>
-            <li><strong>app-sg:</strong> Allows 443/HTTPS and outbound-only mode</li>
-            <li><strong>db-sg:</strong> Only allows PostgreSQL 5432 from app-sg</li>
-            <li><strong>alb-sg:</strong> Allows inbound 443 from internet + WAF protection</li>
+    <section class="card">
+        <h2 style="color: #38bdf8;">Security Group Model</h2>
+        <p style="color: #cbd5e1;">Security groups follow least privilege principles with directional SG-to-SG rules.</p>
+        <ul style="color: #cbd5e1;">
+            <li>admin-sg: SSH allowed only from corporate IPs</li>
+            <li>app-sg: Allows 443/HTTPS and outbound-only mode</li>
+            <li>db-sg: Only allows PostgreSQL 5432 from app-sg</li>
         </ul>
-
-        <p>
-            No security group contains 0.0.0.0/0 except the ALB, which is paired with WAF rules to restrict 
-            malicious traffic.
-        </p>
     </section>
-
-    <!-- DATA FLOW -->
-    <section class='arch-card'>
-        <h2>Data Flow Architecture</h2>
-
-        <div class='grid-2'>
-            <div>
-                <p>The data processing lifecycle is structured as:</p>
-                <ol class='list'>
-                    <li>Application servers request student record segments</li>
-                    <li>Requests pass through IAM role policies → VPC routing → SG-to-SG access</li>
-                    <li>RDS returns encrypted row-level data only for permitted roles</li>
-                    <li>All queries logged via CloudTrail + RDS Audit Logs</li>
-                    <li>S3 used for backups and encrypted exports</li>
-                </ol>
-            </div>
-
-            <div>
-                <p class='subheading'>Built-in Protections</p>
-                <ul class='list'>
-                    <li>KMS encryption on RDS + S3</li>
-                    <li>NACL deny rules blocking cross-tier lateral movement</li>
-                    <li>MFA-based IAM role assumption</li>
-                    <li>CloudTrail monitoring for every API call</li>
-                </ul>
-            </div>
-        </div>
-
-    </section>
-
-    <!-- IAM STRUCTURE -->
-    <section class='arch-card'>
-        <h2>IAM Role & Permission Structure</h2>
-
-        <p>
-            IAM follows group-based access with automation-driven provisioning. All identities enforce MFA 
-            and are tagged for auditing.
-        </p>
-
-        <ul class='list'>
-            <li><strong>StudentDataReadOnly</strong> – Read-only access to academic datasets</li>
-            <li><strong>StudentDataAdmin</strong> – Elevated control for infrastructure testing</li>
-            <li><strong>AutomationUserRole</strong> – Boto3 provisioning, tagging, and policy enforcement</li>
-        </ul>
-
-        <p>
-            IAM automation script enforces deny-all policies until MFA is enabled, ensuring compliance.
-        </p>
-
-    </section>
-
-    <!-- MONITORING -->
-    <section class='arch-card'>
-        <h2>Monitoring & Logging</h2>
-
-        <ul class='list'>
-            <li>CloudTrail enabled for all regions</li>
-            <li>VPC Flow Logs record inbound/outbound traffic patterns</li>
-            <li>S3 access logs track bucket-level interactions</li>
-            <li>KMS audit events log encryption key usage</li>
-        </ul>
-
-        <p>
-            The system is fully auditable, with logs covering authentication, access attempts, database 
-            queries, API calls, and network traversal.
-        </p>
-    </section>
-
 </main>
 
-<footer class='site-footer'>
-    <p>Architecture • Mohammad Khan • Updated 2025</p>
+<footer class="site-footer">
+    <p>Architecture • Mohammad Khan • 2025</p>
 </footer>
-
 </body>
 </html>
