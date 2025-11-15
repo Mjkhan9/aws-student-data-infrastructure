@@ -1,141 +1,221 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <title>AWS VPC Architecture | Mohammad Khan</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <meta charset='UTF-8'>
+    <title>Architecture | Mohammad Khan</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='style.css'>
 
-    <!-- Modern AWS Console UI styling additions -->
     <style>
-        .aws-section-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #232f3e;
-            margin-bottom: 6px;
-        }
-        .aws-subtitle {
-            font-size: 1rem;
-            color: #4b5873;
-            margin-bottom: 14px;
-        }
-        .aws-box {
-            background: #ffffff;
-            border: 1px solid #d5dbeb;
+        .arch-card {
+            background: white;
+            padding: 32px;
             border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 18px;
+            border: 1px solid #d1d5db;
+            margin-bottom: 32px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
-        .tier-label {
-            background: #232f3e;
+        .arch-card h2 {
+            font-size: 1.7rem;
+            margin-bottom: 14px;
+            color: #1e40af;
+        }
+        .arch-card p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #374151;
+        }
+        .tier-box {
+            background: #f8fafc;
+            border-left: 4px solid #2563eb;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 18px 0;
+        }
+        .diagram-preview {
+            width: 100%;
+            border-radius: 12px;
+            margin-top: 10px;
+            border: 2px solid #cbd5e1;
+        }
+        .cta-button {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: #2563eb;
             color: white;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 0.8rem;
-            margin-right: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+        .cta-button:hover {
+            background: #1e3a8a;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 26px;
+            margin-top: 20px;
+        }
+        .list {
+            padding-left: 20px;
+        }
+        .list li { margin-bottom: 8px; }
+        @media (max-width: 900px) {
+            .grid-2 { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 
 <body>
-<header class="site-header">
-    <div class="logo">AWS Student Data Infrastructure</div>
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="architecture.html" class="active">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="docs.html">Documentation</a>
-        <a href="review.html">Faculty Review</a>
+
+<header class='site-header'>
+    <div class='logo'>AWS Student Data Infrastructure</div>
+    <nav class='nav-links'>
+        <a href='index.html'>Home</a>
+        <a href='architecture.html' class='active'>Architecture</a>
+        <a href='automation.html'>IAM Automation</a>
+        <a href='docs.html'>Documentation</a>
+        <a href='review.html'>Faculty Review</a>
     </nav>
 </header>
 
-<main class="content">
+<main class='content'>
 
-    <section class="card">
-        <h1>AWS VPC Architecture</h1>
+    <!-- OVERVIEW -->
+    <section class='arch-card'>
+        <h2>System Architecture Overview</h2>
         <p>
-            The environment uses a fully isolated VPC architecture modeled after industry AWS best practices
-            for sensitive student information systems. Each layer (Admin, Application, Database) is network-isolated,
-            encrypted, and monitored.
+            The AWS Student Data Infrastructure uses a secure, scalable, three-tier VPC architecture designed 
+            for academic data processing. The environment isolates administrative tools, application services, 
+            and database workloads while enforcing AWS best practices for IAM, networking, encryption, and 
+            audit logging.
+        </p>
+        <a href='interactive-diagram.html' class='cta-button'>Open Interactive Architecture Diagram →</a>
+    </section>
+
+    <!-- NETWORK LAYOUT -->
+    <section class='arch-card'>
+        <h2>Three-Tier VPC Layout</h2>
+
+        <p>The VPC is divided into isolated network segments:</p>
+
+        <div class='tier-box'>
+            <strong>Public Tier (172.32.0.0/24)</strong><br>
+            - Contains NAT Gateway and Bastion Host<br>
+            - Restricted to corporate IP ranges<br>
+            - No workloads or databases reside here
+        </div>
+
+        <div class='tier-box'>
+            <strong>Application Tier (172.32.10.0/24)</strong><br>
+            - Hosts application compute resources (EC2/Lambda)<br>
+            - Allowed outbound internet via NAT<br>
+            - Can access DB tier via SG references
+        </div>
+
+        <div class='tier-box'>
+            <strong>Database Tier (172.32.20.0/24)</strong><br>
+            - Private-only, no internet gateway route<br>
+            - Contains encrypted RDS PostgreSQL<br>
+            - Only reachable via app-sg → db-sg rules
+        </div>
+    </section>
+
+    <!-- SECURITY GROUPS -->
+    <section class='arch-card'>
+        <h2>Security Group Model</h2>
+        <p>
+            Security groups are used instead of IP-based firewalling for trusted traffic. Every tier follows 
+            least privilege principles with directional SG-to-SG rules.
+        </p>
+
+        <ul class='list'>
+            <li><strong>admin-sg:</strong> SSH allowed only from corporate IPs</li>
+            <li><strong>app-sg:</strong> Allows 443/HTTPS and outbound-only mode</li>
+            <li><strong>db-sg:</strong> Only allows PostgreSQL 5432 from app-sg</li>
+            <li><strong>alb-sg:</strong> Allows inbound 443 from internet + WAF protection</li>
+        </ul>
+
+        <p>
+            No security group contains 0.0.0.0/0 except the ALB, which is paired with WAF rules to restrict 
+            malicious traffic.
         </p>
     </section>
 
-    <section class="aws-box">
-        <div class="aws-section-title">VPC Overview</div>
-        <div class="aws-subtitle">A 3-tier architecture with enforced security boundaries.</div>
+    <!-- DATA FLOW -->
+    <section class='arch-card'>
+        <h2>Data Flow Architecture</h2>
 
-        <p><strong>VPC CIDR:</strong> 172.32.0.0/16</p>
+        <div class='grid-2'>
+            <div>
+                <p>The data processing lifecycle is structured as:</p>
+                <ol class='list'>
+                    <li>Application servers request student record segments</li>
+                    <li>Requests pass through IAM role policies → VPC routing → SG-to-SG access</li>
+                    <li>RDS returns encrypted row-level data only for permitted roles</li>
+                    <li>All queries logged via CloudTrail + RDS Audit Logs</li>
+                    <li>S3 used for backups and encrypted exports</li>
+                </ol>
+            </div>
 
-        <pre class="diagram">
-+-----------------------------------------------------------+
-|                    VPC: 172.32.0.0/16                     |
-|                                                           |
-|  [Admin Tier]                                             |
-|  +-----------------+   +-----------------+                |
-|  | Admin Subnet A  |   | Admin Subnet B  |  Bastion,      |
-|  | 172.32.1.0/24   |   | 172.32.2.0/24   |  monitoring    |
-|  +-----------------+   +-----------------+                |
-|                                                           |
-|  [Application Tier]                                       |
-|  +-----------------+   +-----------------+                |
-|  | App Subnet A    |   | App Subnet B    |  EC2/ECS app   |
-|  | 172.32.10.0/24  |   | 172.32.11.0/24  |  layer         |
-|  +-----------------+   +-----------------+                |
-|                                                           |
-|  [Database Tier - Private]                                |
-|  +-----------------+   +-----------------+                |
-|  | DB Subnet A     |   | DB Subnet B     |  RDS (PGSQL)   |
-|  | 172.32.20.0/24  |   | 172.32.21.0/24  |  encrypted     |
-|  +-----------------+   +-----------------+                |
-+-----------------------------------------------------------+
-        </pre>
-    </section>
-
-    <section class="grid two-columns">
-
-        <div class="aws-box">
-            <div class="aws-section-title">Subnet Design</div>
-            <table class="summary-table">
-                <tr><th>Tier</th><th>Subnet</th><th>CIDR</th><th>Purpose</th></tr>
-                <tr><td>Admin</td><td>Admin Subnet A</td><td>172.32.1.0/24</td><td>Jump host, admin tooling</td></tr>
-                <tr><td>Admin</td><td>Admin Subnet B</td><td>172.32.2.0/24</td><td>Monitoring & logging</td></tr>
-                <tr><td>App</td><td>App Subnet A</td><td>172.32.10.0/24</td><td>Primary application layer</td></tr>
-                <tr><td>App</td><td>App Subnet B</td><td>172.32.11.0/24</td><td>Horizontal scaling</td></tr>
-                <tr><td>DB</td><td>DB Subnet A</td><td>172.32.20.0/24</td><td>RDS primary instance</td></tr>
-                <tr><td>DB</td><td>DB Subnet B</td><td>172.32.21.0/24</td><td>Multi-AZ standby</td></tr>
-            </table>
-        </div>
-
-        <div class="aws-box">
-            <div class="aws-section-title">Security Controls</div>
-            <ul class="bullet-list">
-                <li>Bastion/VPN required for admin-tier access.</li>
-                <li>Application tier unreachable from the internet.</li>
-                <li>Database tier fully private with SG-to-SG permissions.</li>
-                <li>Network ACLs restrict lateral movement.</li>
-                <li>All data encrypted using AWS KMS (RDS, S3, snapshots).</li>
-                <li>CloudTrail logs IAM, RDS, SG, and VPC modifications.</li>
-            </ul>
+            <div>
+                <p class='subheading'>Built-in Protections</p>
+                <ul class='list'>
+                    <li>KMS encryption on RDS + S3</li>
+                    <li>NACL deny rules blocking cross-tier lateral movement</li>
+                    <li>MFA-based IAM role assumption</li>
+                    <li>CloudTrail monitoring for every API call</li>
+                </ul>
+            </div>
         </div>
 
     </section>
 
-    <section class="aws-box">
-        <div class="aws-section-title">Student Data Flow</div>
-        <ol class="bullet-list">
-            <li>Admins access system via secure bastion or VPN.</li>
-            <li>App tier processes student workflows (read/write, validation, audit).</li>
-            <li>All sensitive data stored in encrypted RDS (PostgreSQL).</li>
-            <li>Exports written to S3 with strict IAM access boundaries.</li>
-            <li>CloudWatch + Flow Logs provide monitoring and alerting.</li>
-        </ol>
+    <!-- IAM STRUCTURE -->
+    <section class='arch-card'>
+        <h2>IAM Role & Permission Structure</h2>
+
+        <p>
+            IAM follows group-based access with automation-driven provisioning. All identities enforce MFA 
+            and are tagged for auditing.
+        </p>
+
+        <ul class='list'>
+            <li><strong>StudentDataReadOnly</strong> – Read-only access to academic datasets</li>
+            <li><strong>StudentDataAdmin</strong> – Elevated control for infrastructure testing</li>
+            <li><strong>AutomationUserRole</strong> – Boto3 provisioning, tagging, and policy enforcement</li>
+        </ul>
+
+        <p>
+            IAM automation script enforces deny-all policies until MFA is enabled, ensuring compliance.
+        </p>
+
+    </section>
+
+    <!-- MONITORING -->
+    <section class='arch-card'>
+        <h2>Monitoring & Logging</h2>
+
+        <ul class='list'>
+            <li>CloudTrail enabled for all regions</li>
+            <li>VPC Flow Logs record inbound/outbound traffic patterns</li>
+            <li>S3 access logs track bucket-level interactions</li>
+            <li>KMS audit events log encryption key usage</li>
+        </ul>
+
+        <p>
+            The system is fully auditable, with logs covering authentication, access attempts, database 
+            queries, API calls, and network traversal.
+        </p>
     </section>
 
 </main>
 
-<footer class="site-footer">
-    <p>AWS VPC Architecture • Mohammad Khan • Updated 2025</p>
+<footer class='site-footer'>
+    <p>Architecture • Mohammad Khan • Updated 2025</p>
 </footer>
+
 </body>
 </html>
