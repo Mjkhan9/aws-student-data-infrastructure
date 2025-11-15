@@ -1,159 +1,164 @@
-﻿@font-face {
+/* ============================================
+   AWS Console + AWS Docs Hybrid Theme
+   Clean • Professional • Cloud Engineer Aesthetic
+   ============================================ */
+
+/* 1. Amazon Ember (Official AWS UI Font) */
+@font-face {
     font-family: "Amazon Ember";
-    font-style: normal;
     font-weight: 400;
     src: url("https://fonts.cdnfonts.com/s/19082/AmazonEmber_Rg.woff") format("woff");
 }
 @font-face {
     font-family: "Amazon Ember";
-    font-style: bold;
     font-weight: 700;
     src: url("https://fonts.cdnfonts.com/s/19082/AmazonEmber_Bd.woff") format("woff");
 }
 
+/* 2. Theme Variables */
 :root {
-    --bg-dark: #0f172a;
-    --bg-panel: #1e293b;
-    --bg-card: #1e293b;
-    --bg-hover: #334155;
-    --border: #334155;
-    --border-light: #475569;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --accent-blue: #38bdf8;
-    --accent-aws: #fbbf24;
+    --bg-dark: #0d1117;        /* AWS console dark navy */
+    --bg-panel: #161b22;       /* console card background */
+    --bg-card: #1b2230;        /* interactive panels */
+    --border: #2d3541;         /* edges */
+    --border-light: #3c4656;   /* softer borders */
+    --text-primary: #f0f6fc;   /* AWS console text */
+    --text-secondary: #c7d1db; /* documentation gray */
+    --accent-blue: #3b82f6;    /* AWS blue */
+    --accent-blue-dark: #2563eb;
+    --accent-yellow: #fbbf24;  /* AWS brand yellow */
     --accent-green: #10b981;
-    --accent-purple: #8b5cf6;
-    --accent-red: #ef4444;
+    --radius: 10px;
+    --shadow: 0 4px 15px rgba(0,0,0,0.25);
 }
 
+/* 3. Global */
 body {
     margin: 0;
-    padding: 0;
     background: var(--bg-dark);
+    font-family: "Amazon Ember", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: var(--text-primary);
-    font-family: "Amazon Ember", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: 0.2px;
-}
-
-p {
-    font-size: 1rem;
-    color: var(--text-secondary);
     line-height: 1.6;
 }
 
+/* Headings */
+h1, h2, h3, h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* Paragraphs */
+p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+/* 4. Header (AWS Console Style) */
 .site-header {
-    background: #1f2a37;
-    border-bottom: 1px solid var(--border-light);
+    background: #111827;
     padding: 16px 32px;
+    border-bottom: 1px solid var(--border-light);
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
+    align-items: center;
 }
 
 .logo {
-    color: white;
-    font-size: 1.25rem;
+    font-size: 1.35rem;
     font-weight: 700;
-    white-space: nowrap;
-    margin-right: 24px;
+    color: var(--text-primary);
+    text-decoration: none;
 }
 
+/* Navigation */
 .nav-links {
     display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    align-items: center;
+    gap: 1rem;
 }
 
 .nav-links a {
-    color: #e5e7eb;
+    color: var(--text-secondary);
     text-decoration: none;
-    font-size: 0.9rem;
     font-weight: 500;
-    transition: color 0.25s ease;
-    white-space: nowrap;
-    padding: 8px 12px;
-    border-radius: 6px;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    transition: 0.2s ease;
 }
 
 .nav-links a:hover {
+    background: rgba(255,255,255,0.05);
     color: var(--accent-blue);
-    background: rgba(56, 189, 248, 0.1);
 }
 
 .nav-links .active {
+    background: rgba(59,130,246,0.15);
     color: var(--accent-blue);
     font-weight: 700;
-    background: rgba(56, 189, 248, 0.15);
 }
 
+/* 5. Content Area */
 .content {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 40px auto;
     padding: 0 24px;
 }
 
+/* 6. Cards (AWS Console Panel Style) */
 .card {
     background: var(--bg-card);
+    padding: 28px;
+    border-radius: var(--radius);
     border: 1px solid var(--border);
-    padding: 32px;
-    border-radius: 12px;
     margin-bottom: 32px;
+    box-shadow: var(--shadow);
 }
 
+/* 7. Buttons (AWS AppRunner/Amplify style) */
 button,
 .run-button {
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    background: var(--accent-blue);
     border: none;
-    padding: 14px 26px;
-    color: white;
+    padding: 12px 22px;
     border-radius: 8px;
-    font-size: 1rem;
+    color: white;
     font-weight: 600;
     cursor: pointer;
-    transition: all .25s ease;
+    transition: 0.2s ease;
 }
 
 button:hover:not(:disabled),
 .run-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    background: var(--accent-blue-dark);
 }
 
 button:disabled {
-    background: #475569;
+    background: #374151;
     cursor: not-allowed;
 }
 
+/* 8. Footer */
 .site-footer {
     text-align: center;
-    color: var(--text-secondary);
-    padding: 40px 0;
-    margin-top: 60px;
+    padding: 32px 0;
+    margin-top: 40px;
     border-top: 1px solid var(--border);
+    color: var(--text-secondary);
 }
 
+/* 9. Tables (AWS Billing/Cost Explorer style) */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 24px 0;
     background: var(--bg-panel);
+    margin: 24px 0;
 }
 
 table th {
-    background: #1f2a37;
     padding: 12px;
-    border: 1px solid var(--border);
-    color: white;
     font-weight: 700;
+    background: #1f2a37;
+    border: 1px solid var(--border-light);
 }
 
 table td {
@@ -163,53 +168,38 @@ table td {
 }
 
 tr:nth-child(even) {
-    background: #111827;
+    background: #0f172a;
 }
 
+/* 10. Code Blocks (AWS Documentation Style) */
 pre, code {
-    background: #0f172a;
-    color: #e2e8f0;
+    background: #0d1117;
     padding: 12px;
     border-radius: 8px;
-    font-family: "Courier New", monospace;
-    font-size: 0.9rem;
+    color: #9ecbff;
     border: 1px solid var(--border);
 }
 
+/* 11. Simulator Panels */
 .console-panel,
 .state-panel,
 .simulator-container {
     background: var(--bg-panel);
+    border-radius: 10px;
     border: 1px solid var(--border-light);
-    border-radius: 12px;
 }
 
-@media (max-width: 1200px) {
+/* 12. Mobile */
+@media (max-width: 768px) {
     .site-header {
         flex-direction: column;
-        align-items: flex-start;
+        gap: 12px;
     }
-    
-    .logo {
-        margin-bottom: 12px;
-    }
-    
+
     .nav-links {
         width: 100%;
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        padding-bottom: 8px;
-    }
-}
-
-@media (max-width: 768px) {
-    .nav-links a {
-        font-size: 0.85rem;
-        padding: 6px 10px;
-    }
-
-    .content {
-        padding: 0 16px;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
     .card {
