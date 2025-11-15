@@ -14,11 +14,13 @@
             color: white;
             text-align: center;
             box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            margin-bottom: 32px;
         }
         .hero h1 {
             font-size: 2.6rem;
             margin-bottom: 12px;
             font-weight: 800;
+            color: white;
         }
         .hero p {
             max-width: 900px;
@@ -26,6 +28,7 @@
             font-size: 1.15rem;
             line-height: 1.7;
             opacity: 0.95;
+            color: #e2e8f0;
         }
         .cta-row {
             margin-top: 28px;
@@ -42,22 +45,24 @@
             transition: 0.25s ease;
         }
         .cta-row a:hover {
-            background: #1e3a8a;
+            background: #3b82f6;
             transform: translateY(-2px);
         }
 
         .section {
-            background: white;
+            background: #1e293b;
             padding: 32px;
             border-radius: 14px;
-            border: 1px solid #d1d5db;
+            border: 1px solid #334155;
             margin-top: 32px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
         .section h2 {
             font-size: 1.7rem;
-            color: #1e40af;
+            color: #38bdf8;
             margin-bottom: 14px;
+        }
+        .section p {
+            color: #94a3b8;
         }
         .grid-3 {
             display: grid;
@@ -65,21 +70,41 @@
             gap: 24px;
             margin-top: 22px;
         }
-        .card {
-            background: #f8fafc;
+        .feature-card {
+            background: #0f172a;
             padding: 22px;
             border-radius: 10px;
-            border-left: 4px solid #2563eb;
+            border: 1px solid #334155;
+            transition: 0.3s ease;
         }
-        .card h3 {
+        .feature-card:hover {
+            border-color: #38bdf8;
+            transform: translateY(-4px);
+        }
+        .feature-card h3 {
             font-size: 1.2rem;
-            margin-bottom: 8px;
-            color: #1e3a8a;
+            margin-bottom: 12px;
+            color: #38bdf8;
         }
-        .card p {
+        .feature-card p {
             font-size: 0.98rem;
-            line-height: 1.55;
-            color: #374151;
+            line-height: 1.6;
+            color: #94a3b8;
+        }
+        .cta-button {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 10px 18px;
+            background: #2563eb;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s ease;
+            font-size: 0.95rem;
+        }
+        .cta-button:hover {
+            background: #3b82f6;
         }
 
         @media (max-width: 900px) {
@@ -98,8 +123,6 @@
         <a href='automation.html'>IAM Automation</a>
         <a href='docs.html'>Documentation</a>
         <a href='review.html'>Faculty Review</a>
-        <a href='interactive-diagram.html'>Interactive Diagram</a>
-        <a href='cost-calculator.html'>Cost Calculator</a>
         <a href='live-demo.html'>Live Demo</a>
         <a href='security-simulator.html'>Security Simulator</a>
     </nav>
@@ -118,7 +141,7 @@
 
         <div class='cta-row'>
             <a href='architecture.html'>View Architecture</a>
-            <a href='automation.html'>Run IAM Automation</a>
+            <a href='automation.html'>IAM Automation</a>
             <a href='live-demo.html'>Try Live Demo</a>
         </div>
     </section>
@@ -134,21 +157,21 @@
         </p>
 
         <div class='grid-3'>
-            <div class='card'>
+            <div class='feature-card'>
                 <h3>Three-Tier VPC Architecture</h3>
                 <p>
                     Fully isolated network layers — Admin, Application, and Database — with security group 
                     referencing, NACL protections, and no public database access.
                 </p>
             </div>
-            <div class='card'>
+            <div class='feature-card'>
                 <h3>IAM Automation (Boto3)</h3>
                 <p>
                     Automated user provisioning, tagging, MFA enforcement, group-based policies, and 
                     least-privilege assignment using Python + AWS SDK.
                 </p>
             </div>
-            <div class='card'>
+            <div class='feature-card'>
                 <h3>KMS, CloudTrail & Logging</h3>
                 <p>
                     End-to-end encryption, full API audit trails, S3 and RDS logging, and operational 
@@ -163,31 +186,31 @@
         <h2>Interactive Tools & Simulations</h2>
 
         <div class='grid-3'>
-            <div class='card'>
-                <h3>Interactive Architecture Diagram</h3>
+            <div class='feature-card'>
+                <h3>Live IAM Demo</h3>
                 <p>
-                    Explore each component of the VPC in an animated diagram with clickable layers, labels, 
-                    and security annotations.
+                    Watch the IAM automation script execute in real-time with console output, state tracking, 
+                    and performance metrics.
                 </p>
-                <a class='cta-button' href='interactive-diagram.html' style='margin-top:14px;'>Open Diagram →</a>
+                <a class='cta-button' href='live-demo.html'>Launch Demo →</a>
             </div>
 
-            <div class='card'>
+            <div class='feature-card'>
                 <h3>Security Attack Simulator</h3>
                 <p>
                     Test real cyber attack scenarios (DB injection, lateral movement, IAM escalation) and 
                     watch AWS defenses respond in real-time.
                 </p>
-                <a class='cta-button' href='security-simulator.html' style='margin-top:14px;'>Launch Simulator →</a>
+                <a class='cta-button' href='security-simulator.html'>Launch Simulator →</a>
             </div>
 
-            <div class='card'>
-                <h3>AWS Cost Calculator</h3>
+            <div class='feature-card'>
+                <h3>Interactive Diagram</h3>
                 <p>
-                    Estimate monthly VPC, RDS, EC2, S3, and NAT Gateway pricing using a custom-built AWS 
-                    calculator aligned with your project components.
+                    Explore each component of the VPC in an interactive diagram with clickable layers and 
+                    detailed security information.
                 </p>
-                <a class='cta-button' href='cost-calculator.html' style='margin-top:14px;'>Open Calculator →</a>
+                <a class='cta-button' href='interactive-diagram.html'>Open Diagram →</a>
             </div>
         </div>
     </section>
