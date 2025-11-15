@@ -1,183 +1,210 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <title>Project Documentation | Mohammad Khan</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <meta charset='UTF-8'>
+    <title>Documentation | Mohammad Khan</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='style.css'>
 
     <style>
-        .section-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #1f2937;
-            margin-bottom: 14px;
-        }
-        .doc-section {
-            background: white;
-            padding: 28px;
-            border-radius: 14px;
+        .doc-card {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 12px;
             border: 1px solid #d1d5db;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
             margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
         }
-        .doc-section h2 {
-            color: #2563eb;
-            margin-bottom: 12px;
-            font-size: 1.6rem;
+        .doc-card h2 {
+            font-size: 1.7rem;
+            color: #1e40af;
+            margin-bottom: 16px;
         }
-        .doc-section p {
-            line-height: 1.7;
+        .doc-card p {
             font-size: 1.05rem;
+            line-height: 1.7;
             color: #374151;
         }
-        .callout {
-            background: #f1f5f9;
-            padding: 14px;
-            border-left: 4px solid #2563eb;
-            border-radius: 6px;
-            margin: 14px 0;
-            color: #334155;
-        }
-        .highlight-box {
-            background: #fefce8;
-            padding: 14px;
-            border-left: 4px solid #eab308;
-            border-radius: 6px;
-            margin: 14px 0;
-            color: #7c6f1c;
-        }
-        .doc-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 18px;
-        }
-        .doc-table th, .doc-table td {
-            border: 1px solid #d1d5db;
-            padding: 12px;
-            text-align: left;
-        }
-        .doc-table th {
+        .info-box {
             background: #eff6ff;
-            font-weight: 700;
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .success-box {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .section-list {
+            padding-left: 20px;
+            margin-top: 12px;
+        }
+        .section-list li {
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        .code-box {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: "Courier New", monospace;
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 14px;
+            overflow-x: auto;
+            font-size: 0.92rem;
+        }
+        .subheading {
+            font-size: 1.25rem;
             color: #1e3a8a;
-        }
-        .doc-table td {
-            background: #ffffff;
-        }
-        .file-link {
-            font-weight: 600;
-            color: #2563eb;
+            margin-top: 22px;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
     </style>
 </head>
 
 <body>
 
-<header class="site-header">
-    <div class="logo">AWS Student Data Infrastructure</div>
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="docs.html" class="active">Documentation</a>
-        <a href="review.html">Faculty Review</a>
+<header class='site-header'>
+    <div class='logo'>AWS Student Data Infrastructure</div>
+    <nav class='nav-links'>
+        <a href='index.html'>Home</a>
+        <a href='architecture.html'>Architecture</a>
+        <a href='automation.html'>IAM Automation</a>
+        <a href='docs.html' class='active'>Documentation</a>
+        <a href='review.html'>Faculty Review</a>
     </nav>
 </header>
 
-<main class="content">
+<main class='content'>
 
-    <!-- DOCS OVERVIEW -->
-    <section class="doc-section">
-        <h2>Documentation Overview</h2>
+    <!-- OVERVIEW -->
+    <section class='doc-card'>
+        <h2>Project Documentation Overview</h2>
         <p>
-            This section contains finalized technical documentation for the AWS Student Data Infrastructure 
-            project. These documents were prepared for academic submission and faculty evaluation, ensuring 
-            high standards in security architecture, automation, and technical writing.
+            This section provides full documentation for the AWS Student Data Infrastructure project, including the 
+            architecture summary, automation design, execution outputs, and academic review. The goal is to provide 
+            complete transparency into the project's planning, infrastructure decisions, and IAM implementation.
         </p>
 
-        <div class="callout">
-            All documentation below is <strong>100% complete</strong> and based on the production-grade build 
-            of this project. No placeholders, drafts, or incomplete sections.
+        <div class='info-box'>
+            All documentation presented here is sourced directly from project files included in the GitHub repository.
         </div>
     </section>
 
     <!-- ARCHITECTURE SUMMARY -->
-    <section class="doc-section">
+    <section class='doc-card'>
         <h2>Architecture Summary</h2>
+
+        <p>The following architecture summary is based on the <strong>architecture_summary.md</strong> file:</p>
+
+        <div class='code-box'>
+Three-tier VPC architecture with public, private app, and private database subnets.
+NAT gateway for outbound-only internet access for private subnets.
+RDS PostgreSQL with encryption, private networking, and subnet group isolation.
+Security groups configured with least privilege and SG-to-SG rules.
+IAM roles separating read-only, admin, and automation functions.
+CloudTrail enabled for all regions with S3 log storage and validation.
+        </div>
+
+        <p class='subheading'>Core Design Goals</p>
+        <ul class='section-list'>
+            <li>Maintain full FERPA-aligned data isolation</li>
+            <li>Eliminate all public attack surfaces</li>
+            <li>Enforce IAM least privilege and MFA</li>
+            <li>Ensure full auditability via CloudTrail & VPC Flow Logs</li>
+        </ul>
+    </section>
+
+    <!-- AUTOMATION DOCUMENTATION -->
+    <section class='doc-card'>
+        <h2>IAM Automation Documentation</h2>
+
         <p>
-            A high-level architecture summary describing the secure multi-tier VPC design, IAM governance 
-            structure, data access controls, and encrypted storage implementation.
+            IAM automation is handled by the <strong>iam_provisioner.py</strong> script. It provisions users, attaches 
+            permissions, enforces MFA, and logs actions for auditing.
         </p>
 
-        <table class="doc-table">
-            <tr><th>File</th><th>Description</th></tr>
-            <tr>
-                <td><a class="file-link" href="architecture_summary.md" target="_blank">architecture_summary.md</a></td>
-                <td>Detailed breakdown of the Admin, App, and DB tiers, routing tables, subnets, logging, and security design.</td>
-            </tr>
-        </table>
+        <p class='subheading'>Key Features</p>
+        <ul class='section-list'>
+            <li>Automatic user creation with tagging</li>
+            <li>Group-based permission assignment (role-access)</li>
+            <li>MFA enforcement through IAM deny policy</li>
+            <li>Optional access key generation</li>
+            <li>Execution results saved to execution_output.txt</li>
+        </ul>
 
-        <div class="highlight-box">
-            Includes diagrams, flow explanations, and control mappings aligned to AWS Well-Architected Framework.
+        <p class='subheading'>Excerpt from iam_provisioner.py</p>
+
+        <div class='code-box'>
+iam.create_user(UserName=username)
+
+iam.add_user_to_group(
+    GroupName=f"{role}-access",
+    UserName=username
+)
+
+iam.put_user_policy(
+    UserName=username,
+    PolicyName="MFAEnforcement",
+    PolicyDocument="{ ... }"
+)
         </div>
     </section>
 
-    <!-- FACULTY REVIEW REPORT -->
-    <section class="doc-section">
-        <h2>Faculty Review Report</h2>
-        <p>
-            Submitted for academic evaluation. This report includes instructor feedback, analysis of the security 
-            model, architectural strengths, IAM automation reliability, and professional presentation.
-        </p>
-
-        <table class="doc-table">
-            <tr><th>File</th><th>Description</th></tr>
-            <tr>
-                <td><a class="file-link" href="faculty_review_report.md" target="_blank">faculty_review_report.md</a></td>
-                <td>Feedback summary, review notes, and academic evaluation of the project.</td>
-            </tr>
-        </table>
-    </section>
-
     <!-- EXECUTION OUTPUT -->
-    <section class="doc-section">
-        <h2>IAM Execution Output</h2>
+    <section class='doc-card'>
+        <h2>Execution Output Report</h2>
         <p>
-            This includes real execution logs generated from the IAM provisioning script in a controlled 
-            environment, showing group creation, tag assignment, MFA enforcement, and user provisioning.
+            Below is a shortened excerpt from <strong>execution_output.txt</strong>, which records all provisioning actions:
         </p>
 
-        <table class="doc-table">
-            <tr><th>File</th><th>Description</th></tr>
-            <tr>
-                <td><a class="file-link" href="execution_output.txt" target="_blank">execution_output.txt</a></td>
-                <td>Actual console output produced by the iam_provisioner.py script.</td>
-            </tr>
-        </table>
+        <div class='code-box'>
+[INFO] Creating IAM user: student_user_01
+[INFO] Adding user to group: readonly-access
+[INFO] Enforcing MFA denial policy
+[INFO] Tagging IAM identity
+[INFO] Completed IAM provisioning successfully
+        </div>
+
+        <div class='success-box'>
+            All IAM automation steps completed successfully with zero errors.
+        </div>
     </section>
 
-    <!-- WEBSITE PREVIEW -->
-    <section class="doc-section">
-        <h2>Website Output Preview</h2>
+    <!-- FACULTY FEEDBACK -->
+    <section class='doc-card'>
+        <h2>Faculty Review Notes</h2>
         <p>
-            A captured preview showing the rendered version of this website at the time of submission, ensuring 
-            visual consistency across grading and presentation environments.
+            The following is taken from <strong>faculty_review_report.md</strong>, included in the project repo.
         </p>
 
-        <table class="doc-table">
-            <tr><th>File</th><th>Description</th></tr>
-            <tr>
-                <td><a class="file-link" href="website_output_preview.txt" target="_blank">website_output_preview.txt</a></td>
-                <td>Static preview used during faculty evaluation.</td>
-            </tr>
-        </table>
+        <div class='code-box'>
+The project demonstrates outstanding understanding of AWS IAM, VPC structure, 
+and data protection best practices. Documentation is clear, technical, and 
+well-organized. Automation scripting is valid and logically structured.
+        </div>
+
+        <div class='info-box'>
+            This review was used to validate the project for academic submission.
+        </div>
     </section>
 
 </main>
 
-<footer class="site-footer">
-    <p>Project Documentation • Mohammad Khan • Updated 2025</p>
+<footer class='site-footer'>
+    <p>Documentation • Mohammad Khan • Updated 2025</p>
 </footer>
 
 </body>
