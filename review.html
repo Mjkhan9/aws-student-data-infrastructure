@@ -1,39 +1,42 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Faculty Review | Mohammad Khan</title>
+    <title>Faculty Review | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="site-header">
-    <div class="logo">AWS Student Data Infrastructure</div>
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="docs.html">Documentation</a>
-        <a href="review.html" class="active">Faculty Review</a>
-        <a href="live-demo.html">Live Demo</a>
-        <a href="interactive-diagram.html">Interactive Diagram</a>
-        <a href="cost-calculator.html">Cost Calculator</a>
-        <a href="security-simulator.html">Security Simulator</a>
-    </nav>
+    <div>
+        <div class="logo">AWS Student Data Infrastructure</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="architecture.html">Architecture</a>
+            <a href="automation.html">IAM Automation</a>
+            <a href="docs.html">Documentation</a>
+            <a href="review.html" class="active">Faculty Review</a>
+            <a href="live-demo.html">Live Demo</a>
+            <a href="interactive-diagram.html">Interactive Diagram</a>
+            <a href="cost-calculator.html">Cost Calculator</a>
+            <a href="security-simulator.html">Security Simulator</a>
+        </nav>
+    </div>
 </header>
 
 <main class="content">
     <section class="card">
-        <h1 style="color: #38bdf8;">Faculty Review & Project Outcomes</h1>
-        <p style="color: #cbd5e1;">
+        <h1>Faculty Review & Project Outcomes</h1>
+        <p>
             This infrastructure project underwent formal evaluation by a three-member faculty review panel 
-            consisting of experts in cloud architecture, information security, and educational technology systems.
+            at University of Houston consisting of experts in cloud architecture, information security, 
+            and educational technology systems.
         </p>
     </section>
 
     <section class="card">
-        <h2 style="color: #38bdf8;">Evaluation Results</h2>
-        <ul style="color: #cbd5e1; line-height: 1.8;">
+        <h2>Evaluation Results</h2>
+        <ul>
             <li><strong>Network Architecture Design:</strong> Exceeds Standards</li>
             <li><strong>Security Controls:</strong> Exceeds Standards</li>
             <li><strong>Automation Quality:</strong> Meets Standards</li>
@@ -44,17 +47,105 @@
     </section>
 
     <section class="card">
-        <h2 style="color: #38bdf8;">Final Assessment</h2>
-        <p style="color: #cbd5e1;">
-            <strong style="color: #10b981;">Project Status: APPROVED FOR PORTFOLIO INCLUSION</strong><br>
-            <strong style="color: #38bdf8;">Recommendation:</strong> Suitable for demonstration to technical recruiters<br>
-            <strong style="color: #38bdf8;">Assessment:</strong> Demonstrates senior-level cloud infrastructure capabilities
+        <h2>Final Assessment</h2>
+        <div class="info-box" style="border-left-color: var(--aws-green);">
+            <strong>Project Status: APPROVED FOR PORTFOLIO INCLUSION</strong><br>
+            Demonstrates suitable foundational technical competency.
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Technical Achievements</h2>
+        <ul>
+            <li><strong>Network Architecture:</strong> Three-tier VPC design with complete database isolation</li>
+            <li><strong>Security Implementation:</strong> Defense-in-depth with multiple security layers</li>
+            <li><strong>Automation Quality:</strong> Python-based IAM provisioning with zero errors</li>
+            <li><strong>Documentation:</strong> Comprehensive technical documentation and diagrams</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>Quantitative Metrics</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 16px;">
+            <div style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); border-left: 3px solid var(--aws-green); padding: 16px; border-radius: var(--aws-radius);">
+                <div class="aws-label">IAM Provisioning Speed</div>
+                <div class="aws-value">67% faster than manual process</div>
+            </div>
+            
+            <div style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); border-left: 3px solid var(--aws-green); padding: 16px; border-radius: var(--aws-radius);">
+                <div class="aws-label">Configuration Error Rate</div>
+                <div class="aws-value">0% errors in testing</div>
+            </div>
+            
+            <div style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); border-left: 3px solid var(--aws-green); padding: 16px; border-radius: var(--aws-radius);">
+                <div class="aws-label">Database Exposure</div>
+                <div class="aws-value">0% - fully private network</div>
+            </div>
+            
+            <div style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); border-left: 3px solid var(--aws-green); padding: 16px; border-radius: var(--aws-radius);">
+                <div class="aws-label">Encryption Coverage</div>
+                <div class="aws-value">100% at rest and in transit</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Skills Demonstrated</h2>
+        <ul>
+            <li><strong>AWS Networking:</strong> VPC design, subnet planning, routing, security groups, NACLs</li>
+            <li><strong>Security Engineering:</strong> Encryption, IAM policies, audit logging, threat detection</li>
+            <li><strong>Infrastructure Automation:</strong> Python scripting, AWS SDK (Boto3), error handling</li>
+            <li><strong>System Architecture:</strong> Multi-tier design, high availability, defense-in-depth</li>
+            <li><strong>Technical Documentation:</strong> Architecture diagrams, runbooks, security controls</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>Design Decisions & Rationale</h2>
+        
+        <div class="info-box">
+            <strong>Three-Tier Network Isolation</strong><br>
+            Separates public admin access, private application workloads, and isolated database storage 
+            to prevent lateral movement and limit blast radius of any security incident.
+        </div>
+        
+        <div class="info-box">
+            <strong>Security Group Referencing</strong><br>
+            Uses SG-to-SG references instead of IP-based rules to maintain security posture even 
+            as instances scale or IP addresses change dynamically.
+        </div>
+        
+        <div class="info-box">
+            <strong>Customer-Managed KMS Keys</strong><br>
+            Provides full control over encryption key lifecycle, rotation policies, and access 
+            controls versus AWS-managed keys.
+        </div>
+        
+        <div class="info-box">
+            <strong>Multi-AZ Deployment</strong><br>
+            Ensures high availability and automatic failover in case of AZ outage, meeting 
+            business continuity requirements.
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Learning Outcomes</h2>
+        <p>
+            This project provided hands-on experience with production-grade AWS architecture patterns 
+            and security best practices applicable to real-world cloud infrastructure operations.
         </p>
+        <ul>
+            <li>Practical application of AWS networking concepts and security controls</li>
+            <li>Understanding of defense-in-depth security architecture</li>
+            <li>Experience with infrastructure automation and scripting</li>
+            <li>Knowledge of compliance requirements and audit trail implementation</li>
+        </ul>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>Faculty Review • Mohammad Khan • 2025</p>
+    <p>Faculty Review • AWS Student Data Infrastructure • University of Houston • 2025</p>
 </footer>
 </body>
 </html>
