@@ -1,47 +1,146 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Interactive Architecture | Mohammad Khan</title>
+    <title>Interactive Architecture | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <style>
-        .diagram-container {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 24px;
+        /* Fixed layout - proper structure */
+        .diagram-page-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 16px;
+            min-height: 600px;
         }
         
-        .interactive-diagram {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
+        /* Left sidebar - tier cards */
+        .tier-sidebar {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            padding: 16px;
+        }
+        
+        .tier-sidebar h3 {
+            font-size: 13px;
+            color: var(--aws-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        
+        /* Main diagram canvas - structured */
+        .diagram-canvas {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            padding: 16px;
+            position: relative;
+            min-height: 600px;
+        }
+        
+        .diagram-header {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--aws-border);
+        }
+        
+        .diagram-header h2 {
+            font-size: 18px;
+            color: var(--aws-text-primary);
+            margin: 0;
+            font-weight: 700;
+            border: none;
+            padding: 0;
+        }
+        
+        .diagram-subtitle {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+            margin-top: 4px;
+        }
+        
+        /* Blueprint grid background */
+        .diagram-viewport {
+            position: relative;
+            min-height: 500px;
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            border-radius: var(--aws-radius);
+        }
+        
+        /* Tier cards - FIXED COLORS (darkened to match theme) */
+        .vpc-tier {
+            background: var(--aws-card-bg);
+            border: 2px solid;
+            border-radius: var(--aws-radius);
+            padding: 12px;
+            margin-bottom: 12px;
+            transition: all 0.15s ease;
             cursor: pointer;
         }
         
-        .vpc-component {
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .vpc-tier:hover {
+            background: #2a3441;
+            transform: translateX(2px);
         }
         
-        .vpc-component:hover {
-            filter: brightness(1.1);
+        /* Darkened pastel colors to match dark theme */
+        .tier-internet {
+            border-color: #b8860b;
+            background: rgba(184, 134, 11, 0.08);
         }
         
-        .vpc-component.selected {
-            filter: brightness(1.2);
-            stroke: #fbbf24;
-            stroke-width: 3;
+        .tier-admin {
+            border-color: #4a7cb8;
+            background: rgba(74, 124, 184, 0.08);
         }
         
+        .tier-app {
+            border-color: #6b5ba3;
+            background: rgba(107, 91, 163, 0.08);
+        }
+        
+        .tier-db {
+            border-color: #b84a7c;
+            background: rgba(184, 74, 124, 0.08);
+        }
+        
+        .tier-s3 {
+            border-color: #2d8659;
+            background: rgba(45, 134, 89, 0.08);
+        }
+        
+        .tier-security {
+            border-color: var(--aws-orange);
+            background: rgba(255, 153, 0, 0.08);
+        }
+        
+        .vpc-tier-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .vpc-tier-cidr {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+            font-family: Monaco, monospace;
+        }
+        
+        /* Info panel - FIXED STYLING (no glowing teal) */
         .info-panel {
-            background: linear-gradient(135deg, #f0f9ff, #ffffff);
-            border: 2px solid #3b82f6;
-            border-radius: 8px;
-            padding: 24px;
-            margin-top: 24px;
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 3px solid var(--aws-blue);
+            border-radius: var(--aws-radius);
+            padding: 16px;
+            margin-top: 16px;
             display: none;
         }
         
@@ -62,75 +161,91 @@
         }
         
         .info-panel h3 {
-            color: #2563eb;
-            margin-bottom: 16px;
-            font-size: 1.5rem;
+            color: var(--aws-blue);
+            font-size: 16px;
+            margin-bottom: 12px;
+            border: none;
+            padding: 0;
         }
         
         .info-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-top: 16px;
-        }
-        
-        .info-item {
-            background: white;
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 4px solid #3b82f6;
-        }
-        
-        .info-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        
-        .info-value {
-            color: #0f172a;
-            font-weight: 500;
-        }
-        
-        .sg-rules {
-            background: #f8fafc;
-            padding: 12px;
-            border-radius: 6px;
+            gap: 12px;
             margin-top: 12px;
         }
         
+        .info-item {
+            background: var(--aws-panel-bg);
+            padding: 10px;
+            border-radius: var(--aws-radius);
+            border: 1px solid var(--aws-border);
+        }
+        
+        .info-label {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-value {
+            color: var(--aws-text-primary);
+            font-weight: 500;
+            font-size: 13px;
+        }
+        
+        .sg-rules {
+            background: var(--aws-panel-bg);
+            padding: 10px;
+            border-radius: var(--aws-radius);
+            margin-top: 12px;
+            border: 1px solid var(--aws-border);
+        }
+        
         .sg-rule {
-            padding: 8px;
-            background: white;
+            padding: 6px;
+            background: var(--aws-card-bg);
             margin: 4px 0;
-            border-left: 3px solid #10b981;
-            font-family: monospace;
-            font-size: 0.85rem;
+            border-left: 2px solid var(--aws-green);
+            font-family: Monaco, monospace;
+            font-size: 12px;
+            color: var(--aws-text-secondary);
         }
         
         .legend {
             display: flex;
-            gap: 24px;
-            justify-content: center;
-            margin-top: 16px;
+            gap: 16px;
+            justify-content: flex-start;
+            margin-top: 12px;
             flex-wrap: wrap;
+            padding: 12px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            font-size: 12px;
         }
         
         .legend-color {
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
-            border: 2px solid #334155;
+            width: 16px;
+            height: 16px;
+            border-radius: var(--aws-radius);
+            border: 2px solid currentColor;
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
+            .diagram-page-layout {
+                grid-template-columns: 1fr;
+            }
+            
             .info-grid {
                 grid-template-columns: 1fr;
             }
@@ -139,226 +254,145 @@
 </head>
 <body>
 <header class="site-header">
-    <div class="logo">AWS Student Data Infrastructure</div>
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="docs.html">Documentation</a>
-        <a href="review.html">Faculty Review</a>
-        <a href="live-demo.html">Live Demo</a>
-        <a href="interactive-diagram.html">Interactive Diagram</a>
-        <a href="cost-calculator.html">Cost Calculator</a>
-        <a href="security-simulator.html">Security Simulator</a>
-    </nav>
+    <div>
+        <div class="logo">AWS Student Data Infrastructure</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="architecture.html">Architecture</a>
+            <a href="automation.html">IAM Automation</a>
+            <a href="docs.html">Documentation</a>
+            <a href="review.html">Faculty Review</a>
+            <a href="live-demo.html">Live Demo</a>
+            <a href="interactive-diagram.html" class="active">Interactive Diagram</a>
+            <a href="cost-calculator.html">Cost Calculator</a>
+            <a href="security-simulator.html">Security Simulator</a>
+        </nav>
+    </div>
 </header>
 
 <main class="content">
     <section class="card">
-        <h1>Interactive VPC Architecture Diagram</h1>
+        <h1>Interactive VPC Architecture</h1>
         <p>
-            Click on any component in the diagram below to see detailed information about its configuration, 
-            security rules, and role in the overall architecture. This interactive visualization helps 
-            understand how the three-tier VPC design provides defense-in-depth security for student data.
+            Click on any network tier to see detailed configuration, security rules, and role in the 
+            three-tier architecture. This visualization demonstrates defense-in-depth security design 
+            for student data protection.
         </p>
     </section>
 
-    <div class="diagram-container">
-        <svg class="interactive-diagram" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-            <rect x="50" y="50" width="1100" height="700" fill="#f0f9ff" stroke="#2563eb" stroke-width="3" rx="10"/>
-            <text x="600" y="90" text-anchor="middle" font-size="28" font-weight="bold" fill="#2563eb">
-                VPC: 172.32.0.0/16
-            </text>
+    <div class="diagram-page-layout">
+        <!-- Left sidebar with tier cards -->
+        <aside class="tier-sidebar">
+            <h3>Network Tiers</h3>
             
-            <g class="vpc-component" data-component="admin-tier">
-                <rect x="100" y="130" width="480" height="160" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="8"/>
-                <text x="340" y="160" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e40af">
-                    Admin Tier (Public)
-                </text>
-                
-                <rect x="120" y="180" width="200" height="90" fill="#bfdbfe" stroke="#2563eb" stroke-width="2" rx="6"/>
-                <text x="220" y="205" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e3a8a">
-                    Admin Subnet A
-                </text>
-                <text x="220" y="225" text-anchor="middle" font-size="12" fill="#1e40af">
-                    172.32.1.0/24
-                </text>
-                <text x="220" y="245" text-anchor="middle" font-size="11" fill="#475569">
-                    Bastion Hosts
-                </text>
-                <text x="220" y="260" text-anchor="middle" font-size="11" fill="#475569">
-                    NAT Gateway
-                </text>
-                
-                <rect x="340" y="180" width="200" height="90" fill="#bfdbfe" stroke="#2563eb" stroke-width="2" rx="6"/>
-                <text x="440" y="205" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e3a8a">
-                    Admin Subnet B
-                </text>
-                <text x="440" y="225" text-anchor="middle" font-size="12" fill="#1e40af">
-                    172.32.2.0/24
-                </text>
-                <text x="440" y="245" text-anchor="middle" font-size="11" fill="#475569">
-                    Monitoring
-                </text>
-                <text x="440" y="260" text-anchor="middle" font-size="11" fill="#475569">
-                    Jump Servers
-                </text>
-            </g>
-            
-            <g class="vpc-component" data-component="app-tier">
-                <rect x="100" y="320" width="480" height="180" fill="#e0e7ff" stroke="#6366f1" stroke-width="2" rx="8"/>
-                <text x="340" y="350" text-anchor="middle" font-size="20" font-weight="bold" fill="#4338ca">
-                    Application Tier (Private)
-                </text>
-                
-                <rect x="120" y="370" width="200" height="110" fill="#c7d2fe" stroke="#6366f1" stroke-width="2" rx="6"/>
-                <text x="220" y="395" text-anchor="middle" font-size="14" font-weight="bold" fill="#3730a3">
-                    App Subnet A
-                </text>
-                <text x="220" y="415" text-anchor="middle" font-size="12" fill="#4338ca">
-                    172.32.10.0/24
-                </text>
-                <text x="220" y="435" text-anchor="middle" font-size="11" fill="#475569">
-                    ECS Fargate
-                </text>
-                <text x="220" y="450" text-anchor="middle" font-size="11" fill="#475569">
-                    Application Load Balancer
-                </text>
-                <text x="220" y="465" text-anchor="middle" font-size="11" fill="#475569">
-                    Lambda Functions
-                </text>
-                
-                <rect x="340" y="370" width="200" height="110" fill="#c7d2fe" stroke="#6366f1" stroke-width="2" rx="6"/>
-                <text x="440" y="395" text-anchor="middle" font-size="14" font-weight="bold" fill="#3730a3">
-                    App Subnet B
-                </text>
-                <text x="440" y="415" text-anchor="middle" font-size="12" fill="#4338ca">
-                    172.32.11.0/24
-                </text>
-                <text x="440" y="435" text-anchor="middle" font-size="11" fill="#475569">
-                    ECS Fargate
-                </text>
-                <text x="440" y="450" text-anchor="middle" font-size="11" fill="#475569">
-                    API Gateway
-                </text>
-                <text x="440" y="465" text-anchor="middle" font-size="11" fill="#475569">
-                    Auto-Scaling
-                </text>
-            </g>
-            
-            <g class="vpc-component" data-component="db-tier">
-                <rect x="100" y="530" width="480" height="180" fill="#fce7f3" stroke="#ec4899" stroke-width="2" rx="8"/>
-                <text x="340" y="560" text-anchor="middle" font-size="20" font-weight="bold" fill="#be185d">
-                    Database Tier (Isolated)
-                </text>
-                
-                <rect x="120" y="580" width="200" height="110" fill="#fbcfe8" stroke="#ec4899" stroke-width="2" rx="6"/>
-                <text x="220" y="605" text-anchor="middle" font-size="14" font-weight="bold" fill="#9f1239">
-                    DB Subnet A
-                </text>
-                <text x="220" y="625" text-anchor="middle" font-size="12" fill="#be185d">
-                    172.32.20.0/24
-                </text>
-                <text x="220" y="645" text-anchor="middle" font-size="11" fill="#475569">
-                    RDS Primary
-                </text>
-                <text x="220" y="660" text-anchor="middle" font-size="11" fill="#475569">
-                    PostgreSQL 15.3
-                </text>
-                <text x="220" y="675" text-anchor="middle" font-size="11" fill="#475569">
-                    KMS Encrypted
-                </text>
-                
-                <rect x="340" y="580" width="200" height="110" fill="#fbcfe8" stroke="#ec4899" stroke-width="2" rx="6"/>
-                <text x="440" y="605" text-anchor="middle" font-size="14" font-weight="bold" fill="#9f1239">
-                    DB Subnet B
-                </text>
-                <text x="440" y="625" text-anchor="middle" font-size="12" fill="#be185d">
-                    172.32.21.0/24
-                </text>
-                <text x="440" y="645" text-anchor="middle" font-size="11" fill="#475569">
-                    RDS Standby
-                </text>
-                <text x="440" y="660" text-anchor="middle" font-size="11" fill="#475569">
-                    Multi-AZ Failover
-                </text>
-                <text x="440" y="675" text-anchor="middle" font-size="11" fill="#475569">
-                    Auto Backups
-                </text>
-            </g>
-            
-            <g class="vpc-component" data-component="s3-bucket">
-                <rect x="650" y="350" width="480" height="140" fill="#d1fae5" stroke="#10b981" stroke-width="2" rx="8"/>
-                <text x="890" y="380" text-anchor="middle" font-size="20" font-weight="bold" fill="#065f46">
-                    S3 Storage
-                </text>
-                <rect x="680" y="400" width="420" height="70" fill="#a7f3d0" stroke="#10b981" stroke-width="2" rx="6"/>
-                <text x="890" y="425" text-anchor="middle" font-size="14" font-weight="bold" fill="#064e3b">
-                    student-data-reports-production
-                </text>
-                <text x="890" y="445" text-anchor="middle" font-size="12" fill="#065f46">
-                    SSE-KMS Encryption • Versioning Enabled
-                </text>
-                <text x="890" y="460" text-anchor="middle" font-size="11" fill="#475569">
-                    Cross-Region Replication • Block Public Access
-                </text>
-            </g>
-            
-            <g class="vpc-component" data-component="security">
-                <rect x="650" y="130" width="230" height="180" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="8"/>
-                <text x="765" y="160" text-anchor="middle" font-size="18" font-weight="bold" fill="#92400e">
-                    Security &amp; Logging
-                </text>
-                <rect x="670" y="180" width="190" height="40" fill="#fde68a" stroke="#f59e0b" stroke-width="1" rx="4"/>
-                <text x="765" y="205" text-anchor="middle" font-size="12" fill="#78350f">CloudTrail Logging</text>
-                
-                <rect x="670" y="230" width="190" height="40" fill="#fde68a" stroke="#f59e0b" stroke-width="1" rx="4"/>
-                <text x="765" y="255" text-anchor="middle" font-size="12" fill="#78350f">VPC Flow Logs</text>
-                
-                <rect x="670" y="280" width="190" height="20" fill="#fde68a" stroke="#f59e0b" stroke-width="1" rx="4"/>
-                <text x="765" y="295" text-anchor="middle" font-size="11" fill="#78350f">GuardDuty</text>
-            </g>
-            
-            <g class="vpc-component" data-component="kms">
-                <rect x="900" y="130" width="230" height="180" fill="#f3e8ff" stroke="#a855f7" stroke-width="2" rx="8"/>
-                <text x="1015" y="160" text-anchor="middle" font-size="18" font-weight="bold" fill="#6b21a8">
-                    Encryption (KMS)
-                </text>
-                <rect x="920" y="180" width="190" height="40" fill="#e9d5ff" stroke="#a855f7" stroke-width="1" rx="4"/>
-                <text x="1015" y="205" text-anchor="middle" font-size="12" fill="#581c87">student-data-key</text>
-                
-                <rect x="920" y="230" width="190" height="40" fill="#e9d5ff" stroke="#a855f7" stroke-width="1" rx="4"/>
-                <text x="1015" y="255" text-anchor="middle" font-size="12" fill="#581c87">cloudtrail-key</text>
-                
-                <rect x="920" y="280" width="190" height="20" fill="#e9d5ff" stroke="#a855f7" stroke-width="1" rx="4"/>
-                <text x="1015" y="295" text-anchor="middle" font-size="11" fill="#581c87">Auto-Rotation Enabled</text>
-            </g>
-            
-            <defs>
-                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                    <polygon points="0 0, 10 3, 0 6" fill="#64748b"/>
-                </marker>
-            </defs>
-            
-            <line x1="340" y1="290" x2="340" y2="320" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
-            
-            <line x1="340" y1="500" x2="340" y2="530" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
-            
-            <line x1="580" y1="420" x2="650" y2="420" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)" stroke-dasharray="5,5"/>
-        </svg>
-        
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-color" style="background: #dbeafe;"></div>
-                <span>Public Tier (Internet Access)</span>
+            <div class="vpc-tier tier-internet" data-component="internet">
+                <div class="vpc-tier-title">Internet Gateway</div>
+                <div class="vpc-tier-cidr">Public Access</div>
             </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: #e0e7ff;"></div>
-                <span>Private Tier (NAT Gateway)</span>
+            
+            <div class="vpc-tier tier-admin" data-component="admin-tier">
+                <div class="vpc-tier-title">Admin Tier</div>
+                <div class="vpc-tier-cidr">172.32.1.0/24</div>
             </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: #fce7f3;"></div>
-                <span>Isolated Tier (No Internet)</span>
+            
+            <div class="vpc-tier tier-app" data-component="app-tier">
+                <div class="vpc-tier-title">Application Tier</div>
+                <div class="vpc-tier-cidr">172.32.10.0/24</div>
+            </div>
+            
+            <div class="vpc-tier tier-db" data-component="db-tier">
+                <div class="vpc-tier-title">Database Tier</div>
+                <div class="vpc-tier-cidr">172.32.20.0/24</div>
+            </div>
+            
+            <div class="vpc-tier tier-s3" data-component="s3-bucket">
+                <div class="vpc-tier-title">S3 Storage</div>
+                <div class="vpc-tier-cidr">Encrypted Buckets</div>
+            </div>
+            
+            <div class="vpc-tier tier-security" data-component="security">
+                <div class="vpc-tier-title">Security & Logging</div>
+                <div class="vpc-tier-cidr">CloudTrail + Flow Logs</div>
+            </div>
+        </aside>
+
+        <!-- Main diagram canvas -->
+        <div class="diagram-canvas">
+            <div class="diagram-header">
+                <h2>VPC Architecture: 172.32.0.0/16</h2>
+                <div class="diagram-subtitle">Multi-tier network isolation with zero-trust security</div>
+            </div>
+            
+            <div class="diagram-viewport">
+                <svg width="100%" height="500" viewBox="0 0 900 500" style="display: block;">
+                    <!-- VPC Container -->
+                    <rect x="20" y="20" width="860" height="460" fill="none" stroke="#3b82f6" stroke-width="2" rx="4"/>
+                    <text x="450" y="50" text-anchor="middle" font-size="16" fill="#d5dbdb" font-weight="700">
+                        VPC: 172.32.0.0/16
+                    </text>
+                    
+                    <!-- Admin Tier -->
+                    <rect x="50" y="80" width="250" height="100" fill="rgba(74, 124, 184, 0.15)" stroke="#4a7cb8" stroke-width="2" rx="3"/>
+                    <text x="175" y="105" text-anchor="middle" font-size="14" fill="#d5dbdb" font-weight="700">Admin Tier (Public)</text>
+                    <text x="175" y="125" text-anchor="middle" font-size="12" fill="#aab7b8">172.32.1.0/24</text>
+                    <text x="175" y="145" text-anchor="middle" font-size="11" fill="#aab7b8">Bastion • NAT Gateway</text>
+                    <text x="175" y="165" text-anchor="middle" font-size="11" fill="#aab7b8">Corporate IP Only</text>
+                    
+                    <!-- App Tier -->
+                    <rect x="50" y="200" width="250" height="100" fill="rgba(107, 91, 163, 0.15)" stroke="#6b5ba3" stroke-width="2" rx="3"/>
+                    <text x="175" y="225" text-anchor="middle" font-size="14" fill="#d5dbdb" font-weight="700">Application Tier (Private)</text>
+                    <text x="175" y="245" text-anchor="middle" font-size="12" fill="#aab7b8">172.32.10.0/24</text>
+                    <text x="175" y="265" text-anchor="middle" font-size="11" fill="#aab7b8">ECS Fargate • ALB</text>
+                    <text x="175" y="285" text-anchor="middle" font-size="11" fill="#aab7b8">NAT Outbound Only</text>
+                    
+                    <!-- DB Tier -->
+                    <rect x="50" y="320" width="250" height="100" fill="rgba(184, 74, 124, 0.15)" stroke="#b84a7c" stroke-width="2" rx="3"/>
+                    <text x="175" y="345" text-anchor="middle" font-size="14" fill="#d5dbdb" font-weight="700">Database Tier (Isolated)</text>
+                    <text x="175" y="365" text-anchor="middle" font-size="12" fill="#aab7b8">172.32.20.0/24</text>
+                    <text x="175" y="385" text-anchor="middle" font-size="11" fill="#aab7b8">RDS PostgreSQL</text>
+                    <text x="175" y="405" text-anchor="middle" font-size="11" fill="#aab7b8">No Internet Access</text>
+                    
+                    <!-- S3 Storage -->
+                    <rect x="350" y="200" width="250" height="100" fill="rgba(45, 134, 89, 0.15)" stroke="#2d8659" stroke-width="2" rx="3"/>
+                    <text x="475" y="225" text-anchor="middle" font-size="14" fill="#d5dbdb" font-weight="700">S3 Storage</text>
+                    <text x="475" y="245" text-anchor="middle" font-size="12" fill="#aab7b8">student-data-reports</text>
+                    <text x="475" y="265" text-anchor="middle" font-size="11" fill="#aab7b8">SSE-KMS Encrypted</text>
+                    <text x="475" y="285" text-anchor="middle" font-size="11" fill="#aab7b8">VPC Endpoint Access</text>
+                    
+                    <!-- Security & Logging -->
+                    <rect x="630" y="80" width="230" height="120" fill="rgba(255, 153, 0, 0.10)" stroke="#ff9900" stroke-width="2" rx="3"/>
+                    <text x="745" y="105" text-anchor="middle" font-size="14" fill="#d5dbdb" font-weight="700">Security & Audit</text>
+                    <text x="745" y="130" text-anchor="middle" font-size="11" fill="#aab7b8">CloudTrail All Regions</text>
+                    <text x="745" y="150" text-anchor="middle" font-size="11" fill="#aab7b8">VPC Flow Logs</text>
+                    <text x="745" y="170" text-anchor="middle" font-size="11" fill="#aab7b8">GuardDuty Active</text>
+                    <text x="745" y="190" text-anchor="middle" font-size="11" fill="#aab7b8">KMS Encryption</text>
+                    
+                    <!-- Traffic Flow Arrows -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <polygon points="0 0, 10 3, 0 6" fill="#64748b"/>
+                        </marker>
+                    </defs>
+                    
+                    <line x1="175" y1="180" x2="175" y2="200" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="175" y1="300" x2="175" y2="320" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="300" y1="250" x2="350" y2="250" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+                </svg>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="color: #4a7cb8;"></div>
+                    <span>Public Tier (Internet Gateway)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="color: #6b5ba3;"></div>
+                    <span>Private Tier (NAT Gateway)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="color: #b84a7c;"></div>
+                    <span>Isolated Tier (No Internet)</span>
+                </div>
             </div>
         </div>
     </div>
@@ -367,21 +401,38 @@
 </main>
 
 <footer class="site-footer">
-    <p>Interactive VPC Architecture • Mohammad Khan • 2025</p>
+    <p>Interactive VPC Architecture • AWS Student Data Infrastructure • 2025</p>
 </footer>
 
 <script>
 const componentInfo = {
+    "internet": {
+        title: "Internet Gateway",
+        description: "Public entry point allowing controlled access to admin tier resources through corporate IP restrictions.",
+        details: {
+            "Type": "Internet Gateway",
+            "Attached To": "VPC 172.32.0.0/16",
+            "Route Target": "Admin subnet only",
+            "Access Control": "Corporate IP whitelist",
+            "Usage": "Bastion host access, NAT Gateway"
+        },
+        securityRules: [
+            "Only admin subnet has IGW route",
+            "All other subnets use NAT for outbound",
+            "No direct internet access to workloads",
+            "Network ACLs restrict inbound traffic"
+        ]
+    },
     "admin-tier": {
         title: "Admin Tier (Public Subnets)",
-        description: "Public-facing administrative layer providing secure access to internal resources through hardened bastion hosts and VPN endpoints.",
+        description: "Public-facing administrative layer providing secure access to internal resources through hardened bastion hosts.",
         details: {
             "Subnets": "admin-az1a (172.32.1.0/24), admin-az1b (172.32.2.0/24)",
             "Availability Zones": "us-east-1a, us-east-1b",
             "Internet Access": "Internet Gateway attached",
             "NAT Gateways": "One per AZ for outbound traffic",
             "Route Table": "Public (0.0.0.0/0 → IGW)",
-            "Components": "Bastion hosts, VPN endpoints, monitoring tools"
+            "Components": "Bastion hosts, VPN endpoints"
         },
         securityRules: [
             "Ingress: TCP 22 from corporate IP ranges only",
@@ -392,26 +443,26 @@ const componentInfo = {
     },
     "app-tier": {
         title: "Application Tier (Private Subnets)",
-        description: "Private application layer hosting containerized workloads with no direct internet access. All outbound traffic routes through NAT Gateways.",
+        description: "Private application layer hosting containerized workloads with no direct internet access.",
         details: {
             "Subnets": "app-az1a (172.32.10.0/24), app-az1b (172.32.11.0/24)",
             "Availability Zones": "us-east-1a, us-east-1b",
             "Internet Access": "Outbound only via NAT Gateway",
             "Compute": "ECS Fargate, Lambda functions",
-            "Load Balancer": "Application Load Balancer (HTTPS only)",
-            "Route Table": "Private (0.0.0.0/0 → NAT Gateway)"
+            "Load Balancer": "Application Load Balancer (HTTPS)",
+            "Route Table": "Private (0.0.0.0/0 → NAT)"
         },
         securityRules: [
             "Ingress: TCP 22 from bastion-sg only",
             "Ingress: TCP 8443 from alb-sg only",
             "Egress: TCP 5432 to db-sg only",
             "Egress: TCP 443 to 0.0.0.0/0 (via NAT)",
-            "Security Group: SG-to-SG referencing (no IP rules)"
+            "Security Group: SG-to-SG referencing"
         ]
     },
     "db-tier": {
         title: "Database Tier (Isolated Subnets)",
-        description: "Fully isolated database layer with no internet routing. RDS instances accept connections only from application tier security groups.",
+        description: "Fully isolated database layer with no internet routing. RDS instances accept connections only from application tier.",
         details: {
             "Subnets": "db-az1a (172.32.20.0/24), db-az1b (172.32.21.0/24)",
             "Availability Zones": "us-east-1a, us-east-1b",
@@ -431,73 +482,51 @@ const componentInfo = {
     },
     "s3-bucket": {
         title: "S3 Storage (Encrypted Exports)",
-        description: "Encrypted object storage for curated student data exports with versioning, lifecycle policies, and cross-region replication.",
+        description: "Encrypted object storage for student data exports with versioning and cross-region replication.",
         details: {
             "Bucket Name": "student-data-reports-production",
             "Encryption": "SSE-KMS (customer-managed key)",
-            "Versioning": "Enabled (all object versions retained)",
+            "Versioning": "Enabled (all versions retained)",
             "Public Access": "Blocked at account and bucket level",
             "Replication": "Cross-region to us-west-2",
-            "Access Logging": "All object access logged to separate bucket",
-            "Lifecycle Policy": "Transition to Glacier after 90 days"
+            "Access Logging": "All requests logged",
+            "Lifecycle": "Transition to Glacier after 90 days"
         },
         securityRules: [
             "Bucket policy: Deny all public access",
-            "IAM policy: Tag-based access control only",
-            "Condition: Require MFA for object deletion",
-            "VPC Endpoint: Private S3 access from application tier",
-            "Object Lock: WORM mode for compliance data"
+            "IAM policy: Tag-based access control",
+            "Condition: Require MFA for deletion",
+            "VPC Endpoint: Private S3 access only",
+            "Object Lock: WORM mode for compliance"
         ]
     },
     "security": {
         title: "Security & Audit Logging",
-        description: "Comprehensive logging and monitoring infrastructure capturing all API calls, network traffic, and security events for compliance and forensics.",
+        description: "Comprehensive logging capturing all API calls, network traffic, and security events.",
         details: {
             "CloudTrail": "Management + data events logged",
             "VPC Flow Logs": "1-minute intervals to S3",
             "GuardDuty": "Threat detection enabled",
-            "Log Retention": "CloudTrail 90 days, VPC 30 days",
-            "Integrity": "CloudTrail log file validation enabled",
-            "Encryption": "All logs encrypted with dedicated KMS key"
+            "Log Retention": "CloudTrail 90d, VPC 30d",
+            "Integrity": "Log file validation enabled",
+            "Encryption": "Dedicated KMS key for logs"
         },
         securityRules: [
-            "CloudTrail: Captures all IAM, RDS, S3, VPC API calls",
-            "VPC Flow Logs: All accepted and rejected traffic",
-            "GuardDuty: Analyzes CloudTrail, Flow Logs, DNS",
+            "CloudTrail: All IAM, RDS, S3, VPC events",
+            "VPC Flow Logs: Accepted and rejected traffic",
+            "GuardDuty: Analyzes logs for threats",
             "SNS Alerts: Critical findings trigger notifications",
-            "Tamper Protection: S3 bucket policy prevents log deletion"
-        ]
-    },
-    "kms": {
-        title: "AWS KMS Encryption Keys",
-        description: "Customer-managed encryption keys with automatic rotation protecting data at rest across RDS, S3, EBS, and logging infrastructure.",
-        details: {
-            "Primary Key": "alias/student-data-key",
-            "Logging Key": "alias/cloudtrail-key",
-            "Key Spec": "SYMMETRIC_DEFAULT (AES-256)",
-            "Rotation": "Automatic annual rotation enabled",
-            "Key Policy": "Least-privilege access (specific IAM roles)",
-            "Multi-Region": "Primary in us-east-1, replica in us-west-2"
-        },
-        securityRules: [
-            "Key Policy: Deny crypto operations without MFA",
-            "Grant: Application role can encrypt/decrypt only",
-            "Audit: All key usage logged to CloudTrail",
-            "Deletion: 30-day waiting period enforced",
-            "Access: Separate keys for data vs logs (segregation)"
+            "S3 Bucket Policy: Prevents log deletion"
         ]
     }
 };
 
-document.querySelectorAll(".vpc-component").forEach(component => {
-    component.addEventListener("click", function(e) {
+document.querySelectorAll(".vpc-tier").forEach(tier => {
+    tier.addEventListener("click", function(e) {
         e.stopPropagation();
         
-        // Remove previous selection
-        document.querySelectorAll(".vpc-component").forEach(c => c.classList.remove("selected"));
-        
-        // Select current
-        this.classList.add("selected");
+        document.querySelectorAll(".vpc-tier").forEach(t => t.style.borderWidth = "2px");
+        this.style.borderWidth = "3px";
         
         const componentType = this.dataset.component;
         const info = componentInfo[componentType];
@@ -524,7 +553,7 @@ function displayInfo(info) {
     
     let rulesHTML = "";
     if (info.securityRules && info.securityRules.length > 0) {
-        rulesHTML = '<div class="sg-rules"><strong>Security Rules & Controls:</strong>';
+        rulesHTML = '<div class="sg-rules"><strong style="color: var(--aws-text-primary); font-size: 13px;">Security Controls:</strong>';
         info.securityRules.forEach(rule => {
             rulesHTML += `<div class="sg-rule">✓ ${rule}</div>`;
         });
@@ -533,7 +562,7 @@ function displayInfo(info) {
     
     panel.innerHTML = `
         <h3>${info.title}</h3>
-        <p style="color: #475569; margin-bottom: 16px;">${info.description}</p>
+        <p style="color: var(--aws-text-secondary); margin-bottom: 12px; font-size: 13px;">${info.description}</p>
         ${detailsHTML}
         ${rulesHTML}
     `;
@@ -542,10 +571,9 @@ function displayInfo(info) {
     panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-// Click outside to deselect
 document.addEventListener("click", function(e) {
-    if (!e.target.closest(".vpc-component") && !e.target.closest(".info-panel")) {
-        document.querySelectorAll(".vpc-component").forEach(c => c.classList.remove("selected"));
+    if (!e.target.closest(".vpc-tier") && !e.target.closest(".info-panel")) {
+        document.querySelectorAll(".vpc-tier").forEach(t => t.style.borderWidth = "2px");
     }
 });
 </script>
