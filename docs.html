@@ -1,60 +1,102 @@
-﻿<!DOCTYPE html>
+cat > /mnt/user-data/outputs/docs.html << 'HTMLEOF'
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Documentation | Mohammad Khan</title>
+    <title>Documentation | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="site-header">
-    <div class="logo">AWS Student Data Infrastructure</div>
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="docs.html" class="active">Documentation</a>
-        <a href="review.html">Faculty Review</a>
-        <a href="live-demo.html">Live Demo</a>
-        <a href="interactive-diagram.html">Interactive Diagram</a>
-        <a href="cost-calculator.html">Cost Calculator</a>
-        <a href="security-simulator.html">Security Simulator</a>
-    </nav>
+    <div>
+        <div class="logo">AWS Student Data Infrastructure</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="architecture.html">Architecture</a>
+            <a href="automation.html">IAM Automation</a>
+            <a href="docs.html" class="active">Documentation</a>
+            <a href="review.html">Faculty Review</a>
+            <a href="live-demo.html">Live Demo</a>
+            <a href="interactive-diagram.html">Interactive Diagram</a>
+            <a href="cost-calculator.html">Cost Calculator</a>
+            <a href="security-simulator.html">Security Simulator</a>
+        </nav>
+    </div>
 </header>
 
 <main class="content">
     <section class="card">
-        <h1 style="color: #38bdf8;">Project Documentation Overview</h1>
-        <p style="color: #cbd5e1;">
+        <h1>Project Documentation Overview</h1>
+        <p>
             Full documentation for the AWS Student Data Infrastructure project, including architecture summary, 
-            automation design, execution outputs, and academic review.
+            automation design, execution outputs, and technical specifications.
         </p>
     </section>
 
     <section class="card">
-        <h2 style="color: #38bdf8;">Architecture Summary</h2>
-        <ul style="color: #cbd5e1; line-height: 1.8;">
+        <h2>Architecture Summary</h2>
+        <ul>
             <li>Three-tier VPC architecture with public, private app, and private database subnets</li>
-            <li>NAT gateway for outbound-only internet access</li>
+            <li>NAT gateway for outbound-only internet access from private tiers</li>
             <li>RDS PostgreSQL with encryption and private networking</li>
-            <li>Security groups configured with least privilege</li>
-            <li>CloudTrail enabled for all regions</li>
+            <li>Security groups configured with least privilege and SG-to-SG references</li>
+            <li>CloudTrail enabled for all regions with log file validation</li>
+            <li>VPC Flow Logs capturing all accepted and rejected traffic</li>
         </ul>
     </section>
 
     <section class="card">
-        <h2 style="color: #38bdf8;">Core Design Goals</h2>
-        <ul style="color: #cbd5e1; line-height: 1.8;">
-            <li>Maintain full FERPA-aligned data isolation</li>
-            <li>Eliminate all public attack surfaces</li>
-            <li>Enforce IAM least privilege and MFA</li>
-            <li>Ensure full auditability via CloudTrail & VPC Flow Logs</li>
+        <h2>Core Design Goals</h2>
+        <ul>
+            <li>Maintain FERPA-aligned data isolation and access controls</li>
+            <li>Eliminate all public attack surfaces through network segmentation</li>
+            <li>Enforce IAM least privilege and multi-factor authentication</li>
+            <li>Ensure full auditability via CloudTrail and VPC Flow Logs</li>
+            <li>Implement defense-in-depth with multiple security layers</li>
+            <li>Enable high availability through multi-AZ deployment</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>Security Controls</h2>
+        <ul>
+            <li><strong>Network Isolation:</strong> Database tier has no internet gateway route</li>
+            <li><strong>Encryption:</strong> Customer-managed KMS keys for all data at rest</li>
+            <li><strong>Access Control:</strong> Tag-based S3 access policies and IAM conditions</li>
+            <li><strong>Monitoring:</strong> GuardDuty threat detection and CloudWatch alarms</li>
+            <li><strong>Audit Logging:</strong> Complete audit trail of all API calls and network traffic</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>Technology Components</h2>
+        <ul>
+            <li><strong>Networking:</strong> AWS VPC, Security Groups, NACLs, NAT Gateway, VPC Endpoints</li>
+            <li><strong>Compute:</strong> EC2, ECS Fargate, Lambda, Application Load Balancer</li>
+            <li><strong>Database:</strong> RDS PostgreSQL Multi-AZ with automated backups</li>
+            <li><strong>Storage:</strong> S3 with SSE-KMS encryption and versioning</li>
+            <li><strong>Security:</strong> IAM, KMS, CloudTrail, GuardDuty, AWS WAF</li>
+            <li><strong>Monitoring:</strong> CloudWatch, VPC Flow Logs, CloudTrail</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>Additional Resources</h2>
+        <ul>
+            <li><a href="architecture.html">Detailed Architecture Documentation</a></li>
+            <li><a href="interactive-diagram.html">Interactive Network Diagram</a></li>
+            <li><a href="automation.html">IAM Automation Workflow</a></li>
+            <li><a href="security-simulator.html">Security Attack Simulations</a></li>
         </ul>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>Documentation • Mohammad Khan • 2025</p>
+    <p>Documentation • AWS Student Data Infrastructure • 2025</p>
 </footer>
 </body>
 </html>
+HTMLEOF
+
+echo "✅ docs.html created"
