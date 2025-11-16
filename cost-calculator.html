@@ -1,62 +1,89 @@
-﻿<!DOCTYPE html>
+cat > /mnt/user-data/outputs/cost-calculator.html << 'HTMLEOF'
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cost Calculator | Mohammad Khan</title>
+    <title>Cost Calculator | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Cost Calculator - AWS Console Style */
+        
+        /* Tight spacing for calculator page */
+        .calculator-page .content {
+            padding-top: 8px !important;
+        }
+        
+        .calculator-page .card {
+            margin-top: 8px !important;
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+        }
+        
         .calculator-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
+            gap: 16px;
+            margin-top: 12px;
+            margin-bottom: 16px;
         }
         
         .input-section {
-            background: white;
-            padding: 28px;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
+            background: var(--aws-card-bg);
+            padding: 16px;
+            border-radius: var(--aws-radius);
+            border: 1px solid var(--aws-border);
+        }
+        
+        .input-section h2 {
+            font-size: 16px;
+            color: var(--aws-text-primary);
+            margin-bottom: 16px;
+            font-weight: 700;
+            border: none;
+            padding: 0;
         }
         
         .input-group {
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
         
         .input-label {
             display: block;
             font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
+            color: var(--aws-text-primary);
+            margin-bottom: 6px;
+            font-size: 13px;
         }
         
         .input-field {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            font-size: 13px;
+            transition: all 0.15s ease;
+            background: var(--aws-panel-bg);
+            color: var(--aws-text-primary);
+            font-family: inherit;
         }
         
         .input-field:focus {
             outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: var(--aws-blue);
+            background: var(--aws-card-bg);
         }
         
         .slider-container {
             position: relative;
-            padding-top: 8px;
+            padding-top: 6px;
         }
         
         .slider {
             width: 100%;
-            height: 6px;
-            border-radius: 5px;
-            background: #e2e8f0;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--aws-border);
             outline: none;
             -webkit-appearance: none;
         }
@@ -64,131 +91,165 @@
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            background: #3b82f6;
+            background: var(--aws-blue);
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: 2px solid var(--aws-panel-bg);
         }
         
         .slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            background: #3b82f6;
+            background: var(--aws-blue);
             cursor: pointer;
-            border: none;
+            border: 2px solid var(--aws-panel-bg);
         }
         
         .slider-value {
             display: inline-block;
-            background: #3b82f6;
+            background: var(--aws-blue);
             color: white;
-            padding: 4px 12px;
-            border-radius: 4px;
+            padding: 3px 10px;
+            border-radius: var(--aws-radius);
             font-weight: 600;
-            font-size: 0.9rem;
-            margin-left: 12px;
+            font-size: 12px;
+            margin-left: 10px;
         }
         
         .results-section {
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-            padding: 28px;
-            border-radius: 12px;
-            border: 2px solid #3b82f6;
+            background: var(--aws-card-bg);
+            padding: 16px;
+            border-radius: var(--aws-radius);
+            border: 1px solid var(--aws-border);
+            border-left: 3px solid var(--aws-blue);
+        }
+        
+        .results-section h2 {
+            font-size: 16px;
+            color: var(--aws-text-primary);
+            margin-bottom: 16px;
+            font-weight: 700;
+            border: none;
+            padding: 0;
         }
         
         .result-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background: var(--aws-panel-bg);
+            padding: 12px;
+            border-radius: var(--aws-radius);
+            margin-bottom: 12px;
+            border: 1px solid var(--aws-border);
         }
         
         .result-title {
-            font-size: 0.9rem;
-            color: #64748b;
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .result-value {
-            font-size: 2rem;
+            font-size: 28px;
             font-weight: 800;
-            color: #2563eb;
+            color: var(--aws-blue);
+            line-height: 1;
         }
         
         .result-value.success {
-            color: #10b981;
+            color: var(--aws-green-light);
         }
         
         .result-breakdown {
             margin-top: 12px;
             padding-top: 12px;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid var(--aws-border);
         }
         
         .breakdown-item {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
-            font-size: 0.9rem;
+            padding: 4px 0;
+            font-size: 12px;
         }
         
         .breakdown-label {
-            color: #475569;
+            color: var(--aws-text-secondary);
         }
         
         .breakdown-value {
             font-weight: 600;
-            color: #0f172a;
+            color: var(--aws-text-primary);
         }
         
         .roi-comparison {
-            background: linear-gradient(135deg, #dcfce7, #f0fdf4);
-            border: 2px solid #10b981;
-            padding: 24px;
-            border-radius: 12px;
-            margin-top: 24px;
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 3px solid var(--aws-green);
+            padding: 16px;
+            border-radius: var(--aws-radius);
+            margin-top: 16px;
+        }
+        
+        .roi-comparison h2 {
+            font-size: 16px;
+            color: var(--aws-green-light);
+            margin-bottom: 8px;
+            font-weight: 700;
+            border: none;
+            padding: 0;
+        }
+        
+        .roi-comparison p {
+            font-size: 12px;
+            color: var(--aws-text-secondary);
+            margin-bottom: 12px;
         }
         
         .comparison-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 16px;
+            gap: 12px;
+            margin-top: 12px;
         }
         
         .comparison-card {
-            background: white;
-            padding: 16px;
-            border-radius: 8px;
+            background: var(--aws-panel-bg);
+            padding: 12px;
+            border-radius: var(--aws-radius);
             text-align: center;
+            border: 1px solid var(--aws-border);
         }
         
         .comparison-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-bottom: 8px;
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+            margin-bottom: 6px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .comparison-value {
-            font-size: 1.5rem;
+            font-size: 24px;
             font-weight: 800;
-            color: #0f172a;
+            color: var(--aws-text-primary);
+            line-height: 1;
         }
         
         .savings-badge {
-            background: #10b981;
+            background: var(--aws-green);
             color: white;
-            padding: 8px 16px;
-            border-radius: 9999px;
+            padding: 6px 14px;
+            border-radius: var(--aws-radius);
             display: inline-block;
-            margin-top: 16px;
+            margin-top: 12px;
             font-weight: 600;
+            font-size: 12px;
         }
         
         @media (max-width: 1024px) {
@@ -201,35 +262,37 @@
         }
     </style>
 </head>
-<body>
+<body class="calculator-page">
 <header class="site-header">
-    <div class="logo">AWS Student Data Infrastructure</div>
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="docs.html">Documentation</a>
-        <a href="review.html">Faculty Review</a>
-        <a href="live-demo.html">Live Demo</a>
-        <a href="interactive-diagram.html">Interactive Diagram</a>
-        <a href="cost-calculator.html">Cost Calculator</a>
-        <a href="security-simulator.html">Security Simulator</a>
-    </nav>
+    <div>
+        <div class="logo">AWS Student Data Infrastructure</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="architecture.html">Architecture</a>
+            <a href="automation.html">IAM Automation</a>
+            <a href="docs.html">Documentation</a>
+            <a href="review.html">Project Summary</a>
+            <a href="live-demo.html">Live Demo</a>
+            <a href="interactive-diagram.html">Interactive Diagram</a>
+            <a href="cost-calculator.html" class="active">Cost Calculator</a>
+            <a href="security-simulator.html">Security Simulator</a>
+        </nav>
+    </div>
 </header>
 
 <main class="content">
     <section class="card">
         <h1>AWS Infrastructure Cost & ROI Calculator</h1>
         <p>
-            Calculate the total monthly AWS infrastructure costs and return on investment (ROI) from IAM automation. 
-            This calculator uses real AWS pricing from the us-east-1 region and demonstrates both infrastructure 
-            costs and operational efficiency gains from automation.
+            Calculate total monthly AWS infrastructure costs and return on investment from IAM automation. 
+            Uses real AWS pricing from the us-east-1 region to demonstrate both infrastructure 
+            costs and operational efficiency gains.
         </p>
     </section>
 
     <div class="calculator-grid">
         <div class="input-section">
-            <h2 style="margin-bottom: 24px; color: #2563eb;">Infrastructure Inputs</h2>
+            <h2>Infrastructure Inputs</h2>
             
             <div class="input-group">
                 <label class="input-label">Number of IAM Users</label>
@@ -273,7 +336,7 @@
         </div>
         
         <div class="results-section">
-            <h2 style="margin-bottom: 24px; color: #2563eb;">Monthly Cost Breakdown</h2>
+            <h2>Monthly Cost Breakdown</h2>
             
             <div class="result-card">
                 <div class="result-title">Total Monthly Infrastructure Cost</div>
@@ -318,8 +381,8 @@
     </div>
     
     <div class="roi-comparison">
-        <h2 style="margin-bottom: 16px; color: #065f46;">IAM Automation ROI Analysis</h2>
-        <p style="color: #047857; margin-bottom: 20px;">
+        <h2>IAM Automation ROI Analysis</h2>
+        <p>
             Comparing manual IAM provisioning versus automated pipeline for <span id="roiUserCount">50</span> users
         </p>
         
@@ -327,31 +390,31 @@
             <div class="comparison-card">
                 <div class="comparison-label">Manual Provisioning Time</div>
                 <div class="comparison-value" id="manualTime">150 min</div>
-                <p style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">
+                <p style="font-size: 11px; color: var(--aws-text-tertiary); margin-top: 6px;">
                     ~3 minutes per user via AWS Console
                 </p>
             </div>
             
             <div class="comparison-card">
                 <div class="comparison-label">Automated Provisioning Time</div>
-                <div class="comparison-value" id="automatedTime" style="color: #10b981;">45 sec</div>
-                <p style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">
+                <div class="comparison-value" id="automatedTime" style="color: var(--aws-green-light);">45 sec</div>
+                <p style="font-size: 11px; color: var(--aws-text-tertiary); margin-top: 6px;">
                     Script execution + validation
                 </p>
             </div>
             
             <div class="comparison-card">
                 <div class="comparison-label">Time Saved</div>
-                <div class="comparison-value" id="timeSaved" style="color: #10b981;">149 min</div>
-                <p style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">
+                <div class="comparison-value" id="timeSaved" style="color: var(--aws-green-light);">149 min</div>
+                <p style="font-size: 11px; color: var(--aws-text-tertiary); margin-top: 6px;">
                     67% efficiency improvement
                 </p>
             </div>
             
             <div class="comparison-card">
                 <div class="comparison-label">Cost Savings (Annual)</div>
-                <div class="comparison-value" id="costSavings" style="color: #10b981;">$12,450</div>
-                <p style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">
+                <div class="comparison-value" id="costSavings" style="color: var(--aws-green-light);">$12,450</div>
+                <p style="font-size: 11px; color: var(--aws-text-tertiary); margin-top: 6px;">
                     Based on $50/hr engineer time
                 </p>
             </div>
@@ -368,37 +431,36 @@
     
     <section class="card">
         <h2>Cost Optimization Opportunities</h2>
-        <ul class="bullet-list">
-            <li><strong>Reserved Instance Pricing:</strong> RDS Reserved Instances can reduce database costs by 40-60% with 1-year or 3-year commitment</li>
+        <ul>
+            <li><strong>Reserved Instance Pricing:</strong> RDS Reserved Instances reduce database costs by 40-60% with 1-3 year commitment</li>
             <li><strong>Savings Plans:</strong> Compute Savings Plans for ECS Fargate provide up to 50% discount on consistent workloads</li>
-            <li><strong>S3 Intelligent-Tiering:</strong> Automatically moves infrequently accessed data to lower-cost storage classes, reducing S3 costs by 30-70%</li>
+            <li><strong>S3 Intelligent-Tiering:</strong> Automatically moves infrequently accessed data to lower-cost storage classes</li>
             <li><strong>NAT Gateway Optimization:</strong> VPC endpoints for S3 and DynamoDB eliminate NAT Gateway data processing charges</li>
-            <li><strong>Right-Sizing:</strong> CloudWatch metrics analysis can identify over-provisioned resources for downsizing opportunities</li>
-            <li><strong>Spot Instances:</strong> ECS Fargate Spot can reduce compute costs by up to 70% for fault-tolerant workloads</li>
+            <li><strong>Right-Sizing:</strong> CloudWatch metrics analysis identifies over-provisioned resources for downsizing</li>
+            <li><strong>Spot Instances:</strong> ECS Fargate Spot reduces compute costs by up to 70% for fault-tolerant workloads</li>
         </ul>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>AWS Cost & ROI Calculator • Mohammad Khan • 2025</p>
+    <p>AWS Cost & ROI Calculator • AWS Student Data Infrastructure • 2025</p>
 </footer>
 
 <script>
-// AWS Pricing (us-east-1, as of March 2024)
 const PRICING = {
-    rdsInstanceHourly: 0.504,     // db.r6g.xlarge per hour
-    rdsStorageGB: 0.115,          // GP3 SSD per GB-month
-    s3StandardGB: 0.023,          // Standard storage per GB
-    s3Requests: 0.0004,           // Per 1000 GET requests
-    ecsFargateVCPU: 0.04048,      // Per vCPU per hour
-    ecsFargateGB: 0.004445,       // Per GB per hour
-    natGatewayHourly: 0.045,      // Per hour
-    natGatewayDataGB: 0.045,      // Per GB processed
-    albHourly: 0.0225,            // Per hour
-    albLCU: 0.008,                // Per LCU-hour
-    dataTransferGB: 0.09,         // First 10 TB per GB
-    cloudwatchBase: 10,           // Base monitoring cost
-    loggingGB: 0.50               // VPC Flow + CloudTrail per GB
+    rdsInstanceHourly: 0.504,
+    rdsStorageGB: 0.115,
+    s3StandardGB: 0.023,
+    s3Requests: 0.0004,
+    ecsFargateVCPU: 0.04048,
+    ecsFargateGB: 0.004445,
+    natGatewayHourly: 0.045,
+    natGatewayDataGB: 0.045,
+    albHourly: 0.0225,
+    albLCU: 0.008,
+    dataTransferGB: 0.09,
+    cloudwatchBase: 10,
+    loggingGB: 0.50
 };
 
 function formatCurrency(value) {
@@ -422,40 +484,27 @@ function calculateCosts() {
     const ecsTaskCount = parseInt(document.getElementById("ecsTaskCount").value);
     const dataTransfer = parseInt(document.getElementById("dataTransfer").value);
     
-    // RDS Cost
     const rdsComputeCost = rdsHours * PRICING.rdsInstanceHourly;
-    const rdsStorageCost = 100 * PRICING.rdsStorageGB; // 100 GB storage
+    const rdsStorageCost = 100 * PRICING.rdsStorageGB;
     const rdsCost = rdsComputeCost + rdsStorageCost;
     
-    // S3 Cost
     const s3StorageCost = storageVolume * PRICING.s3StandardGB;
-    const s3RequestCost = (userCount * 100 * PRICING.s3Requests); // 100 requests per user
+    const s3RequestCost = (userCount * 100 * PRICING.s3Requests);
     const s3Cost = s3StorageCost + s3RequestCost;
     
-    // ECS Fargate Cost (0.25 vCPU, 0.5 GB per task, 730 hours)
     const ecsCost = ecsTaskCount * 730 * (0.25 * PRICING.ecsFargateVCPU + 0.5 * PRICING.ecsFargateGB);
     
-    // NAT Gateway Cost (2 AZs)
     const natHourlyCost = 2 * 730 * PRICING.natGatewayHourly;
     const natDataCost = dataTransfer * PRICING.natGatewayDataGB;
     const natCost = natHourlyCost + natDataCost;
     
-    // ALB Cost
     const albCost = 730 * PRICING.albHourly + (730 * PRICING.albLCU);
-    
-    // Data Transfer
     const transferCost = dataTransfer * PRICING.dataTransferGB;
-    
-    // CloudWatch
     const cloudwatchCost = PRICING.cloudwatchBase + (userCount * 0.15);
-    
-    // Logging
     const loggingCost = (dataTransfer / 10) * PRICING.loggingGB;
     
-    // Total
     const totalCost = rdsCost + s3Cost + ecsCost + natCost + albCost + transferCost + cloudwatchCost + loggingCost;
     
-    // Update UI
     document.getElementById("rdsCost").textContent = formatCurrency(rdsCost);
     document.getElementById("s3Cost").textContent = formatCurrency(s3Cost);
     document.getElementById("ecsCost").textContent = formatCurrency(ecsCost);
@@ -466,16 +515,14 @@ function calculateCosts() {
     document.getElementById("loggingCost").textContent = formatCurrency(loggingCost);
     document.getElementById("totalCost").textContent = formatCurrency(totalCost);
     
-    // ROI Calculation
     const manualTimeMinutes = userCount * 3;
     const automatedTimeSeconds = 45;
     const automatedTimeMinutes = automatedTimeSeconds / 60;
     const timeSavedMinutes = manualTimeMinutes - automatedTimeMinutes;
     const efficiencyGain = ((timeSavedMinutes / manualTimeMinutes) * 100).toFixed(1);
     
-    // Cost savings (assuming $50/hr engineer time)
     const hourlyRate = 50;
-    const annualProvisioningCycles = 4; // Quarterly onboarding
+    const annualProvisioningCycles = 4;
     const annualSavings = (timeSavedMinutes / 60) * hourlyRate * annualProvisioningCycles;
     
     document.getElementById("roiUserCount").textContent = userCount;
@@ -486,15 +533,16 @@ function calculateCosts() {
     document.getElementById("roiEfficiency").textContent = `${efficiencyGain}%`;
 }
 
-// Initialize sliders
 updateSliderValue("userCount", "userCountValue", "");
 updateSliderValue("storageVolume", "storageVolumeValue", " GB");
 updateSliderValue("rdsHours", "rdsHoursValue", " hrs");
 updateSliderValue("ecsTaskCount", "ecsTaskCountValue", "");
 updateSliderValue("dataTransfer", "dataTransferValue", " GB");
 
-// Initial calculation
 calculateCosts();
 </script>
 </body>
 </html>
+HTMLEOF
+
+echo "✅ cost-calculator.html FIXED - AWS theme with tight spacing"
