@@ -1,77 +1,113 @@
-﻿<!DOCTYPE html>
+cat > /mnt/user-data/outputs/architecture.html << 'HTMLEOF'
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Architecture | Mohammad Khan</title>
+    <title>Architecture | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="site-header">
-    <div class="logo">AWS Student Data Infrastructure</div>
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="architecture.html" class="active">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="docs.html">Documentation</a>
-        <a href="review.html">Faculty Review</a>
-        <a href="live-demo.html">Live Demo</a>
-        <a href="interactive-diagram.html">Interactive Diagram</a>
-        <a href="cost-calculator.html">Cost Calculator</a>
-        <a href="security-simulator.html">Security Simulator</a>
-    </nav>
+    <div>
+        <div class="logo">AWS Student Data Infrastructure</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="architecture.html" class="active">Architecture</a>
+            <a href="automation.html">IAM Automation</a>
+            <a href="docs.html">Documentation</a>
+            <a href="review.html">Faculty Review</a>
+            <a href="live-demo.html">Live Demo</a>
+            <a href="interactive-diagram.html">Interactive Diagram</a>
+            <a href="cost-calculator.html">Cost Calculator</a>
+            <a href="security-simulator.html">Security Simulator</a>
+        </nav>
+    </div>
 </header>
 
 <main class="content">
     <section class="card">
-        <h1 style="color: #38bdf8;">System Architecture Overview</h1>
-        <p style="color: #e2e8f0; font-size: 1.05rem;">
+        <h1>System Architecture Overview</h1>
+        <p>
             The AWS Student Data Infrastructure uses a secure, scalable, three-tier VPC architecture designed 
             for academic data processing. The environment isolates administrative tools, application services, 
-            and database workloads while enforcing AWS best practices.
+            and database workloads while enforcing AWS security best practices.
         </p>
     </section>
 
     <section class="card">
-        <h2 style="color: #38bdf8;">Three-Tier VPC Layout</h2>
-        <p style="color: #e2e8f0;">The VPC is divided into isolated network segments:</p>
+        <h2>Three-Tier VPC Layout</h2>
+        <p>The VPC is divided into isolated network segments with distinct security boundaries:</p>
         
-        <div style="background: #0f172a; border-left: 4px solid #38bdf8; padding: 20px; margin: 16px 0; border-radius: 6px;">
-            <strong style="color: #fbbf24; font-size: 1.1rem;">Public Tier (172.32.0.0/24)</strong><br>
-            <span style="color: #e2e8f0; display: block; margin-top: 8px;">- Contains NAT Gateway and Bastion Host</span>
-            <span style="color: #e2e8f0; display: block;">- Restricted to corporate IP ranges</span>
-            <span style="color: #e2e8f0; display: block;">- No workloads or databases reside here</span>
+        <div class="info-box">
+            <strong>Public Tier (172.32.0.0/24)</strong><br>
+            Contains NAT Gateway and Bastion Host. Restricted to corporate IP ranges. No workloads or databases reside here.
         </div>
         
-        <div style="background: #0f172a; border-left: 4px solid #6366f1; padding: 20px; margin: 16px 0; border-radius: 6px;">
-            <strong style="color: #a78bfa; font-size: 1.1rem;">Application Tier (172.32.10.0/24)</strong><br>
-            <span style="color: #e2e8f0; display: block; margin-top: 8px;">- Hosts application compute resources (EC2/Lambda)</span>
-            <span style="color: #e2e8f0; display: block;">- Allowed outbound internet via NAT</span>
-            <span style="color: #e2e8f0; display: block;">- Can access DB tier via SG references</span>
+        <div class="info-box">
+            <strong>Application Tier (172.32.10.0/24)</strong><br>
+            Hosts application compute resources (EC2/Lambda). Allowed outbound internet via NAT. Can access DB tier via SG references.
         </div>
         
-        <div style="background: #0f172a; border-left: 4px solid #ec4899; padding: 20px; margin: 16px 0; border-radius: 6px;">
-            <strong style="color: #f472b6; font-size: 1.1rem;">Database Tier (172.32.20.0/24)</strong><br>
-            <span style="color: #e2e8f0; display: block; margin-top: 8px;">- Private-only, no internet gateway route</span>
-            <span style="color: #e2e8f0; display: block;">- Contains encrypted RDS PostgreSQL</span>
-            <span style="color: #e2e8f0; display: block;">- Only reachable via app-sg → db-sg rules</span>
+        <div class="info-box">
+            <strong>Database Tier (172.32.20.0/24)</strong><br>
+            Private-only, no internet gateway route. Contains encrypted RDS PostgreSQL. Only reachable via app-sg → db-sg rules.
         </div>
     </section>
 
     <section class="card">
-        <h2 style="color: #38bdf8;">Security Group Model</h2>
-        <p style="color: #e2e8f0;">Security groups follow least privilege principles with directional SG-to-SG rules.</p>
-        <ul style="color: #e2e8f0; line-height: 1.8; font-size: 1.05rem;">
-            <li><strong style="color: #10b981;">admin-sg:</strong> SSH allowed only from corporate IPs</li>
-            <li><strong style="color: #10b981;">app-sg:</strong> Allows 443/HTTPS and outbound-only mode</li>
-            <li><strong style="color: #10b981;">db-sg:</strong> Only allows PostgreSQL 5432 from app-sg</li>
-            <li><strong style="color: #10b981;">alb-sg:</strong> Allows inbound 443 from internet + WAF protection</li>
+        <h2>Security Group Model</h2>
+        <p>Security groups follow least privilege principles with directional SG-to-SG rules.</p>
+        <ul>
+            <li><strong>admin-sg:</strong> SSH allowed only from corporate IPs</li>
+            <li><strong>app-sg:</strong> Allows 443/HTTPS and outbound-only mode</li>
+            <li><strong>db-sg:</strong> Only allows PostgreSQL 5432 from app-sg</li>
+            <li><strong>alb-sg:</strong> Allows inbound 443 from internet + WAF protection</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>Network Isolation Design</h2>
+        <p>Each tier implements defense-in-depth with multiple security layers:</p>
+        <ul>
+            <li><strong>Network ACLs:</strong> Stateless filtering at subnet boundaries</li>
+            <li><strong>Security Groups:</strong> Stateful instance-level firewall rules</li>
+            <li><strong>Route Tables:</strong> Control traffic flow between tiers</li>
+            <li><strong>VPC Endpoints:</strong> Private access to AWS services (S3, DynamoDB)</li>
+            <li><strong>Flow Logs:</strong> Comprehensive traffic monitoring and analysis</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>High Availability Configuration</h2>
+        <p>The architecture ensures business continuity through multi-AZ deployment:</p>
+        <ul>
+            <li><strong>Multi-AZ Subnets:</strong> Each tier spans multiple availability zones</li>
+            <li><strong>RDS Multi-AZ:</strong> Automatic failover for database tier</li>
+            <li><strong>NAT Gateway Redundancy:</strong> One per AZ for high availability</li>
+            <li><strong>Application Load Balancer:</strong> Distributes traffic across AZs</li>
+            <li><strong>Auto Scaling:</strong> Dynamic capacity adjustment based on demand</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>Data Encryption Strategy</h2>
+        <p>Comprehensive encryption protects data at rest and in transit:</p>
+        <ul>
+            <li><strong>RDS Encryption:</strong> Customer-managed KMS key with automatic rotation</li>
+            <li><strong>S3 Encryption:</strong> SSE-KMS for all objects with versioning</li>
+            <li><strong>EBS Encryption:</strong> All volumes encrypted by default</li>
+            <li><strong>TLS/SSL:</strong> Required for all client connections</li>
+            <li><strong>Secrets Manager:</strong> Encrypted credential storage with rotation</li>
         </ul>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>Architecture • Mohammad Khan • 2025</p>
+    <p>Architecture Overview • AWS Student Data Infrastructure • 2025</p>
 </footer>
 </body>
 </html>
+HTMLEOF
+
+echo "✅ architecture.html created"
