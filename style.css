@@ -1,208 +1,769 @@
 /* ============================================
-   AWS Console + AWS Docs Hybrid Theme
-   Clean • Professional • Cloud Engineer Aesthetic
+   AWS Console Theme - Authentic AWS Styling
+   Based on AWS Console + AWS Documentation
    ============================================ */
 
-/* 1. Amazon Ember (Official AWS UI Font) */
+/* 1. AWS Official Font - Amazon Ember */
 @font-face {
     font-family: "Amazon Ember";
     font-weight: 400;
-    src: url("https://fonts.cdnfonts.com/s/19082/AmazonEmber_Rg.woff") format("woff");
+    src: url("https://d1ge0kk1l5kms0.cloudfront.net/fonts/AmazonEmber_Rg.woff2") format("woff2"),
+         url("https://d1ge0kk1l5kms0.cloudfront.net/fonts/AmazonEmber_Rg.woff") format("woff");
 }
 @font-face {
     font-family: "Amazon Ember";
     font-weight: 700;
-    src: url("https://fonts.cdnfonts.com/s/19082/AmazonEmber_Bd.woff") format("woff");
+    src: url("https://d1ge0kk1l5kms0.cloudfront.net/fonts/AmazonEmber_Bd.woff2") format("woff2"),
+         url("https://d1ge0kk1l5kms0.cloudfront.net/fonts/AmazonEmber_Bd.woff") format("woff");
 }
 
-/* 2. Theme Variables */
+/* 2. AWS Official Color Palette */
 :root {
-    --bg-dark: #0d1117;        /* AWS console dark navy */
-    --bg-panel: #161b22;       /* console card background */
-    --bg-card: #1b2230;        /* interactive panels */
-    --border: #2d3541;         /* edges */
-    --border-light: #3c4656;   /* softer borders */
-    --text-primary: #f0f6fc;   /* AWS console text */
-    --text-secondary: #c7d1db; /* documentation gray */
-    --accent-blue: #3b82f6;    /* AWS blue */
-    --accent-blue-dark: #2563eb;
-    --accent-yellow: #fbbf24;  /* AWS brand yellow */
-    --accent-green: #10b981;
-    --radius: 10px;
-    --shadow: 0 4px 15px rgba(0,0,0,0.25);
+    /* AWS Console Backgrounds */
+    --aws-squid-ink: #232f3e;          /* AWS primary dark blue (header) */
+    --aws-squid-ink-dark: #161e2d;     /* Darker variant */
+    --aws-squid-ink-light: #37475a;    /* Lighter panels */
+    
+    /* AWS Orange - The Brand Color */
+    --aws-orange: #ff9900;             /* AWS official orange */
+    --aws-orange-dark: #ec7211;        /* Hover state */
+    --aws-orange-light: #ffac31;       /* Light variant */
+    
+    /* AWS Console UI Colors */
+    --aws-panel-bg: #1d2736;           /* Console panel background */
+    --aws-card-bg: #273548;            /* Console cards */
+    --aws-border: #3f4f5f;             /* Console borders */
+    --aws-border-light: #546171;       /* Lighter borders */
+    
+    /* AWS Text Colors */
+    --aws-text-primary: #ffffff;       /* Primary white text */
+    --aws-text-secondary: #d5dbdb;     /* Secondary gray text */
+    --aws-text-tertiary: #aab7b8;      /* Tertiary muted text */
+    
+    /* AWS Service Colors */
+    --aws-blue: #1e8fff;               /* AWS service blue */
+    --aws-blue-dark: #0972d3;          /* Dark blue */
+    --aws-blue-light: #5fb3ff;         /* Light blue */
+    
+    /* AWS Status Colors */
+    --aws-green: #1d8102;              /* Success (healthchecks) */
+    --aws-green-light: #2ea043;        /* Lighter green */
+    --aws-red: #d13212;                /* Error/critical */
+    --aws-red-light: #ff5947;          /* Warning red */
+    --aws-yellow: #ff9900;             /* Warning (matches orange) */
+    
+    /* AWS Shadows */
+    --aws-shadow-sm: 0 1px 1px 0 rgba(0, 28, 36, 0.3);
+    --aws-shadow-md: 0 4px 8px 0 rgba(0, 28, 36, 0.5);
+    --aws-shadow-lg: 0 12px 24px 0 rgba(0, 28, 36, 0.6);
+    
+    /* Spacing */
+    --aws-radius: 2px;                 /* AWS uses minimal border radius */
+    --aws-radius-lg: 4px;
 }
 
-/* 3. Global */
-body {
+/* 3. Global Styles - AWS Console Base */
+* {
+    box-sizing: border-box;
     margin: 0;
-    background: var(--bg-dark);
-    font-family: "Amazon Ember", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: var(--text-primary);
+    padding: 0;
+}
+
+body {
+    font-family: "Amazon Ember", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: var(--aws-squid-ink-dark);
+    color: var(--aws-text-primary);
+    line-height: 1.6;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography - AWS Console Style */
+h1 {
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--aws-text-primary);
+    line-height: 1.3;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--aws-text-primary);
+    line-height: 1.4;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--aws-border);
+    padding-bottom: 8px;
+}
+
+h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--aws-text-primary);
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--aws-text-primary);
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+p {
+    color: var(--aws-text-secondary);
+    margin-bottom: 16px;
+    font-size: 14px;
     line-height: 1.6;
 }
 
-/* Headings */
-h1, h2, h3, h4 {
-    color: var(--text-primary);
-    margin-bottom: 1rem;
+strong {
     font-weight: 700;
+    color: var(--aws-text-primary);
 }
 
-/* Paragraphs */
-p {
-    color: var(--text-secondary);
-    margin-bottom: 1rem;
+a {
+    color: var(--aws-blue-light);
+    text-decoration: none;
+    transition: color 0.15s ease;
 }
 
-/* 4. Header (AWS Console Style) */
+a:hover {
+    color: var(--aws-orange);
+    text-decoration: underline;
+}
+
+/* 4. Header - AWS Console Navigation Bar */
 .site-header {
-    background: #111827;
-    padding: 16px 32px;
-    border-bottom: 1px solid var(--border-light);
+    background: var(--aws-squid-ink);
+    border-bottom: 4px solid var(--aws-orange);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--aws-shadow-md);
+}
+
+.site-header > * {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 12px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .logo {
-    font-size: 1.35rem;
+    font-size: 16px;
     font-weight: 700;
-    color: var(--text-primary);
-    text-decoration: none;
+    color: var(--aws-text-primary);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* Navigation */
+.logo::before {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: var(--aws-orange);
+    border-radius: 2px;
+}
+
 .nav-links {
     display: flex;
-    gap: 1rem;
+    gap: 4px;
+    align-items: center;
 }
 
 .nav-links a {
-    color: var(--text-secondary);
+    color: var(--aws-text-secondary);
+    font-weight: 400;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: var(--aws-radius);
+    transition: all 0.15s ease;
     text-decoration: none;
-    font-weight: 500;
-    padding: 6px 12px;
-    border-radius: var(--radius);
-    transition: 0.2s ease;
+    border: 1px solid transparent;
 }
 
 .nav-links a:hover {
-    background: rgba(255,255,255,0.05);
-    color: var(--accent-blue);
+    background: var(--aws-squid-ink-light);
+    color: var(--aws-text-primary);
+    border-color: var(--aws-border);
+    text-decoration: none;
 }
 
 .nav-links .active {
-    background: rgba(59,130,246,0.15);
-    color: var(--accent-blue);
+    background: var(--aws-orange);
+    color: var(--aws-squid-ink);
+    font-weight: 700;
+    border-color: var(--aws-orange-dark);
+}
+
+/* 5. Main Content Area - AWS Console Layout */
+.content {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* 6. Cards - AWS Console Panel Style */
+.card {
+    background: var(--aws-card-bg);
+    border: 1px solid var(--aws-border);
+    border-radius: var(--aws-radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--aws-shadow-sm);
+}
+
+.card h1 {
+    border-bottom: 2px solid var(--aws-orange);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+}
+
+.card h2 {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--aws-border);
+    border-bottom: 1px solid var(--aws-border);
+}
+
+.card h2:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+/* 7. Lists - AWS Documentation Style */
+ul, ol {
+    margin-left: 24px;
+    margin-bottom: 20px;
+}
+
+ul li, ol li {
+    color: var(--aws-text-secondary);
+    margin-bottom: 8px;
+    line-height: 1.7;
+}
+
+ul li strong, ol li strong {
+    color: var(--aws-text-primary);
     font-weight: 700;
 }
 
-/* 5. Content Area */
-.content {
-    max-width: 1300px;
-    margin: 40px auto;
-    padding: 0 24px;
+.bullet-list {
+    list-style: none;
+    margin-left: 0;
 }
 
-/* 6. Cards (AWS Console Panel Style) */
-.card {
-    background: var(--bg-card);
-    padding: 28px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    margin-bottom: 32px;
-    box-shadow: var(--shadow);
+.bullet-list li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 12px;
 }
 
-/* 7. Buttons (AWS AppRunner/Amplify style) */
+.bullet-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--aws-orange);
+    font-weight: 700;
+}
+
+/* 8. Buttons - AWS Console Action Buttons */
 button,
 .run-button {
-    background: var(--accent-blue);
-    border: none;
-    padding: 12px 22px;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: var(--aws-radius);
+    border: 1px solid var(--aws-orange-dark);
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: all 0.15s ease;
+    background: var(--aws-orange);
+    color: var(--aws-squid-ink);
+    box-shadow: var(--aws-shadow-sm);
 }
 
 button:hover:not(:disabled),
 .run-button:hover:not(:disabled) {
-    background: var(--accent-blue-dark);
+    background: var(--aws-orange-dark);
+    box-shadow: var(--aws-shadow-md);
+}
+
+button:active:not(:disabled),
+.run-button:active:not(:disabled) {
+    transform: translateY(1px);
 }
 
 button:disabled {
-    background: #374151;
+    opacity: 0.5;
     cursor: not-allowed;
+    background: var(--aws-border);
+    border-color: var(--aws-border);
 }
 
-/* 8. Footer */
-.site-footer {
-    text-align: center;
-    padding: 32px 0;
-    margin-top: 40px;
-    border-top: 1px solid var(--border);
-    color: var(--text-secondary);
+/* Attack/danger button variant */
+.attack-button {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 16px 20px;
+    border-radius: var(--aws-radius);
+    border: 1px solid var(--aws-red);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--aws-panel-bg);
+    color: var(--aws-text-primary);
+    text-align: left;
 }
 
-/* 9. Tables (AWS Billing/Cost Explorer style) */
+.attack-button:hover:not(:disabled) {
+    background: var(--aws-red);
+    color: var(--aws-text-primary);
+    border-color: var(--aws-red-light);
+}
+
+.attack-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.attack-desc {
+    font-size: 12px;
+    color: var(--aws-text-tertiary);
+}
+
+/* 9. Tables - AWS Console Table Style */
 table {
     width: 100%;
     border-collapse: collapse;
-    background: var(--bg-panel);
-    margin: 24px 0;
+    margin: 20px 0;
+    background: var(--aws-panel-bg);
+    border: 1px solid var(--aws-border);
+    border-radius: var(--aws-radius-lg);
+    overflow: hidden;
+}
+
+table thead {
+    background: var(--aws-squid-ink);
 }
 
 table th {
-    padding: 12px;
+    padding: 12px 16px;
+    text-align: left;
     font-weight: 700;
-    background: #1f2a37;
-    border: 1px solid var(--border-light);
+    color: var(--aws-text-primary);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--aws-orange);
 }
 
 table td {
-    padding: 12px;
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
+    padding: 12px 16px;
+    color: var(--aws-text-secondary);
+    border-bottom: 1px solid var(--aws-border);
 }
 
-tr:nth-child(even) {
-    background: #0f172a;
+table tr:last-child td {
+    border-bottom: none;
 }
 
-/* 10. Code Blocks (AWS Documentation Style) */
+table tr:hover {
+    background: var(--aws-card-bg);
+}
+
+/* 10. Code blocks - AWS Console/CLI Style */
 pre, code {
-    background: #0d1117;
-    padding: 12px;
-    border-radius: 8px;
-    color: #9ecbff;
-    border: 1px solid var(--border);
+    font-family: Monaco, Menlo, "Ubuntu Mono", "Courier New", monospace;
+    font-size: 13px;
+    border-radius: var(--aws-radius);
 }
 
-/* 11. Simulator Panels */
+code {
+    background: var(--aws-squid-ink-dark);
+    color: var(--aws-orange-light);
+    padding: 2px 6px;
+    border: 1px solid var(--aws-border);
+}
+
+pre {
+    background: var(--aws-squid-ink-dark);
+    color: var(--aws-text-secondary);
+    padding: 16px;
+    overflow-x: auto;
+    border: 1px solid var(--aws-border);
+    line-height: 1.5;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+pre code {
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 0;
+}
+
+/* 11. Console/Terminal panels */
 .console-panel,
-.state-panel,
-.simulator-container {
-    background: var(--bg-panel);
-    border-radius: 10px;
-    border: 1px solid var(--border-light);
+.console-output {
+    background: var(--aws-panel-bg);
+    border: 1px solid var(--aws-border);
+    border-radius: var(--aws-radius-lg);
+    padding: 16px;
+    font-family: Monaco, Menlo, monospace;
+    font-size: 13px;
+    overflow-x: auto;
 }
 
-/* 12. Mobile */
-@media (max-width: 768px) {
-    .site-header {
-        flex-direction: column;
-        gap: 12px;
-    }
+.console-header {
+    color: var(--aws-orange);
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--aws-border);
+    padding-bottom: 8px;
+}
 
-    .nav-links {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
+.console-output {
+    background: var(--aws-squid-ink-dark);
+    color: var(--aws-text-secondary);
+    max-height: 500px;
+    overflow-y: auto;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
 
+.console-line {
+    margin-bottom: 4px;
+    line-height: 1.5;
+}
+
+.console-line.info { color: var(--aws-blue-light); }
+.console-line.demo { color: #a78bfa; }
+.console-line.success { color: var(--aws-green-light); }
+.console-line.header { color: var(--aws-orange); font-weight: 700; }
+.console-line.warning { color: var(--aws-yellow); }
+.console-line.error { color: var(--aws-red-light); }
+
+/* 12. State/Info panels - AWS Service Detail Panels */
+.state-panel,
+.state-section {
+    background: var(--aws-card-bg);
+    border: 1px solid var(--aws-border);
+    border-radius: var(--aws-radius-lg);
+    padding: 20px;
+}
+
+.state-section {
+    margin-bottom: 16px;
+    background: var(--aws-panel-bg);
+}
+
+.state-section:last-child {
+    margin-bottom: 0;
+}
+
+.state-section h3 {
+    font-size: 14px;
+    color: var(--aws-orange);
+    font-weight: 700;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--aws-border);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* 13. Metric cards - AWS CloudWatch Style */
+.metrics-grid,
+.defense-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.metric-card,
+.stat-card {
+    background: var(--aws-card-bg);
+    border: 1px solid var(--aws-border);
+    border-left: 4px solid var(--aws-orange);
+    border-radius: var(--aws-radius);
+    padding: 20px;
+    text-align: center;
+    transition: all 0.15s ease;
+}
+
+.metric-card:hover,
+.stat-card:hover {
+    border-left-color: var(--aws-blue);
+    box-shadow: var(--aws-shadow-md);
+    transform: translateY(-2px);
+}
+
+.metric-value,
+.stat-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--aws-orange);
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.metric-label,
+.stat-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--aws-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value.success,
+.stat-value.success {
+    color: var(--aws-green-light);
+}
+
+/* 14. Info boxes - AWS Console Alert Styles */
+.info-box,
+.info-panel {
+    background: var(--aws-panel-bg);
+    border-left: 4px solid var(--aws-blue);
+    padding: 16px 20px;
+    border-radius: var(--aws-radius);
+    margin: 20px 0;
+    border: 1px solid var(--aws-border);
+    border-left-width: 4px;
+}
+
+.success-box {
+    border-left-color: var(--aws-green);
+}
+
+.warning-box {
+    border-left-color: var(--aws-orange);
+}
+
+.error-box {
+    border-left-color: var(--aws-red);
+}
+
+/* 15. Footer - AWS Console Footer */
+.site-footer {
+    background: var(--aws-squid-ink);
+    border-top: 1px solid var(--aws-border);
+    padding: 24px;
+    margin-top: 48px;
+    text-align: center;
+}
+
+.site-footer p {
+    color: var(--aws-text-tertiary);
+    font-size: 12px;
+    margin: 0;
+}
+
+/* 16. User items - AWS Resource Lists */
+.user-item {
+    background: var(--aws-panel-bg);
+    border: 1px solid var(--aws-border);
+    border-radius: var(--aws-radius);
+    padding: 12px 16px;
+    margin: 8px 0;
+    transition: all 0.15s ease;
+}
+
+.user-item:hover {
+    background: var(--aws-card-bg);
+    border-color: var(--aws-orange);
+    box-shadow: var(--aws-shadow-sm);
+}
+
+.user-item strong {
+    color: var(--aws-text-primary);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.user-item span {
+    color: var(--aws-text-tertiary);
+    font-size: 12px;
+}
+
+/* 17. AWS Service Color Badges */
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: var(--aws-radius);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-ec2 { background: #ff9900; color: #232f3e; }
+.badge-rds { background: #527fff; color: white; }
+.badge-s3 { background: #569a31; color: white; }
+.badge-iam { background: #dd344c; color: white; }
+.badge-vpc { background: #7b61ff; color: white; }
+.badge-cloudwatch { background: #ff4f8b; color: white; }
+
+/* 18. Responsive Design */
+@media (max-width: 1200px) {
+    .content {
+        padding: 20px 16px;
+    }
+    
     .card {
         padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .site-header > * {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px 16px;
+    }
+    
+    .nav-links {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .nav-links a {
+        flex: 1 1 auto;
+        text-align: center;
+        min-width: 100px;
+    }
+    
+    .content {
+        padding: 16px 12px;
+    }
+    
+    .card {
+        padding: 16px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    h2 {
+        font-size: 18px;
+    }
+    
+    .metrics-grid,
+    .defense-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .metric-value,
+    .stat-value {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .metrics-grid,
+    .defense-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    h1 {
+        font-size: 20px;
+    }
+    
+    .nav-links a {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+}
+
+/* 19. Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.user-item.appear {
+    animation: slideIn 0.3s ease forwards;
+}
+
+/* 20. AWS-specific utility classes */
+.aws-divider {
+    height: 1px;
+    background: var(--aws-border);
+    margin: 24px 0;
+}
+
+.aws-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--aws-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.aws-value {
+    font-size: 14px;
+    color: var(--aws-text-primary);
+    font-weight: 400;
+}
+
+/* 21. Print styles */
+@media print {
+    .site-header,
+    .site-footer,
+    .nav-links,
+    button,
+    .run-button,
+    .attack-button {
+        display: none;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .card {
+        border: 1px solid #ddd;
+        box-shadow: none;
+        page-break-inside: avoid;
     }
 }
