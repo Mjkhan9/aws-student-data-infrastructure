@@ -21,7 +21,7 @@
 :root {
     /* AWS Console Backgrounds */
     --aws-squid-ink: #232f3e;          /* AWS primary dark blue (header) */
-    --aws-squid-ink-dark: #161e2d;     /* Darker variant */
+    --aws-squid-ink-dark: #16191f;     /* Darker variant - actual console bg */
     --aws-squid-ink-light: #37475a;    /* Lighter panels */
     
     /* AWS Orange - The Brand Color */
@@ -30,10 +30,10 @@
     --aws-orange-light: #ffac31;       /* Light variant */
     
     /* AWS Console UI Colors */
-    --aws-panel-bg: #1d2736;           /* Console panel background */
-    --aws-card-bg: #273548;            /* Console cards */
-    --aws-border: #3f4f5f;             /* Console borders */
-    --aws-border-light: #546171;       /* Lighter borders */
+    --aws-panel-bg: #1b1f26;           /* Console panel background - slightly grayer */
+    --aws-card-bg: #232935;            /* Console cards - less saturated */
+    --aws-border: #2a3240;             /* Console borders - more subtle */
+    --aws-border-light: #3a4454;       /* Lighter borders - less contrast */
     
     /* AWS Text Colors */
     --aws-text-primary: #ffffff;       /* Primary white text */
@@ -52,14 +52,26 @@
     --aws-red-light: #ff5947;          /* Warning red */
     --aws-yellow: #ff9900;             /* Warning (matches orange) */
     
-    /* AWS Shadows */
-    --aws-shadow-sm: 0 1px 1px 0 rgba(0, 28, 36, 0.3);
-    --aws-shadow-md: 0 4px 8px 0 rgba(0, 28, 36, 0.5);
-    --aws-shadow-lg: 0 12px 24px 0 rgba(0, 28, 36, 0.6);
+    /* AWS Shadows - minimal */
+    --aws-shadow-sm: 0 1px 1px 0 rgba(0, 0, 0, 0.15);
+    --aws-shadow-md: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    --aws-shadow-lg: 0 4px 8px 0 rgba(0, 0, 0, 0.25);
     
-    /* Spacing */
-    --aws-radius: 2px;                 /* AWS uses minimal border radius */
-    --aws-radius-lg: 4px;
+    /* Spacing - AWS standard grid */
+    --aws-spacing-xs: 4px;
+    --aws-spacing-sm: 8px;
+    --aws-spacing-md: 12px;
+    --aws-spacing-lg: 16px;
+    --aws-spacing-xl: 24px;
+    
+    /* Border radius - minimal like AWS */
+    --aws-radius: 2px;
+    --aws-radius-lg: 3px;
+    
+    /* Icon sizing - AWS standard */
+    --aws-icon-sm: 14px;
+    --aws-icon-md: 16px;
+    --aws-icon-lg: 20px;
 }
 
 /* 3. Global Styles - AWS Console Base */
@@ -71,55 +83,55 @@
 
 body {
     font-family: "Amazon Ember", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background: var(--aws-squid-ink-dark);
+    background: #16191f; /* AWS console actual background - less saturated */
     color: var(--aws-text-primary);
-    line-height: 1.6;
-    font-size: 14px;
+    line-height: 1.4; /* AWS console tighter line height */
+    font-size: 13px; /* AWS console base font size */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 /* Typography - AWS Console Style */
 h1 {
-    font-size: 28px;
+    font-size: 24px; /* AWS console h1 size */
     font-weight: 400;
     color: var(--aws-text-primary);
-    line-height: 1.3;
-    margin-bottom: 20px;
+    line-height: 1.2; /* Tight AWS title spacing */
+    margin-bottom: 12px;
     letter-spacing: -0.5px;
 }
 
 h2 {
-    font-size: 20px;
+    font-size: 18px; /* AWS console h2 size */
     font-weight: 700;
     color: var(--aws-text-primary);
-    line-height: 1.4;
-    margin-bottom: 16px;
+    line-height: 1.3; /* Tight AWS spacing */
+    margin-bottom: 12px;
     border-bottom: 1px solid var(--aws-border);
-    padding-bottom: 8px;
+    padding-bottom: 6px;
 }
 
 h3 {
-    font-size: 16px;
+    font-size: 14px; /* AWS console h3 size */
     font-weight: 700;
     color: var(--aws-text-primary);
-    line-height: 1.4;
-    margin-bottom: 12px;
+    line-height: 1.3;
+    margin-bottom: 8px;
 }
 
 h4 {
-    font-size: 14px;
+    font-size: 13px; /* AWS console h4 size */
     font-weight: 700;
     color: var(--aws-text-primary);
-    line-height: 1.4;
-    margin-bottom: 8px;
+    line-height: 1.3;
+    margin-bottom: 6px;
 }
 
 p {
     color: var(--aws-text-secondary);
-    margin-bottom: 16px;
-    font-size: 14px;
-    line-height: 1.6;
+    margin-bottom: 12px; /* Tighter AWS spacing */
+    font-size: 13px;
+    line-height: 1.5; /* AWS console line height */
 }
 
 strong {
@@ -179,15 +191,15 @@ a:hover {
 
 .nav-links {
     display: flex;
-    gap: 4px;
+    gap: 2px; /* AWS console tight nav spacing */
     align-items: center;
 }
 
 .nav-links a {
     color: var(--aws-text-secondary);
     font-weight: 400;
-    font-size: 14px;
-    padding: 8px 16px;
+    font-size: 13px; /* AWS console nav font size */
+    padding: 6px 12px; /* AWS console nav padding */
     border-radius: var(--aws-radius);
     transition: all 0.15s ease;
     text-decoration: none;
@@ -212,30 +224,30 @@ a:hover {
 .content {
     max-width: 1600px;
     margin: 0 auto;
-    padding: 24px;
+    padding: 24px; /* AWS standard horizontal padding */
 }
 
 /* 6. Cards - AWS Console Panel Style */
 .card {
     background: var(--aws-card-bg);
-    border: 1px solid var(--aws-border);
-    border-radius: var(--aws-radius-lg);
-    padding: 24px;
-    margin-bottom: 24px;
-    box-shadow: var(--aws-shadow-sm);
+    border: 1px solid #2a3240; /* More subtle AWS border */
+    border-radius: var(--aws-radius); /* Minimal rounding like AWS */
+    padding: 16px; /* AWS card internal padding */
+    margin-bottom: 16px;
+    box-shadow: none; /* AWS console has no shadows on cards */
 }
 
 .card h1 {
-    border-bottom: 2px solid var(--aws-orange);
-    padding-bottom: 12px;
-    margin-bottom: 20px;
+    border-bottom: 1px solid var(--aws-border); /* Subtle underline only */
+    padding-bottom: 8px;
+    margin-bottom: 16px;
 }
 
 .card h2 {
-    margin-top: 32px;
-    padding-top: 16px;
-    border-top: 1px solid var(--aws-border);
-    border-bottom: 1px solid var(--aws-border);
+    margin-top: 24px;
+    padding-top: 12px;
+    border-top: 1px solid #2a3240; /* Subtle divider */
+    border-bottom: none; /* Remove double borders */
 }
 
 .card h2:first-of-type {
@@ -246,14 +258,15 @@ a:hover {
 
 /* 7. Lists - AWS Documentation Style */
 ul, ol {
-    margin-left: 24px;
-    margin-bottom: 20px;
+    margin-left: var(--aws-spacing-xl);
+    margin-bottom: var(--aws-spacing-lg);
 }
 
 ul li, ol li {
     color: var(--aws-text-secondary);
-    margin-bottom: 8px;
-    line-height: 1.7;
+    margin-bottom: var(--aws-spacing-sm);
+    line-height: 1.5; /* AWS tight list spacing */
+    font-size: 13px;
 }
 
 ul li strong, ol li strong {
@@ -268,8 +281,8 @@ ul li strong, ol li strong {
 
 .bullet-list li {
     position: relative;
-    padding-left: 24px;
-    margin-bottom: 12px;
+    padding-left: var(--aws-spacing-lg);
+    margin-bottom: var(--aws-spacing-sm);
 }
 
 .bullet-list li::before {
@@ -278,6 +291,7 @@ ul li strong, ol li strong {
     left: 0;
     color: var(--aws-orange);
     font-weight: 700;
+    font-size: 13px;
 }
 
 /* 8. Buttons - AWS Console Action Buttons */
@@ -350,32 +364,36 @@ button:disabled {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: var(--aws-spacing-lg) 0;
     background: var(--aws-panel-bg);
     border: 1px solid var(--aws-border);
-    border-radius: var(--aws-radius-lg);
+    border-radius: var(--aws-radius);
     overflow: hidden;
+    font-size: 13px; /* AWS table font size */
 }
 
 table thead {
-    background: var(--aws-squid-ink);
+    background: var(--aws-squid-ink-dark);
 }
 
 table th {
-    padding: 12px 16px;
+    padding: 10px 12px; /* AWS console table header padding */
     text-align: left;
     font-weight: 700;
     color: var(--aws-text-primary);
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-bottom: 2px solid var(--aws-orange);
+    border-bottom: 1px solid var(--aws-orange);
+    line-height: 1.3;
 }
 
 table td {
-    padding: 12px 16px;
+    padding: 10px 12px; /* AWS console table cell padding */
     color: var(--aws-text-secondary);
     border-bottom: 1px solid var(--aws-border);
+    line-height: 1.4;
+    font-size: 13px;
 }
 
 table tr:last-child td {
@@ -491,18 +509,18 @@ pre code {
 .metrics-grid,
 .defense-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--aws-spacing-md);
+    margin-bottom: var(--aws-spacing-lg);
 }
 
 .metric-card,
 .stat-card {
     background: var(--aws-card-bg);
     border: 1px solid var(--aws-border);
-    border-left: 4px solid var(--aws-orange);
+    border-left: 3px solid var(--aws-orange); /* AWS accent stripe */
     border-radius: var(--aws-radius);
-    padding: 20px;
+    padding: var(--aws-spacing-md);
     text-align: center;
     transition: all 0.15s ease;
 }
@@ -510,26 +528,26 @@ pre code {
 .metric-card:hover,
 .stat-card:hover {
     border-left-color: var(--aws-blue);
-    box-shadow: var(--aws-shadow-md);
-    transform: translateY(-2px);
+    background: #293541; /* Slightly lighter on hover */
 }
 
 .metric-value,
 .stat-value {
-    font-size: 36px;
+    font-size: 32px; /* AWS metric size */
     font-weight: 700;
     color: var(--aws-orange);
     line-height: 1;
-    margin-bottom: 8px;
+    margin-bottom: var(--aws-spacing-xs);
 }
 
 .metric-label,
 .stat-label {
-    font-size: 12px;
-    font-weight: 400;
+    font-size: 11px; /* AWS label size */
+    font-weight: 600;
     color: var(--aws-text-tertiary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    line-height: 1.3;
 }
 
 .metric-value.success,
@@ -625,53 +643,56 @@ pre code {
 /* 18. Responsive Design */
 @media (max-width: 1200px) {
     .content {
-        padding: 20px 16px;
+        padding: var(--aws-spacing-lg); /* 16px for tablets */
     }
     
     .card {
-        padding: 20px;
+        padding: var(--aws-spacing-md); /* 12px internal */
     }
 }
 
 @media (max-width: 768px) {
     .site-header > * {
         flex-direction: column;
-        gap: 12px;
-        padding: 12px 16px;
+        gap: var(--aws-spacing-sm);
+        padding: var(--aws-spacing-md) var(--aws-spacing-lg);
     }
     
     .nav-links {
         width: 100%;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 8px;
+        gap: var(--aws-spacing-xs);
     }
     
     .nav-links a {
         flex: 1 1 auto;
         text-align: center;
-        min-width: 100px;
+        min-width: 90px;
+        font-size: 12px; /* Smaller on mobile */
+        padding: 4px 8px; /* Tighter mobile nav */
     }
     
     .content {
-        padding: 16px 12px;
+        padding: var(--aws-spacing-md); /* 12px for mobile */
     }
     
     .card {
-        padding: 16px;
+        padding: var(--aws-spacing-md);
     }
     
     h1 {
-        font-size: 24px;
+        font-size: 20px;
     }
     
     h2 {
-        font-size: 18px;
+        font-size: 16px;
     }
     
     .metrics-grid,
     .defense-stats {
         grid-template-columns: repeat(2, 1fr);
+        gap: var(--aws-spacing-md);
     }
     
     .metric-value,
@@ -684,15 +705,20 @@ pre code {
     .metrics-grid,
     .defense-stats {
         grid-template-columns: 1fr;
+        gap: var(--aws-spacing-sm);
     }
     
     h1 {
-        font-size: 20px;
+        font-size: 18px;
     }
     
     .nav-links a {
-        font-size: 13px;
-        padding: 6px 12px;
+        font-size: 11px;
+        padding: 4px 6px;
+    }
+    
+    .content {
+        padding: var(--aws-spacing-sm); /* 8px for very small screens */
     }
 }
 
@@ -723,11 +749,52 @@ pre code {
     animation: slideIn 0.3s ease forwards;
 }
 
-/* 20. AWS-specific utility classes */
+/* 20. AWS Icon System - Using Unicode symbols for AWS-style glyphs */
+.icon {
+    display: inline-block;
+    width: var(--aws-icon-md);
+    height: var(--aws-icon-md);
+    margin-right: 6px;
+    vertical-align: middle;
+    font-size: var(--aws-icon-md);
+}
+
+.icon-sm {
+    width: var(--aws-icon-sm);
+    height: var(--aws-icon-sm);
+    font-size: var(--aws-icon-sm);
+}
+
+.icon-lg {
+    width: var(--aws-icon-lg);
+    height: var(--aws-icon-lg);
+    font-size: var(--aws-icon-lg);
+}
+
+/* AWS Service Icon Colors */
+.icon-ec2::before { content: "▣"; color: var(--aws-orange); }
+.icon-rds::before { content: "◉"; color: #527fff; }
+.icon-s3::before { content: "◈"; color: #569a31; }
+.icon-iam::before { content: "⬢"; color: #dd344c; }
+.icon-vpc::before { content: "⬡"; color: #7b61ff; }
+.icon-lambda::before { content: "λ"; color: var(--aws-orange); }
+.icon-cloudwatch::before { content: "◷"; color: #ff4f8b; }
+.icon-cloudtrail::before { content: "◴"; color: #1e8fff; }
+.icon-kms::before { content: "🔑"; color: #dd344c; font-size: 14px; }
+
+/* Generic utility icons */
+.icon-check::before { content: "✓"; color: var(--aws-green-light); }
+.icon-warning::before { content: "⚠"; color: var(--aws-orange); }
+.icon-error::before { content: "✖"; color: var(--aws-red-light); }
+.icon-info::before { content: "ℹ"; color: var(--aws-blue-light); }
+.icon-arrow::before { content: "→"; color: var(--aws-orange); }
+.icon-external::before { content: "↗"; color: var(--aws-blue-light); }
+
+/* 21. AWS-specific utility classes */
 .aws-divider {
     height: 1px;
     background: var(--aws-border);
-    margin: 24px 0;
+    margin: var(--aws-spacing-xl) 0;
 }
 
 .aws-label {
@@ -736,13 +803,88 @@ pre code {
     color: var(--aws-text-tertiary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 8px;
+    margin-bottom: var(--aws-spacing-sm);
+    display: block;
 }
 
 .aws-value {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--aws-text-primary);
     font-weight: 400;
+}
+
+/* AWS Console spacing utilities */
+.mb-xs { margin-bottom: var(--aws-spacing-xs); }
+.mb-sm { margin-bottom: var(--aws-spacing-sm); }
+.mb-md { margin-bottom: var(--aws-spacing-md); }
+.mb-lg { margin-bottom: var(--aws-spacing-lg); }
+.mb-xl { margin-bottom: var(--aws-spacing-xl); }
+
+.mt-xs { margin-top: var(--aws-spacing-xs); }
+.mt-sm { margin-top: var(--aws-spacing-sm); }
+.mt-md { margin-top: var(--aws-spacing-md); }
+.mt-lg { margin-top: var(--aws-spacing-lg); }
+.mt-xl { margin-top: var(--aws-spacing-xl); }
+
+.p-xs { padding: var(--aws-spacing-xs); }
+.p-sm { padding: var(--aws-spacing-sm); }
+.p-md { padding: var(--aws-spacing-md); }
+.p-lg { padding: var(--aws-spacing-lg); }
+.p-xl { padding: var(--aws-spacing-xl); }
+
+/* 22. AWS Console breadcrumb style */
+.breadcrumb {
+    font-size: 12px;
+    color: var(--aws-text-tertiary);
+    margin-bottom: var(--aws-spacing-md);
+    padding: var(--aws-spacing-sm) 0;
+}
+
+.breadcrumb a {
+    color: var(--aws-blue-light);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-separator {
+    margin: 0 var(--aws-spacing-sm);
+    color: var(--aws-text-tertiary);
+}
+
+.breadcrumb-separator::before {
+    content: "›";
+}
+
+/* 23. AWS Console info badge */
+.info-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--aws-panel-bg);
+    border: 1px solid var(--aws-border);
+    border-radius: var(--aws-radius);
+    padding: 4px 8px;
+    font-size: 12px;
+    color: var(--aws-text-secondary);
+    margin: 0 4px;
+}
+
+.info-badge.success {
+    border-color: var(--aws-green);
+    background: rgba(29, 129, 2, 0.1);
+}
+
+.info-badge.warning {
+    border-color: var(--aws-orange);
+    background: rgba(255, 153, 0, 0.1);
+}
+
+.info-badge.error {
+    border-color: var(--aws-red);
+    background: rgba(209, 50, 18, 0.1);
 }
 
 /* 21. Print styles */
