@@ -1,44 +1,56 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Security Attack Simulator | Mohammad Khan</title>
+    <title>Security Simulator | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <style>
-        .simulator-container {
-            background: #0f172a;
-            padding: 32px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            min-height: 500px;
-            position: relative;
-            overflow: hidden;
+        /* Security Simulator - AWS Console Style */
+        .simulator-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 16px;
+            min-height: 600px;
+        }
+        
+        .attack-panel {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            padding: 16px;
+        }
+        
+        .attack-panel h3 {
+            font-size: 13px;
+            color: var(--aws-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
         
         .attack-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         
         .attack-button {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            color: white;
-            border: 2px solid #7f1d1d;
-            padding: 20px;
-            border-radius: 8px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 3px solid var(--aws-red);
+            border-radius: var(--aws-radius);
+            padding: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.15s ease;
             text-align: left;
             font-family: inherit;
         }
         
         .attack-button:hover:not(:disabled) {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(220, 38, 38, 0.4);
+            background: var(--aws-card-bg);
+            border-left-color: var(--aws-red-light);
         }
         
         .attack-button:disabled {
@@ -47,108 +59,151 @@
         }
         
         .attack-title {
-            font-size: 1.1rem;
+            font-size: 13px;
             font-weight: 700;
-            margin-bottom: 6px;
+            color: var(--aws-text-primary);
+            margin-bottom: 4px;
         }
         
         .attack-desc {
-            font-size: 0.85rem;
-            opacity: 0.9;
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+            line-height: 1.4;
+        }
+        
+        /* Visualization Canvas */
+        .visualization-container {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            padding: 16px;
+        }
+        
+        .visualization-header {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--aws-border);
+        }
+        
+        .visualization-header h2 {
+            font-size: 18px;
+            color: var(--aws-text-primary);
+            margin: 0;
+            border: none;
+            padding: 0;
         }
         
         .visualization {
             position: relative;
-            height: 400px;
-            background: #1e293b;
-            border-radius: 8px;
-            border: 2px solid #334155;
+            min-height: 500px;
+            background: var(--aws-squid-ink-dark);
+            border-radius: var(--aws-radius);
+            border: 1px solid var(--aws-border);
+            /* Blueprint grid background */
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
         
         .network-layer {
             position: absolute;
-            padding: 16px;
-            border-radius: 6px;
+            padding: 12px;
+            border-radius: var(--aws-radius);
             border: 2px solid;
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
+            font-size: 12px;
         }
         
         .layer-internet {
             top: 20px;
             left: 20px;
             width: 200px;
-            background: #fef3c7;
-            border-color: #f59e0b;
+            background: rgba(184, 134, 11, 0.12);
+            border-color: #b8860b;
         }
         
         .layer-admin {
             top: 100px;
             left: 20px;
             width: 200px;
-            background: #dbeafe;
-            border-color: #3b82f6;
+            background: rgba(74, 124, 184, 0.12);
+            border-color: #4a7cb8;
         }
         
         .layer-app {
             top: 180px;
             left: 20px;
             width: 200px;
-            background: #e0e7ff;
-            border-color: #6366f1;
+            background: rgba(107, 91, 163, 0.12);
+            border-color: #6b5ba3;
         }
         
         .layer-db {
             top: 260px;
             left: 20px;
             width: 200px;
-            background: #fce7f3;
-            border-color: #ec4899;
+            background: rgba(184, 74, 124, 0.12);
+            border-color: #b84a7c;
+        }
+        
+        .layer-title {
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .layer-desc {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
         }
         
         .attacker {
             position: absolute;
-            width: 60px;
-            height: 60px;
-            background: #dc2626;
+            width: 50px;
+            height: 50px;
+            background: var(--aws-red);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.6);
+            font-size: 24px;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
             opacity: 0;
-            transition: all 0.5s ease;
+            transition: all 0.4s ease;
         }
         
         .attacker.active {
             opacity: 1;
         }
         
+        /* FIXED: No more glowing neon - subtle AWS-style highlight */
         .defense-layer {
             position: absolute;
-            background: rgba(16, 185, 129, 0.2);
-            border: 3px solid #10b981;
-            border-radius: 8px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 2px solid var(--aws-green);
+            border-radius: var(--aws-radius);
             opacity: 0;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
         }
         
         .defense-layer.active {
             opacity: 1;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
         }
         
+        /* FIXED: No glowing effect - clean AWS alert style */
         .block-indicator {
             position: absolute;
-            background: #dc2626;
+            background: var(--aws-red);
             color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 10px 16px;
+            border-radius: var(--aws-radius);
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 13px;
             opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.3s ease;
+            transform: scale(0.9);
+            transition: all 0.25s ease;
+            border: 1px solid var(--aws-red-light);
         }
         
         .block-indicator.show {
@@ -157,23 +212,33 @@
         }
         
         .log-panel {
-            background: #1e293b;
-            border: 2px solid #334155;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 24px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            padding: 16px;
+            margin-top: 16px;
             max-height: 300px;
             overflow-y: auto;
         }
         
+        .log-panel h3 {
+            font-size: 13px;
+            color: var(--aws-text-tertiary);
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
         .log-entry {
-            padding: 8px 12px;
+            padding: 6px 10px;
             margin: 4px 0;
-            border-radius: 4px;
-            font-family: "Courier New", monospace;
-            font-size: 0.85rem;
+            border-radius: var(--aws-radius);
+            font-family: Monaco, monospace;
+            font-size: 12px;
             opacity: 0;
             animation: logFadeIn 0.3s forwards;
+            border-left: 2px solid;
         }
         
         @keyframes logFadeIn {
@@ -181,58 +246,73 @@
         }
         
         .log-info {
-            background: #1e40af;
-            color: #dbeafe;
+            background: rgba(30, 143, 255, 0.1);
+            color: var(--aws-blue-light);
+            border-left-color: var(--aws-blue);
         }
         
         .log-warning {
-            background: #f59e0b;
-            color: #fef3c7;
+            background: rgba(255, 153, 0, 0.1);
+            color: var(--aws-orange);
+            border-left-color: var(--aws-orange);
         }
         
         .log-error {
-            background: #dc2626;
-            color: #fee2e2;
+            background: rgba(209, 50, 18, 0.1);
+            color: var(--aws-red-light);
+            border-left-color: var(--aws-red);
         }
         
         .log-success {
-            background: #10b981;
-            color: #d1fae5;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--aws-green-light);
+            border-left-color: var(--aws-green);
         }
         
         .defense-stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
         
         .stat-card {
-            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-            border: 2px solid #10b981;
-            padding: 16px;
-            border-radius: 8px;
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 3px solid var(--aws-green);
+            padding: 12px;
+            border-radius: var(--aws-radius);
             text-align: center;
         }
         
         .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #065f46;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--aws-green-light);
+            line-height: 1;
+            margin-bottom: 6px;
         }
         
         .stat-label {
-            font-size: 0.85rem;
-            color: #047857;
+            font-size: 11px;
             font-weight: 600;
-            margin-top: 4px;
+            color: var(--aws-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
+            .simulator-layout {
+                grid-template-columns: 1fr;
+            }
+            
             .defense-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
-            .attack-buttons {
+        }
+        
+        @media (max-width: 640px) {
+            .defense-stats {
                 grid-template-columns: 1fr;
             }
         }
@@ -240,27 +320,29 @@
 </head>
 <body>
 <header class="site-header">
-    <div class="logo">AWS Student Data Infrastructure</div>
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="docs.html">Documentation</a>
-        <a href="review.html">Faculty Review</a>
-        <a href="live-demo.html">Live Demo</a>
-        <a href="interactive-diagram.html">Interactive Diagram</a>
-        <a href="cost-calculator.html">Cost Calculator</a>
-        <a href="security-simulator.html">Security Simulator</a>
-    </nav>
+    <div>
+        <div class="logo">AWS Student Data Infrastructure</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="architecture.html">Architecture</a>
+            <a href="automation.html">IAM Automation</a>
+            <a href="docs.html">Documentation</a>
+            <a href="review.html">Project Summary</a>
+            <a href="live-demo.html">Live Demo</a>
+            <a href="interactive-diagram.html">Interactive Diagram</a>
+            <a href="cost-calculator.html">Cost Calculator</a>
+            <a href="security-simulator.html" class="active">Security Simulator</a>
+        </nav>
+    </div>
 </header>
 
 <main class="content">
     <section class="card">
         <h1>Security Attack Simulator</h1>
         <p>
-            This interactive simulator demonstrates how the multi-layer security architecture blocks common attack 
-            vectors. Select an attack scenario below to watch defense mechanisms activate in real-time, showing 
-            security groups, NACLs, IAM policies, and encryption working together to protect student data.
+            This interactive simulator demonstrates how multi-layer security architecture blocks common attack 
+            vectors. Select an attack scenario to watch defense mechanisms activate in real-time, showing 
+            security groups, NACLs, IAM policies, and encryption working together.
         </p>
     </section>
 
@@ -283,70 +365,79 @@
         </div>
     </div>
 
-    <div class="attack-buttons">
-        <button class="attack-button" onclick="simulateAttack('direct-db')">
-            <div class="attack-title">🎯 Direct Database Access</div>
-            <div class="attack-desc">Attempt to connect to RDS from internet</div>
-        </button>
-        
-        <button class="attack-button" onclick="simulateAttack('lateral-movement')">
-            <div class="attack-title">↔️ Lateral Movement</div>
-            <div class="attack-desc">Try to move from app tier to admin tier</div>
-        </button>
-        
-        <button class="attack-button" onclick="simulateAttack('privilege-escalation')">
-            <div class="attack-title">⬆️ IAM Privilege Escalation</div>
-            <div class="attack-desc">Attempt to attach admin policy to user</div>
-        </button>
-        
-        <button class="attack-button" onclick="simulateAttack('s3-public')">
-            <div class="attack-title">🌐 S3 Public Exposure</div>
-            <div class="attack-desc">Try to make bucket public-read</div>
-        </button>
-        
-        <button class="attack-button" onclick="simulateAttack('unencrypted-data')">
-            <div class="attack-title">🔓 Unencrypted Data Access</div>
-            <div class="attack-desc">Access data without encryption key</div>
-        </button>
-        
-        <button class="attack-button" onclick="simulateAttack('sg-misconfiguration')">
-            <div class="attack-title">🔥 Security Group Bypass</div>
-            <div class="attack-desc">Exploit 0.0.0.0/0 rules</div>
-        </button>
-    </div>
+    <div class="simulator-layout">
+        <aside class="attack-panel">
+            <h3>Attack Scenarios</h3>
+            <div class="attack-buttons">
+                <button class="attack-button" onclick="simulateAttack('direct-db')">
+                    <div class="attack-title">🎯 Direct Database Access</div>
+                    <div class="attack-desc">Attempt to connect to RDS from internet</div>
+                </button>
+                
+                <button class="attack-button" onclick="simulateAttack('lateral-movement')">
+                    <div class="attack-title">↔️ Lateral Movement</div>
+                    <div class="attack-desc">Try to move from app tier to admin tier</div>
+                </button>
+                
+                <button class="attack-button" onclick="simulateAttack('privilege-escalation')">
+                    <div class="attack-title">⬆️ IAM Privilege Escalation</div>
+                    <div class="attack-desc">Attempt to attach admin policy to user</div>
+                </button>
+                
+                <button class="attack-button" onclick="simulateAttack('s3-public')">
+                    <div class="attack-title">🌐 S3 Public Exposure</div>
+                    <div class="attack-desc">Try to make bucket public-read</div>
+                </button>
+                
+                <button class="attack-button" onclick="simulateAttack('unencrypted-data')">
+                    <div class="attack-title">🔓 Unencrypted Data Access</div>
+                    <div class="attack-desc">Access data without encryption key</div>
+                </button>
+                
+                <button class="attack-button" onclick="simulateAttack('sg-misconfiguration')">
+                    <div class="attack-title">🔥 Security Group Bypass</div>
+                    <div class="attack-desc">Exploit 0.0.0.0/0 rules</div>
+                </button>
+            </div>
+        </aside>
 
-    <div class="simulator-container">
-        <div class="visualization" id="visualization">
-            <div class="network-layer layer-internet">
-                <strong>Internet</strong><br>
-                <small>Untrusted Network</small>
-            </div>
-            <div class="network-layer layer-admin">
-                <strong>Admin Tier</strong><br>
-                <small>172.32.1.0/24</small>
-            </div>
-            <div class="network-layer layer-app">
-                <strong>App Tier</strong><br>
-                <small>172.32.10.0/24</small>
-            </div>
-            <div class="network-layer layer-db">
-                <strong>DB Tier</strong><br>
-                <small>172.32.20.0/24</small>
+        <div class="visualization-container">
+            <div class="visualization-header">
+                <h2>Network Defense Visualization</h2>
             </div>
             
-            <div class="attacker" id="attacker">⚠️</div>
-            <div class="block-indicator" id="blockIndicator">❌ BLOCKED</div>
+            <div class="visualization" id="visualization">
+                <div class="network-layer layer-internet">
+                    <div class="layer-title">Internet</div>
+                    <div class="layer-desc">Untrusted Network</div>
+                </div>
+                <div class="network-layer layer-admin">
+                    <div class="layer-title">Admin Tier</div>
+                    <div class="layer-desc">172.32.1.0/24</div>
+                </div>
+                <div class="network-layer layer-app">
+                    <div class="layer-title">App Tier</div>
+                    <div class="layer-desc">172.32.10.0/24</div>
+                </div>
+                <div class="network-layer layer-db">
+                    <div class="layer-title">DB Tier</div>
+                    <div class="layer-desc">172.32.20.0/24</div>
+                </div>
+                
+                <div class="attacker" id="attacker">⚠️</div>
+                <div class="block-indicator" id="blockIndicator">❌ BLOCKED</div>
+            </div>
         </div>
     </div>
 
     <div class="log-panel" id="logPanel">
-        <div style="color: #94a3b8; font-weight: 600; margin-bottom: 12px;">Security Event Log</div>
+        <h3>Security Event Log</h3>
         <div id="logEntries"></div>
     </div>
 </main>
 
 <footer class="site-footer">
-    <p>Security Attack Simulator • Mohammad Khan • 2025</p>
+    <p>Security Attack Simulator • AWS Student Data Infrastructure • 2025</p>
 </footer>
 
 <script>
@@ -369,7 +460,7 @@ const attackScenarios = {
             { type: "error", message: "❌ ATTACK BLOCKED: No route exists from internet to database tier" }
         ],
         defensePositions: [
-            { left: 240, top: 280, width: 180, height: 80 }
+            { left: 20, top: 260, width: 200, height: 80 }
         ]
     },
     "lateral-movement": {
@@ -381,12 +472,10 @@ const attackScenarios = {
             { type: "success", message: "✓ bastion-sg ingress: Only allows corporate IPs, not app tier" },
             { type: "info", message: "🔍 Checking Network ACL rules..." },
             { type: "success", message: "✓ admin-nacl: Explicit deny for traffic from app subnets" },
-            { type: "info", message: "🔍 Checking route tables..." },
-            { type: "success", message: "✓ No routes exist between app and admin tiers" },
             { type: "error", message: "❌ ATTACK BLOCKED: Security groups prevent cross-tier access" }
         ],
         defensePositions: [
-            { left: 240, top: 110, width: 180, height: 70 }
+            { left: 20, top: 100, width: 200, height: 70 }
         ]
     },
     "privilege-escalation": {
@@ -396,11 +485,7 @@ const attackScenarios = {
             { type: "warning", message: "⚠️ Action: iam:AttachUserPolicy → Policy: AdministratorAccess" },
             { type: "info", message: "🔍 Checking IAM permissions..." },
             { type: "success", message: "✓ User is in StudentDataRestrictedAccess group (read-only)" },
-            { type: "info", message: "🔍 Evaluating IAM policies..." },
             { type: "success", message: "✓ User has NO iam:AttachUserPolicy permission" },
-            { type: "success", message: "✓ User has NO iam:AttachGroupPolicy permission" },
-            { type: "info", message: "🔍 Checking MFA enforcement..." },
-            { type: "success", message: "✓ Sensitive actions require MFA (not provided)" },
             { type: "info", message: "📝 CloudTrail logging unauthorized action attempt" },
             { type: "error", message: "❌ ATTACK BLOCKED: AccessDenied - Insufficient IAM permissions" }
         ],
@@ -415,34 +500,21 @@ const attackScenarios = {
             { type: "success", message: "✓ BlockPublicAcls: ENABLED (account-level)" },
             { type: "success", message: "✓ BlockPublicPolicy: ENABLED (bucket-level)" },
             { type: "success", message: "✓ IgnorePublicAcls: ENABLED" },
-            { type: "success", message: "✓ RestrictPublicBuckets: ENABLED" },
-            { type: "info", message: "🔍 Checking bucket policy..." },
-            { type: "success", message: "✓ Explicit deny for public access in bucket policy" },
-            { type: "info", message: "📝 S3 access logging recording attempt" },
             { type: "error", message: "❌ ATTACK BLOCKED: S3 Block Public Access prevents exposure" }
         ],
-        defensePositions: [
-            { left: 660, top: 360, width: 460, height: 100 }
-        ]
+        defensePositions: []
     },
     "unencrypted-data": {
         title: "Unencrypted Data Access Attempt",
         steps: [
             { type: "info", message: "🔓 Attack: Attempting to read RDS snapshot without decryption key" },
-            { type: "warning", message: "⚠️ Snapshot: student-records-snapshot-2025-11-15" },
+            { type: "warning", message: "⚠️ Snapshot: student-records-snapshot-2025" },
             { type: "info", message: "🔍 Checking encryption status..." },
             { type: "success", message: "✓ Snapshot encrypted with KMS key: alias/student-data-key" },
-            { type: "info", message: "🔍 Checking KMS key permissions..." },
             { type: "success", message: "✓ Key policy: Only specific IAM roles can decrypt" },
-            { type: "success", message: "✓ Attacker role: NOT in key policy grant list" },
-            { type: "info", message: "🔍 Attempting kms:Decrypt operation..." },
-            { type: "success", message: "✓ MFA required for decrypt operations (not provided)" },
-            { type: "info", message: "📝 CloudTrail logging unauthorized decrypt attempt" },
             { type: "error", message: "❌ ATTACK BLOCKED: KMS denies decrypt without proper credentials" }
         ],
-        defensePositions: [
-            { left: 910, top: 140, width: 210, height: 160 }
-        ]
+        defensePositions: []
     },
     "sg-misconfiguration": {
         title: "Security Group Misconfiguration Exploit",
@@ -453,14 +525,11 @@ const attackScenarios = {
             { type: "success", message: "✓ Admin tier SGs: Only specific corporate IP ranges allowed" },
             { type: "success", message: "✓ App tier SGs: Use security group referencing (not IPs)" },
             { type: "success", message: "✓ DB tier SGs: Only app-sg can reach port 5432" },
-            { type: "info", message: "🔍 Checking for 0.0.0.0/0 rules..." },
             { type: "success", message: "✓ Zero instances of 0.0.0.0/0 on ingress rules" },
-            { type: "success", message: "✓ ALB-sg allows 443 from internet (by design, protected by WAF)" },
-            { type: "info", message: "🔍 AWS Config continuous monitoring active" },
             { type: "error", message: "❌ ATTACK BLOCKED: No exploitable security group misconfigurations" }
         ],
         defensePositions: [
-            { left: 240, top: 110, width: 180, height: 230 }
+            { left: 20, top: 100, width: 200, height: 230 }
         ]
     }
 };
@@ -482,7 +551,6 @@ async function simulateAttack(attackType) {
     if (isSimulating) return;
     isSimulating = true;
     
-    // Disable all buttons
     document.querySelectorAll(".attack-button").forEach(btn => btn.disabled = true);
     
     const scenario = attackScenarios[attackType];
@@ -490,34 +558,27 @@ async function simulateAttack(attackType) {
     const blockIndicator = document.getElementById("blockIndicator");
     const logEntries = document.getElementById("logEntries");
     
-    // Clear previous logs
     logEntries.innerHTML = "";
-    
-    // Clear previous defenses
     document.querySelectorAll(".defense-layer").forEach(el => el.remove());
     
-    // Show attacker
-    attacker.style.left = "400px";
+    attacker.style.left = "300px";
     attacker.style.top = "20px";
     attacker.classList.add("active");
     
     addLogEntry("info", `═══ ${scenario.title} ═══`);
     await sleep(1000);
     
-    // Execute attack steps
     for (let i = 0; i < scenario.steps.length; i++) {
         const step = scenario.steps[i];
         addLogEntry(step.type, step.message);
         
-        // Move attacker down
         if (i % 3 === 0 && i > 0) {
             attacker.style.top = `${20 + (i * 15)}px`;
         }
         
-        await sleep(800);
+        await sleep(700);
     }
     
-    // Show defense layers
     if (scenario.defensePositions.length > 0) {
         for (const pos of scenario.defensePositions) {
             const defense = document.createElement("div");
@@ -530,32 +591,27 @@ async function simulateAttack(attackType) {
         }
     }
     
-    await sleep(500);
+    await sleep(400);
     
-    // Show block indicator
-    blockIndicator.style.left = "400px";
+    blockIndicator.style.left = "300px";
     blockIndicator.style.top = "200px";
     blockIndicator.classList.add("show");
     
     await sleep(2000);
     
-    // Hide elements
     blockIndicator.classList.remove("show");
     attacker.classList.remove("active");
     
-    // Update stats
     attackCount++;
     document.getElementById("attacksBlocked").textContent = attackCount;
     document.getElementById("layersActive").textContent = Math.min(attackCount, 6);
     
-    await sleep(500);
+    await sleep(400);
     
-    // Re-enable buttons
     document.querySelectorAll(".attack-button").forEach(btn => btn.disabled = false);
     isSimulating = false;
 }
 
-// Initial log message
 addLogEntry("info", "Security simulator ready. Select an attack to begin.");
 </script>
 </body>
