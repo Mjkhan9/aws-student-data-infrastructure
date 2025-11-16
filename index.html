@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,51 +8,137 @@
 </head>
 <body>
 <header class="site-header">
-    <div class="logo">AWS Student Data Infrastructure</div>
-    <nav class="nav-links">
-        <a href="index.html" class="active">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="docs.html">Documentation</a>
-        <a href="review.html">Faculty Review</a>
-        <a href="live-demo.html">Live Demo</a>
-        <a href="interactive-diagram.html">Interactive Diagram</a>
-        <a href="cost-calculator.html">Cost Calculator</a>
-        <a href="security-simulator.html">Security Simulator</a>
-    </nav>
+    <div>
+        <div class="logo">AWS Student Data Infrastructure</div>
+        <nav class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="architecture.html">Architecture</a>
+            <a href="automation.html">IAM Automation</a>
+            <a href="docs.html">Documentation</a>
+            <a href="review.html">Faculty Review</a>
+            <a href="live-demo.html">Live Demo</a>
+            <a href="interactive-diagram.html">Interactive Diagram</a>
+            <a href="cost-calculator.html">Cost Calculator</a>
+            <a href="security-simulator.html">Security Simulator</a>
+        </nav>
+    </div>
 </header>
 
 <main class="content">
     <section class="card">
-        <h1 style="color: #38bdf8; font-size: 2.5rem; margin-bottom: 20px;">AWS Student Data Infrastructure</h1>
-        <p style="color: #cbd5e1; font-size: 1.1rem; line-height: 1.8;">
-            A secure, automated, end-to-end cloud environment for academic data processing featuring 
-            IAM automation, multi-tier VPC security, encryption, network segmentation, and fully interactive 
-            diagrams and simulations built for learning, research, and real-world cloud operations.
+        <h1>AWS Student Data Infrastructure</h1>
+        <p>
+            A secure, automated cloud environment for academic data processing featuring 
+            IAM automation, multi-tier VPC security, encryption, and network segmentation. 
+            Built for learning AWS cloud architecture and demonstrating infrastructure skills.
         </p>
     </section>
 
     <section class="card">
-        <h2 style="color: #38bdf8;">System Overview</h2>
-        <p style="color: #cbd5e1;">
-            This project demonstrates a production-grade AWS deployment showcasing how student information 
-            systems can be secured, automated, and monitored using modern cloud best practices.
+        <h2>Project Overview</h2>
+        <p>
+            This portfolio project demonstrates production-grade AWS deployment patterns for 
+            securing sensitive data systems. The implementation showcases three-tier VPC architecture, 
+            automated IAM provisioning, comprehensive encryption, and defense-in-depth security controls.
         </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px;">
+            <div style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); border-left: 3px solid var(--aws-orange); padding: 16px; border-radius: var(--aws-radius);">
+                <div class="aws-label">Network Architecture</div>
+                <div class="aws-value">Three-tier VPC with complete database isolation</div>
+            </div>
+            
+            <div style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); border-left: 3px solid var(--aws-blue); padding: 16px; border-radius: var(--aws-radius);">
+                <div class="aws-label">Security Controls</div>
+                <div class="aws-value">Defense-in-depth with encryption and audit trails</div>
+            </div>
+            
+            <div style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); border-left: 3px solid var(--aws-green); padding: 16px; border-radius: var(--aws-radius);">
+                <div class="aws-label">Automation</div>
+                <div class="aws-value">Python-based IAM provisioning with zero errors</div>
+            </div>
+        </div>
     </section>
 
     <section class="card">
-        <h2 style="color: #38bdf8;">Quick Links</h2>
-        <ul style="list-style: none; padding: 0;">
-            <li style="margin: 12px 0;"><a href="live-demo.html" style="color: #60a5fa; text-decoration: none; font-size: 1.1rem;">→ Live IAM Automation Demo</a></li>
-            <li style="margin: 12px 0;"><a href="security-simulator.html" style="color: #60a5fa; text-decoration: none; font-size: 1.1rem;">→ Security Attack Simulator</a></li>
-            <li style="margin: 12px 0;"><a href="interactive-diagram.html" style="color: #60a5fa; text-decoration: none; font-size: 1.1rem;">→ Interactive VPC Diagram</a></li>
-            <li style="margin: 12px 0;"><a href="cost-calculator.html" style="color: #60a5fa; text-decoration: none; font-size: 1.1rem;">→ AWS Cost Calculator</a></li>
+        <h2>Core Features</h2>
+        <ul>
+            <li><strong>Multi-tier VPC Architecture:</strong> Public admin tier, private application tier, and isolated database tier with proper network segmentation</li>
+            <li><strong>Zero-Trust Security Model:</strong> Security groups with SG-to-SG references, no 0.0.0.0/0 rules, explicit allow lists</li>
+            <li><strong>IAM Automation:</strong> Python script reducing provisioning time by 67% with zero configuration errors</li>
+            <li><strong>Comprehensive Encryption:</strong> Customer-managed KMS keys with automatic rotation for all data at rest and in transit</li>
+            <li><strong>Complete Audit Trail:</strong> CloudTrail, VPC Flow Logs, and GuardDuty providing full visibility</li>
+            <li><strong>High Availability:</strong> Multi-AZ deployment with automated failover and backup strategies</li>
         </ul>
+    </section>
+
+    <section class="card">
+        <h2>Technology Stack</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px;">
+            <div style="background: var(--aws-panel-bg); padding: 12px; border-radius: var(--aws-radius); border: 1px solid var(--aws-border);">
+                <div style="font-size: 11px; color: var(--aws-text-tertiary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Networking</div>
+                <div style="font-size: 13px; color: var(--aws-text-secondary);">AWS VPC, Security Groups, NACLs, NAT Gateway, VPC Endpoints</div>
+            </div>
+            
+            <div style="background: var(--aws-panel-bg); padding: 12px; border-radius: var(--aws-radius); border: 1px solid var(--aws-border);">
+                <div style="font-size: 11px; color: var(--aws-text-tertiary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Compute & Storage</div>
+                <div style="font-size: 13px; color: var(--aws-text-secondary);">EC2, ECS Fargate, Lambda, RDS PostgreSQL, S3</div>
+            </div>
+            
+            <div style="background: var(--aws-panel-bg); padding: 12px; border-radius: var(--aws-radius); border: 1px solid var(--aws-border);">
+                <div style="font-size: 11px; color: var(--aws-text-tertiary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Security</div>
+                <div style="font-size: 13px; color: var(--aws-text-secondary);">IAM, KMS, CloudTrail, GuardDuty, VPC Flow Logs</div>
+            </div>
+            
+            <div style="background: var(--aws-panel-bg); padding: 12px; border-radius: var(--aws-radius); border: 1px solid var(--aws-border);">
+                <div style="font-size: 11px; color: var(--aws-text-tertiary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Automation</div>
+                <div style="font-size: 13px; color: var(--aws-text-secondary);">Python 3.11, Boto3, AWS CLI</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Explore the Project</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-top: 12px;">
+            <a href="interactive-diagram.html" style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); padding: 16px; border-radius: var(--aws-radius); text-decoration: none; display: block; transition: all 0.15s ease;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--aws-orange); margin-bottom: 4px;">Interactive VPC Diagram</div>
+                <div style="font-size: 12px; color: var(--aws-text-tertiary);">Click network tiers to see detailed configuration and security rules</div>
+            </a>
+            
+            <a href="live-demo.html" style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); padding: 16px; border-radius: var(--aws-radius); text-decoration: none; display: block; transition: all 0.15s ease;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--aws-blue); margin-bottom: 4px;">IAM Automation Demo</div>
+                <div style="font-size: 12px; color: var(--aws-text-tertiary);">Watch automated provisioning execute in real-time in your browser</div>
+            </a>
+            
+            <a href="security-simulator.html" style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); padding: 16px; border-radius: var(--aws-radius); text-decoration: none; display: block; transition: all 0.15s ease;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--aws-green); margin-bottom: 4px;">Security Attack Simulator</div>
+                <div style="font-size: 12px; color: var(--aws-text-tertiary);">Test defense mechanisms against common attack vectors</div>
+            </a>
+            
+            <a href="cost-calculator.html" style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); padding: 16px; border-radius: var(--aws-radius); text-decoration: none; display: block; transition: all 0.15s ease;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--aws-orange); margin-bottom: 4px;">AWS Cost Calculator</div>
+                <div style="font-size: 12px; color: var(--aws-text-tertiary);">Calculate infrastructure costs and automation ROI</div>
+            </a>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Project Context</h2>
+        <p>
+            This project was developed to demonstrate cloud infrastructure skills for IT operations 
+            and cloud engineering roles. It showcases understanding of AWS networking, security best 
+            practices, and infrastructure automation gained through hands-on practice and AWS Academy coursework.
+        </p>
+        <p>
+            The architecture follows enterprise security patterns used in production student information 
+            systems, implementing FERPA-aligned data protection principles including encryption, access 
+            controls, and comprehensive audit trails.
+        </p>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>Mohammad Khan • AWS Student Data Infrastructure • 2025</p>
+    <p>AWS Student Data Infrastructure • Portfolio Project • 2025</p>
 </footer>
 </body>
 </html>
