@@ -7,6 +7,39 @@
     <link rel="stylesheet" href="style.css">
     <style>
         /* Security Simulator - AWS Console Style */
+        
+        /* FIX 1: Reduce content padding on this page */
+        .security-page .content {
+            padding-top: 8px !important;
+        }
+        
+        /* FIX 2: Remove top padding on cards for this page */
+        .security-page .card {
+            margin-top: 8px !important;
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+        }
+        
+        /* FIX 3: Tighten up the simulator grid */
+        .security-page .simulator-layout {
+            margin-top: 12px !important;
+        }
+        
+        /* FIX 4: Reduce spacing inside visualization container */
+        .security-page .visualization-container {
+            padding: 8px !important;
+        }
+        
+        /* FIX 5: Reduce top spacing before defense stats */
+        .security-page .defense-stats {
+            margin-top: 12px !important;
+        }
+        
+        /* OPTIONAL: Remove any glow/shadow on visualization */
+        .security-page .visualization {
+            box-shadow: none !important;
+        }
+        
         .simulator-layout {
             display: grid;
             grid-template-columns: 380px 1fr;
@@ -318,7 +351,7 @@
         }
     </style>
 </head>
-<body>
+<body class="security-page">
 <header class="site-header">
     <div>
         <div class="logo">AWS Student Data Infrastructure</div>
