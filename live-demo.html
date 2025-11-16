@@ -1,152 +1,187 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Live IAM Demo | Mohammad Khan</title>
+    <title>Live IAM Demo | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <style>
-        body { background: #0f172a; }
-        .demo-container {
+        /* Live Demo - AWS Console Style */
+        .demo-page .content {
+            padding-top: 8px !important;
+        }
+        
+        .demo-page .card {
+            margin-top: 8px !important;
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+        }
+        
+        .demo-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
+            gap: 16px;
+            margin-top: 12px;
         }
-        .console-panel {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 24px;
-            min-height: 500px;
-        }
-        .console-header {
-            color: #38bdf8;
-            font-weight: 700;
+        
+        .run-button-container {
+            text-align: center;
+            padding: 32px 0;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
             margin-bottom: 16px;
-            font-size: 1.1rem;
         }
+        
+        .run-button {
+            background: var(--aws-orange);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: var(--aws-radius);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .run-button:hover:not(:disabled) {
+            background: #e88b00;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .run-button:disabled {
+            background: var(--aws-border);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
         .console-output {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 8px;
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
             padding: 16px;
-            height: 440px;
-            overflow-y: auto;
-            font-family: "Courier New", monospace;
-            font-size: 0.85rem;
-            color: #e2e8f0;
         }
-        .console-line {
-            margin-bottom: 6px;
+        
+        .console-output h2 {
+            font-size: 16px;
+            color: var(--aws-text-primary);
+            margin-bottom: 12px;
+            font-weight: 700;
+            border: none;
+            padding: 0;
+        }
+        
+        .console-window {
+            background: #0d1117;
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            padding: 16px;
+            min-height: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: Monaco, Consolas, monospace;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        
+        .log-line {
+            margin: 2px 0;
             opacity: 0;
             animation: fadeIn 0.3s forwards;
         }
-        @keyframes fadeIn { to { opacity: 1; } }
-        .console-line.info { color: #60a5fa; }
-        .console-line.demo { color: #a78bfa; }
-        .console-line.success { color: #34d399; }
-        .console-line.header { color: #fbbf24; font-weight: bold; }
-        .state-panel {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 24px;
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
-        .state-section {
-            background: #0f172a;
-            border: 1px solid #334155;
+        
+        .log-info { color: #58a6ff; }
+        .log-success { color: #3fb950; }
+        .log-warning { color: #d29922; }
+        .log-error { color: #f85149; }
+        .log-dim { color: #8b949e; }
+        
+        .iam-state {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
             padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
         }
-        .state-section h3 {
-            color: #38bdf8;
-            font-size: 1rem;
+        
+        .iam-state h2 {
+            font-size: 16px;
+            color: var(--aws-text-primary);
+            margin-bottom: 12px;
+            font-weight: 700;
+            border: none;
+            padding: 0;
+        }
+        
+        .state-section {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            padding: 12px;
             margin-bottom: 12px;
         }
-        .user-item {
-            background: #1e293b;
-            border: 1px solid #334155;
-            padding: 12px;
-            border-radius: 6px;
-            margin: 8px 0;
-            color: #e2e8f0;
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-        .user-item.appear {
-            animation: slideIn 0.4s forwards;
-        }
-        @keyframes slideIn {
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .run-button {
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
-            color: white;
+        
+        .state-section h3 {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
             border: none;
-            padding: 16px 32px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-            transition: all 0.3s ease;
-            margin: 0 auto;
-            display: block;
         }
-        .run-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+        
+        .state-item {
+            background: var(--aws-card-bg);
+            border-left: 3px solid var(--aws-green);
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: var(--aws-radius);
+            font-size: 12px;
         }
-        .run-button:disabled {
-            background: #475569;
-            cursor: not-allowed;
+        
+        .state-item.pending {
+            border-left-color: var(--aws-text-tertiary);
+            opacity: 0.5;
         }
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
+        
+        .state-empty {
+            color: var(--aws-text-tertiary);
+            font-style: italic;
+            font-size: 12px;
+            padding: 8px;
         }
-        .metric-card {
-            background: #1e293b;
-            border: 1px solid #334155;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-        }
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #38bdf8;
-            margin-bottom: 4px;
-        }
-        .metric-label {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            font-weight: 500;
-        }
+        
         @media (max-width: 1024px) {
-            .demo-container { grid-template-columns: 1fr; }
-            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .demo-layout {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
-<body>
+<body class="demo-page">
 <header class="site-header">
-    <div class="logo">AWS Student Data Infrastructure</div>
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="docs.html">Documentation</a>
-        <a href="review.html">Faculty Review</a>
-        <a href="live-demo.html">Live Demo</a>
-        <a href="interactive-diagram.html">Interactive Diagram</a>
-        <a href="cost-calculator.html">Cost Calculator</a>
-        <a href="security-simulator.html">Security Simulator</a>
-    </nav>
+    <div>
+        <div class="logo">AWS Student Data Infrastructure</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="architecture.html">Architecture</a>
+            <a href="automation.html">IAM Automation</a>
+            <a href="docs.html">Documentation</a>
+            <a href="review.html">Faculty Review</a>
+            <a href="live-demo.html" class="active">Live Demo</a>
+            <a href="interactive-diagram.html">Interactive Diagram</a>
+            <a href="cost-calculator.html">Cost Calculator</a>
+            <a href="security-simulator.html">Security Simulator</a>
+        </nav>
+    </div>
 </header>
 
 <main class="content">
@@ -157,257 +192,190 @@
             simulates the production automation workflow including group validation, policy attachment, 
             user creation, and compliance reporting. No AWS credentials required.
         </p>
-        <div style="text-align: center; margin: 24px 0;">
-            <button id="runDemo" class="run-button">▶ Run IAM Automation</button>
-        </div>
     </section>
 
-    <div class="metrics-grid" id="metricsGrid" style="display: none;">
-        <div class="metric-card">
-            <div class="metric-value" id="metricTime">0s</div>
-            <div class="metric-label">Execution Time</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-value" id="metricUsers">0/5</div>
-            <div class="metric-label">Users Provisioned</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-value" id="metricEfficiency">0%</div>
-            <div class="metric-label">Efficiency Gain</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-value" id="metricCompliance">0%</div>
-            <div class="metric-label">Policy Compliance</div>
-        </div>
+    <div class="run-button-container">
+        <button id="runButton" class="run-button" onclick="runDemo()">
+            ▶ Run IAM Automation
+        </button>
     </div>
 
-    <div class="demo-container">
-        <div class="card">
+    <div class="demo-layout">
+        <div class="console-output">
             <h2>Console Output</h2>
-            <div class="console-output" id="consoleOutput"></div>
+            <div id="consoleWindow" class="console-window"></div>
         </div>
         
-        <div class="card">
+        <div class="iam-state">
             <h2>IAM State</h2>
-            <div class="state-viewer" id="stateViewer">
-                <div class="state-section" id="groupsSection">
-                    <h3 style="margin-bottom: 12px; color: #475569;">IAM Groups</h3>
-                    <div id="groupsList">
-                        <p style="color: #94a3b8; font-style: italic;">Groups will appear here...</p>
-                    </div>
-                </div>
-                
-                <div class="state-section" id="usersSection">
-                    <h3 style="margin-bottom: 12px; color: #475569;">Provisioned Users</h3>
-                    <div id="usersList">
-                        <p style="color: #94a3b8; font-style: italic;">Users will appear here...</p>
-                    </div>
-                </div>
+            
+            <div class="state-section">
+                <h3>IAM Groups</h3>
+                <div id="groupsList" class="state-empty">Groups will appear here...</div>
+            </div>
+            
+            <div class="state-section">
+                <h3>Provisioned Users</h3>
+                <div id="usersList" class="state-empty">Users will appear here...</div>
+            </div>
+            
+            <div class="state-section">
+                <h3>Applied Policies</h3>
+                <div id="policiesList" class="state-empty">Policies will appear here...</div>
             </div>
         </div>
     </div>
 </main>
 
 <footer class="site-footer">
-    <p>Live IAM Automation Demo • Mohammad Khan • 2025</p>
+    <p>Live IAM Automation Demo • AWS Student Data Infrastructure • 2025</p>
 </footer>
 
 <script>
-const users = [
-    {username: "registrar_office_analyst", role: "analyst", department: "Registrar"},
-    {username: "student_data_specialist", role: "specialist", department: "IT"},
-    {username: "enrollment_reporting_svc", role: "service_account", department: "Enrollment"},
-    {username: "compliance_auditor", role: "auditor", department: "Compliance"},
-    {username: "institutional_research", role: "researcher", department: "Research"}
-];
-
 let isRunning = false;
-let startTime;
-let userCount = 0;
 
-function addConsoleLine(text, className = "") {
-    const consoleOutput = document.getElementById("consoleOutput");
-    const line = document.createElement("div");
-    line.className = `console-line ${className}`;
-    line.textContent = text;
-    consoleOutput.appendChild(line);
-    consoleOutput.scrollTop = consoleOutput.scrollHeight;
-}
-
-function updateMetric(id, value) {
-    document.getElementById(id).textContent = value;
+function log(message, type = 'info') {
+    const consoleWindow = document.getElementById('consoleWindow');
+    const line = document.createElement('div');
+    line.className = `log-line log-${type}`;
+    line.textContent = message;
+    consoleWindow.appendChild(line);
+    consoleWindow.scrollTop = consoleWindow.scrollHeight;
 }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function addStateItem(listId, content, pending = false) {
+    const list = document.getElementById(listId);
+    if (list.querySelector('.state-empty')) {
+        list.innerHTML = '';
+    }
+    const item = document.createElement('div');
+    item.className = pending ? 'state-item pending' : 'state-item';
+    item.textContent = content;
+    list.appendChild(item);
+    return item;
+}
+
 async function runDemo() {
     if (isRunning) return;
     isRunning = true;
     
-    const runButton = document.getElementById("runDemo");
-    runButton.disabled = true;
-    runButton.textContent = "⏳ Running...";
+    const button = document.getElementById('runButton');
+    button.disabled = true;
+    button.textContent = '⏳ Running...';
     
-    // Clear previous run
-    document.getElementById("consoleOutput").innerHTML = "";
-    document.getElementById("groupsList").innerHTML = "";
-    document.getElementById("usersList").innerHTML = "";
-    document.getElementById("metricsGrid").style.display = "grid";
-    userCount = 0;
+    document.getElementById('consoleWindow').innerHTML = '';
+    document.getElementById('groupsList').innerHTML = '<div class="state-empty">Groups will appear here...</div>';
+    document.getElementById('usersList').innerHTML = '<div class="state-empty">Users will appear here...</div>';
+    document.getElementById('policiesList').innerHTML = '<div class="state-empty">Policies will appear here...</div>';
     
-    startTime = Date.now();
+    log('═══════════════════════════════════════════════', 'dim');
+    log('IAM AUTOMATION PIPELINE v2.1.0', 'info');
+    log('University of Houston Student Data Infrastructure', 'dim');
+    log('═══════════════════════════════════════════════', 'dim');
+    await sleep(800);
     
-    // Header
-    addConsoleLine("======================================================================", "header");
-    addConsoleLine("AWS IAM PROVISIONING AUTOMATION", "header");
-    addConsoleLine("Student Data Infrastructure Project", "header");
-    addConsoleLine("======================================================================", "header");
-    await sleep(300);
-    
-    addConsoleLine("");
-    addConsoleLine("[DEMO MODE] Running without AWS credentials - safe simulation", "demo");
-    addConsoleLine("");
+    log('[INIT] Initializing IAM automation workflow...', 'info');
+    await sleep(600);
+    log('[INIT] Loading configuration from provisioning.yaml', 'dim');
     await sleep(500);
+    log('[INIT] Validating AWS credentials... ✓', 'success');
+    await sleep(700);
     
-    // Step 1: Groups
-    addConsoleLine("[STEP 1] Validating IAM group structure...", "info");
-    await sleep(400);
-    
-    const groups = ["StudentDataRestrictedAccess", "StudentDataAnalysts", "StudentDataAdministrators"];
-    const groupsList = document.getElementById("groupsList");
-    groupsList.innerHTML = "";
-    
-    for (const group of groups) {
-        addConsoleLine(`  [DEMO] Group "${group}" verified`, "demo");
-        const groupItem = document.createElement("div");
-        groupItem.className = "user-item appear";
-        groupItem.innerHTML = `<strong>${group}</strong><br><span style="font-size: 0.85rem; color: #64748b;">Status: Active</span>`;
-        groupsList.appendChild(groupItem);
-        await sleep(300);
-    }
-    
-    document.getElementById("groupsSection").classList.add("active");
-    addConsoleLine("");
-    await sleep(400);
-    
-    // Step 2: Policies
-    addConsoleLine("[STEP 2] Attaching managed policies to groups...", "info");
-    await sleep(300);
-    addConsoleLine("  [DEMO] Policy \"arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess\" attached to \"StudentDataRestrictedAccess\"", "demo");
-    addConsoleLine("");
-    await sleep(500);
-    
-    // Step 3: Custom Policy
-    addConsoleLine("[STEP 3] Deploying custom bucket access policy...", "info");
-    await sleep(300);
-    addConsoleLine("  [DEMO] Custom policy \"StudentDataBucketAccess\" created with tag-based access control", "demo");
-    addConsoleLine("  [DEMO] Policy restricts access to: s3://student-data-reports-production", "demo");
-    addConsoleLine("  [DEMO] Access control enforced via object tags: DataClassification=StudentRecords", "demo");
-    addConsoleLine("");
+    log('[GROUPS] Creating IAM groups...', 'info');
     await sleep(600);
     
-    // Step 4: Users
-    addConsoleLine(`[STEP 4] Provisioning ${users.length} user identities...`, "info");
-    addConsoleLine("");
-    await sleep(400);
+    const groups = [
+        'StudentDataReadOnly',
+        'StudentDataAdmin', 
+        'ReportsGeneration',
+        'AuditViewers'
+    ];
     
-    const usersList = document.getElementById("usersList");
-    usersList.innerHTML = "";
-    document.getElementById("usersSection").classList.add("active");
-    
-    for (const user of users) {
-        addConsoleLine(`  → Provisioning: ${user.username}`, "info");
-        await sleep(200);
-        addConsoleLine(`    [DEMO] Created user with tags: Role=${user.role}, Department=${user.department}`, "demo");
-        await sleep(200);
-        addConsoleLine(`    [DEMO] Tagged with: DataAccess=StudentRecords, MFARequired=true`, "demo");
-        await sleep(200);
-        
-        const group = user.role === "auditor" ? "StudentDataAdministrators" : "StudentDataRestrictedAccess";
-        addConsoleLine(`    [DEMO] Added to group "${group}"`, "demo");
-        await sleep(200);
-        addConsoleLine(`    [✓] User provisioned successfully`, "success");
-        addConsoleLine("");
-        
-        userCount++;
-        updateMetric("metricUsers", `${userCount}/5`);
-        
-        const userItem = document.createElement("div");
-        userItem.className = "user-item appear";
-        userItem.innerHTML = `
-            <strong>${user.username}</strong><br>
-            <span style="font-size: 0.85rem; color: #64748b;">
-                ${user.role} • ${user.department} • Group: ${group}
-            </span>
-        `;
-        usersList.appendChild(userItem);
-        
-        await sleep(300);
+    for (const group of groups) {
+        log(`[GROUPS] Creating group: ${group}`, 'dim');
+        addStateItem('groupsList', group);
+        await sleep(500);
+        log(`[GROUPS] ✓ ${group} created successfully`, 'success');
+        await sleep(400);
     }
     
-    const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
-    updateMetric("metricTime", `${elapsed}s`);
+    log('[POLICY] Attaching managed policies to groups...', 'info');
+    await sleep(600);
     
-    addConsoleLine(`[✓] Provisioned ${users.length}/${users.length} identities in ${elapsed} seconds`, "success");
-    addConsoleLine("");
+    const policies = [
+        'AmazonS3ReadOnlyAccess → StudentDataReadOnly',
+        'StudentDataCustomPolicy → StudentDataAdmin',
+        'CloudWatchLogsReadOnlyAccess → AuditViewers'
+    ];
+    
+    for (const policy of policies) {
+        log(`[POLICY] Attaching: ${policy}`, 'dim');
+        addStateItem('policiesList', policy.split(' → ')[0]);
+        await sleep(500);
+        log(`[POLICY] ✓ Policy attached successfully`, 'success');
+        await sleep(400);
+    }
+    
+    log('[USERS] Provisioning IAM users...', 'info');
+    await sleep(600);
+    
+    const users = [
+        { name: 'john.smith', group: 'StudentDataReadOnly' },
+        { name: 'sarah.johnson', group: 'StudentDataAdmin' },
+        { name: 'mike.williams', group: 'ReportsGeneration' }
+    ];
+    
+    for (const user of users) {
+        log(`[USERS] Creating user: ${user.name}`, 'dim');
+        await sleep(500);
+        log(`[USERS] Adding ${user.name} to ${user.group}`, 'dim');
+        addStateItem('usersList', `${user.name} (${user.group})`);
+        await sleep(500);
+        log(`[USERS] ✓ ${user.name} provisioned successfully`, 'success');
+        await sleep(400);
+    }
+    
+    log('[TAGS] Applying resource tags...', 'info');
+    await sleep(600);
+    log('[TAGS] Environment: Production', 'dim');
+    await sleep(300);
+    log('[TAGS] Project: StudentDataInfrastructure', 'dim');
+    await sleep(300);
+    log('[TAGS] ManagedBy: Automation', 'dim');
+    await sleep(500);
+    log('[TAGS] ✓ Tags applied successfully', 'success');
+    await sleep(700);
+    
+    log('[AUDIT] Generating CloudTrail compliance report...', 'info');
+    await sleep(800);
+    log('[AUDIT] ✓ All actions logged to CloudTrail', 'success');
     await sleep(500);
     
-    // Summary Report
-    addConsoleLine("======================================================================", "header");
-    addConsoleLine("IAM PROVISIONING SUMMARY REPORT", "header");
-    addConsoleLine("======================================================================", "header");
-    addConsoleLine(`Execution Time:       ${elapsed} seconds`, "info");
-    addConsoleLine(`Users Provisioned:      ${users.length}/${users.length}`, "info");
-    addConsoleLine(`Success Rate:           100.0%`, "success");
-    addConsoleLine(`Groups Configured:      3 (Restricted, Analyst, Admin)`, "info");
-    addConsoleLine(`Policies Attached:      2 (Managed + Custom)`, "info");
-    addConsoleLine("");
+    log('[VALIDATE] Running post-provisioning validation...', 'info');
+    await sleep(700);
+    log('[VALIDATE] ✓ All users have MFA enforcement', 'success');
     await sleep(400);
-    
-    addConsoleLine("EFFICIENCY METRICS:", "header");
-    const manualTime = users.length * 3; // 3 minutes per user
-    const automatedTime = parseFloat(elapsed) / 60;
-    const timeSaved = manualTime - automatedTime;
-    const efficiency = ((timeSaved / manualTime) * 100).toFixed(1);
-    
-    updateMetric("metricEfficiency", `${efficiency}%`);
-    updateMetric("metricCompliance", "100%");
-    
-    addConsoleLine(`Manual Process Time:    ${manualTime.toFixed(1)} minutes (~3 min/user)`, "info");
-    addConsoleLine(`Automated Time:         ${elapsed} seconds`, "info");
-    addConsoleLine(`Time Saved:             ${timeSaved.toFixed(1)} minutes`, "success");
-    addConsoleLine(`Efficiency Gain:        ${efficiency}% faster`, "success");
-    addConsoleLine(`Error Rate:             0% (zero misconfigurations)`, "success");
-    addConsoleLine(`Policy Compliance:      100% (least-privilege enforced)`, "success");
-    addConsoleLine("");
+    log('[VALIDATE] ✓ Password policy meets requirements', 'success');
     await sleep(400);
+    log('[VALIDATE] ✓ No overly permissive policies detected', 'success');
+    await sleep(700);
     
-    addConsoleLine("SECURITY CONTROLS:", "header");
-    addConsoleLine("  ✓ Least-privilege group assignments", "success");
-    addConsoleLine("  ✓ MFA tags applied to all users", "success");
-    addConsoleLine("  ✓ Tag-based S3 access restrictions", "success");
-    addConsoleLine("  ✓ Audit trail logged for all operations", "success");
-    addConsoleLine("");
-    await sleep(400);
+    log('═══════════════════════════════════════════════', 'dim');
+    log('✓ PROVISIONING COMPLETE', 'success');
+    log(`Total users created: ${users.length}`, 'info');
+    log(`Total groups created: ${groups.length}`, 'info');
+    log(`Execution time: 12.3 seconds`, 'info');
+    log(`Error rate: 0%`, 'success');
+    log('═══════════════════════════════════════════════', 'dim');
     
-    addConsoleLine("COMPLIANCE STATUS:", "header");
-    addConsoleLine("  ✓ FERPA-aligned access controls", "success");
-    addConsoleLine("  ✓ Zero standing privileges (group-based only)", "success");
-    addConsoleLine("  ✓ Automated policy enforcement", "success");
-    addConsoleLine("  ✓ Audit-ready logging enabled", "success");
-    addConsoleLine("");
-    addConsoleLine("======================================================================", "header");
-    addConsoleLine("");
-    addConsoleLine("[COMPLETE] IAM provisioning pipeline finished successfully", "success");
-    
-    runButton.disabled = false;
-    runButton.textContent = "🔄 Run Again";
+    button.disabled = false;
+    button.textContent = '▶ Run IAM Automation';
     isRunning = false;
 }
-
-document.getElementById("runDemo").addEventListener("click", runDemo);
 </script>
 </body>
 </html>
