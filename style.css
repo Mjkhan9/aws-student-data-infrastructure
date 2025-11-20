@@ -86,7 +86,7 @@ body {
     background: #16191f; /* AWS console actual background - less saturated */
     color: var(--aws-text-primary);
     line-height: 1.4; /* AWS console tighter line height */
-    font-size: 13px; /* AWS console base font size */
+    font-size: 14px; /* AWS console base font size */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
