@@ -1,103 +1,718 @@
-
-cat > /mnt/user-data/outputs/docs.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Documentation | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Technical documentation for AWS Student Data Infrastructure including architecture decisions, security controls, and operational procedures.">
+    <meta name="keywords" content="AWS, Documentation, Cloud Architecture, VPC, Security, Technical Documentation">
+    <meta name="author" content="Jawad Khan">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Documentation | AWS Student Data Infrastructure">
+    <meta property="og:description" content="Comprehensive technical documentation for AWS Student Data Infrastructure including architecture, security controls, and operational procedures.">
+    <meta property="og:url" content="https://mjkhan9.github.io/aws-student-data-infrastructure/docs.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Documentation | AWS Student Data Infrastructure">
+    <meta name="twitter:description" content="Technical documentation for AWS cloud architecture and security controls.">
+    
+    <link rel="canonical" href="https://mjkhan9.github.io/aws-student-data-infrastructure/docs.html">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
+    
+    <style>
+        /* Documentation Page Specific Styles */
+        .toc-card {
+            background: linear-gradient(135deg, var(--aws-card-bg) 0%, var(--aws-panel-bg) 100%);
+            border-left: 4px solid var(--aws-orange);
+        }
+        
+        .toc {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .toc-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            color: var(--aws-text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .toc-link::before {
+            content: "▸";
+            color: var(--aws-orange);
+            margin-right: 12px;
+            font-weight: 700;
+            transition: transform 0.2s ease;
+        }
+        
+        .toc-link:hover {
+            background: var(--aws-card-bg);
+            border-color: var(--aws-orange);
+            color: var(--aws-text-primary);
+            transform: translateX(4px);
+        }
+        
+        .toc-link:hover::before {
+            transform: translateX(4px);
+        }
+        
+        .doc-diagram {
+            margin: 24px 0;
+            padding: 24px;
+            background: var(--aws-squid-ink-dark);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            overflow-x: auto;
+        }
+        
+        .ascii-diagram {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            color: var(--aws-text-secondary);
+            margin: 0;
+            white-space: pre;
+        }
+        
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+        
+        .goal-card {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 4px solid var(--aws-blue);
+            border-radius: var(--aws-radius);
+            padding: 24px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .goal-card:hover {
+            border-left-color: var(--aws-orange);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            background: var(--aws-card-bg);
+        }
+        
+        .goal-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .goal-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .goal-desc {
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+            line-height: 1.5;
+        }
+        
+        .controls-table {
+            margin-top: 24px;
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            overflow: hidden;
+        }
+        
+        .control-row {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr 1fr;
+            gap: 16px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--aws-border);
+            align-items: center;
+        }
+        
+        .control-row:last-child {
+            border-bottom: none;
+        }
+        
+        .control-row.header {
+            background: var(--aws-squid-ink-dark);
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .control-row:not(.header):hover {
+            background: var(--aws-card-bg);
+        }
+        
+        .control-category {
+            font-weight: 600;
+            color: var(--aws-text-primary);
+        }
+        
+        .control-implementation {
+            color: var(--aws-text-secondary);
+            font-size: 14px;
+        }
+        
+        .control-status {
+            text-align: right;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: var(--aws-radius);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-badge.success {
+            background: rgba(46, 160, 67, 0.15);
+            color: var(--aws-green-light);
+            border: 1px solid var(--aws-green);
+        }
+        
+        .tech-table {
+            margin-top: 24px;
+        }
+        
+        .tech-row {
+            display: flex;
+            gap: 24px;
+            padding: 20px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 4px solid var(--aws-orange);
+            border-radius: var(--aws-radius);
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+            align-items: center;
+        }
+        
+        .tech-row:hover {
+            border-left-color: var(--aws-blue);
+            background: var(--aws-card-bg);
+            transform: translateX(4px);
+        }
+        
+        .tech-category {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            min-width: 140px;
+            font-size: 15px;
+        }
+        
+        .tech-icon {
+            font-size: 24px;
+        }
+        
+        .tech-items {
+            flex: 1;
+            color: var(--aws-text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+        
+        .compliance-item {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 4px solid var(--aws-green-light);
+            border-radius: var(--aws-radius);
+            padding: 24px;
+            transition: all 0.2s ease;
+        }
+        
+        .compliance-item:hover {
+            border-left-color: var(--aws-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .compliance-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--aws-green);
+            color: var(--aws-text-primary);
+            border-radius: var(--aws-radius);
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .compliance-desc {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            line-height: 1.6;
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+        
+        .resource-link {
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 4px solid var(--aws-blue);
+            border-radius: var(--aws-radius);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        .resource-link:hover {
+            border-left-color: var(--aws-orange);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            background: var(--aws-card-bg);
+        }
+        
+        .resource-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+        
+        .resource-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .resource-desc {
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+            line-height: 1.5;
+        }
+        
+        /* Section anchor offset for fixed header */
+        section[id] {
+            scroll-margin-top: 80px;
+        }
+        
+        @media (max-width: 768px) {
+            .toc {
+                gap: 8px;
+            }
+            
+            .toc-link {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .goals-grid,
+            .compliance-grid,
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .control-row.header {
+                display: none;
+            }
+            
+            .control-category {
+                font-weight: 700;
+                color: var(--aws-orange);
+                margin-bottom: 4px;
+            }
+            
+            .control-status {
+                text-align: left;
+                margin-top: 8px;
+            }
+            
+            .tech-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .tech-category {
+                min-width: auto;
+            }
+            
+            .doc-diagram {
+                padding: 16px;
+            }
+            
+            .ascii-diagram {
+                font-size: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
 <header class="site-header">
     <div>
-        <div class="logo">AWS Student Data Infrastructure</div>
+        <div class="logo">
+            <span class="logo-icon">☁</span>
+            AWS Student Data Infrastructure
+        </div>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="architecture.html">Architecture</a>
             <a href="automation.html">IAM Automation</a>
             <a href="docs.html" class="active">Documentation</a>
-            <a href="review.html">Faculty Review</a>
+            <a href="review.html">Project Review</a>
             <a href="live-demo.html">Live Demo</a>
             <a href="interactive-diagram.html">Interactive Diagram</a>
             <a href="cost-calculator.html">Cost Calculator</a>
             <a href="security-simulator.html">Security Simulator</a>
         </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
 </header>
 
 <main class="content">
     <section class="card">
-        <h1>Project Documentation Overview</h1>
+        <h1>Project Documentation</h1>
         <p>
-            Full documentation for the AWS Student Data Infrastructure project, including architecture summary, 
-            automation design, execution outputs, and technical specifications.
+            Comprehensive documentation for the AWS Student Data Infrastructure project, including 
+            architecture summary, automation design, security controls, and technical specifications. 
+            This documentation serves as a technical reference for understanding the infrastructure 
+            design decisions and operational procedures.
         </p>
     </section>
 
-    <section class="card">
+    <!-- Table of Contents -->
+    <section class="card toc-card">
+        <h2>Table of Contents</h2>
+        <nav class="toc">
+            <a href="#architecture-summary" class="toc-link">Architecture Summary</a>
+            <a href="#design-goals" class="toc-link">Core Design Goals</a>
+            <a href="#security-controls" class="toc-link">Security Controls</a>
+            <a href="#technology-components" class="toc-link">Technology Components</a>
+            <a href="#compliance" class="toc-link">Compliance & Standards</a>
+            <a href="#resources" class="toc-link">Additional Resources</a>
+        </nav>
+    </section>
+
+    <section id="architecture-summary" class="card">
         <h2>Architecture Summary</h2>
-        <ul>
-            <li>Three-tier VPC architecture with public, private app, and private database subnets</li>
-            <li>NAT gateway for outbound-only internet access from private tiers</li>
-            <li>RDS PostgreSQL with encryption and private networking</li>
-            <li>Security groups configured with least privilege and SG-to-SG references</li>
-            <li>CloudTrail enabled for all regions with log file validation</li>
-            <li>VPC Flow Logs capturing all accepted and rejected traffic</li>
+        <p>The infrastructure implements a production-grade three-tier architecture optimized for security and compliance:</p>
+        
+        <ul class="feature-list">
+            <li><strong>Three-tier VPC architecture</strong> with public admin tier, private application tier, and isolated database tier</li>
+            <li><strong>NAT Gateway</strong> for outbound-only internet access from private tiers, enabling software updates and patching</li>
+            <li><strong>RDS PostgreSQL Multi-AZ</strong> with encryption at rest and in transit, deployed in private subnets</li>
+            <li><strong>Security Groups</strong> configured with least privilege and SG-to-SG references (no IP-based rules)</li>
+            <li><strong>CloudTrail</strong> enabled for all regions with log file validation and S3 storage</li>
+            <li><strong>VPC Flow Logs</strong> capturing all accepted and rejected traffic for network visibility</li>
+            <li><strong>VPC Endpoints</strong> for private AWS service access without internet gateway</li>
         </ul>
+        
+        <div class="doc-diagram">
+            <pre class="ascii-diagram">┌─────────────────────────────────────────────────────────────┐
+│                    VPC: 172.32.0.0/16                       │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │ Admin Tier  │  │  App Tier   │  │  DB Tier    │         │
+│  │ (Public)    │→ │ (Private)   │→ │ (Isolated)  │         │
+│  │ 172.32.1.0  │  │ 172.32.10.0 │  │ 172.32.20.0 │         │
+│  │   /24       │  │    /24      │  │    /24      │         │
+│  │             │  │             │  │             │         │
+│  │ [Bastion]   │  │ [App Servers]│ │ [RDS Multi-AZ]│        │
+│  │ [IGW]       │  │ [NAT GW]    │  │ [No IGW]    │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘         │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  Security Layer: CloudTrail + Flow Logs + GuardDuty │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘</pre>
+        </div>
     </section>
 
-    <section class="card">
+    <section id="design-goals" class="card">
         <h2>Core Design Goals</h2>
-        <ul>
-            <li>Maintain FERPA-aligned data isolation and access controls</li>
-            <li>Eliminate all public attack surfaces through network segmentation</li>
-            <li>Enforce IAM least privilege and multi-factor authentication</li>
-            <li>Ensure full auditability via CloudTrail and VPC Flow Logs</li>
-            <li>Implement defense-in-depth with multiple security layers</li>
-            <li>Enable high availability through multi-AZ deployment</li>
-        </ul>
+        <p>The architecture was designed with the following primary objectives:</p>
+        
+        <div class="goals-grid">
+            <div class="goal-card">
+                <div class="goal-icon">🔐</div>
+                <div class="goal-title">FERPA Alignment</div>
+                <div class="goal-desc">Maintain data isolation and access controls aligned with educational privacy requirements and Family Educational Rights and Privacy Act compliance</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">🛡️</div>
+                <div class="goal-title">Zero Public Exposure</div>
+                <div class="goal-desc">Eliminate all public attack surfaces through network segmentation and private subnet deployment for sensitive resources</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">👤</div>
+                <div class="goal-title">Least Privilege</div>
+                <div class="goal-desc">Enforce IAM least privilege access, multi-factor authentication requirements, and role-based access control</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">📊</div>
+                <div class="goal-title">Full Auditability</div>
+                <div class="goal-desc">Ensure complete audit trail via CloudTrail, VPC Flow Logs, and GuardDuty for compliance and security monitoring</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">🏗️</div>
+                <div class="goal-title">Defense-in-Depth</div>
+                <div class="goal-desc">Implement multiple security layers at each tier including network, application, and data protection controls</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">🔄</div>
+                <div class="goal-title">High Availability</div>
+                <div class="goal-desc">Enable multi-AZ deployment with automated failover for business continuity and disaster recovery</div>
+            </div>
+        </div>
     </section>
 
-    <section class="card">
+    <section id="security-controls" class="card">
         <h2>Security Controls</h2>
-        <ul>
-            <li><strong>Network Isolation:</strong> Database tier has no internet gateway route</li>
-            <li><strong>Encryption:</strong> Customer-managed KMS keys for all data at rest</li>
-            <li><strong>Access Control:</strong> Tag-based S3 access policies and IAM conditions</li>
-            <li><strong>Monitoring:</strong> GuardDuty threat detection and CloudWatch alarms</li>
-            <li><strong>Audit Logging:</strong> Complete audit trail of all API calls and network traffic</li>
-        </ul>
+        <p>Comprehensive security controls implemented across all infrastructure layers:</p>
+        
+        <div class="controls-table">
+            <div class="control-row header">
+                <div class="control-category">Control</div>
+                <div class="control-implementation">Implementation</div>
+                <div class="control-status">Status</div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Network Isolation</div>
+                <div class="control-implementation">Database tier has no internet gateway route; access only via application tier security groups</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Encryption at Rest</div>
+                <div class="control-implementation">Customer-managed KMS keys for all data (RDS, S3, EBS volumes) with automatic key rotation</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Encryption in Transit</div>
+                <div class="control-implementation">TLS 1.2+ for all data transmission; RDS SSL connections required</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Access Control</div>
+                <div class="control-implementation">Tag-based S3 access policies, IAM conditions, and security group rules with least privilege</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Threat Detection</div>
+                <div class="control-implementation">GuardDuty threat detection, CloudWatch alarms, and automated response workflows</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Audit Logging</div>
+                <div class="control-implementation">Complete audit trail of all API calls (CloudTrail), network traffic (Flow Logs), and security events</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Backup & Recovery</div>
+                <div class="control-implementation">Automated RDS backups with 7-day retention, S3 versioning, and cross-region replication</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+        </div>
     </section>
 
-    <section class="card">
+    <section id="technology-components" class="card">
         <h2>Technology Components</h2>
-        <ul>
-            <li><strong>Networking:</strong> AWS VPC, Security Groups, NACLs, NAT Gateway, VPC Endpoints</li>
-            <li><strong>Compute:</strong> EC2, ECS Fargate, Lambda, Application Load Balancer</li>
-            <li><strong>Database:</strong> RDS PostgreSQL Multi-AZ with automated backups</li>
-            <li><strong>Storage:</strong> S3 with SSE-KMS encryption and versioning</li>
-            <li><strong>Security:</strong> IAM, KMS, CloudTrail, GuardDuty, AWS WAF</li>
-            <li><strong>Monitoring:</strong> CloudWatch, VPC Flow Logs, CloudTrail</li>
-        </ul>
+        <p>Core AWS services and technologies used in the infrastructure:</p>
+        
+        <div class="tech-table">
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">🌐</span>
+                    Networking
+                </div>
+                <div class="tech-items">AWS VPC, Security Groups, NACLs, NAT Gateway, Internet Gateway, VPC Endpoints (S3, KMS, CloudWatch Logs)</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">⚙️</span>
+                    Compute
+                </div>
+                <div class="tech-items">EC2 instances, ECS Fargate for containerized workloads, Lambda for serverless functions, Application Load Balancer for traffic distribution</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">🗄️</span>
+                    Database
+                </div>
+                <div class="tech-items">RDS PostgreSQL Multi-AZ with automated backups, read replicas, and encryption at rest and in transit</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">📦</span>
+                    Storage
+                </div>
+                <div class="tech-items">S3 with SSE-KMS encryption, versioning, lifecycle policies, and Block Public Access enabled</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">🔐</span>
+                    Security
+                </div>
+                <div class="tech-items">IAM with MFA enforcement, KMS for key management, CloudTrail for audit logging, GuardDuty for threat detection, AWS WAF for application protection</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">📊</span>
+                    Monitoring
+                </div>
+                <div class="tech-items">CloudWatch for metrics and alarms, VPC Flow Logs for network visibility, CloudTrail for API logging, CloudWatch Logs for application logs</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">🤖</span>
+                    Automation
+                </div>
+                <div class="tech-items">Python 3.11 with Boto3 SDK, AWS CLI, and custom provisioning scripts for IAM and resource management</div>
+            </div>
+        </div>
     </section>
 
-    <section class="card">
+    <section id="compliance" class="card">
+        <h2>Compliance & Standards</h2>
+        <p>The infrastructure aligns with industry standards and regulatory requirements:</p>
+        
+        <div class="compliance-grid">
+            <div class="compliance-item">
+                <div class="compliance-badge">FERPA</div>
+                <div class="compliance-desc">Family Educational Rights and Privacy Act alignment for student data protection, ensuring proper access controls, encryption, and audit trails for educational records</div>
+            </div>
+            <div class="compliance-item">
+                <div class="compliance-badge">CIS</div>
+                <div class="compliance-desc">Center for Internet Security AWS Foundations Benchmark compliance, following security best practices for cloud infrastructure configuration</div>
+            </div>
+            <div class="compliance-item">
+                <div class="compliance-badge">Well-Architected</div>
+                <div class="compliance-desc">AWS Well-Architected Framework security pillar best practices, including encryption, access control, and monitoring requirements</div>
+            </div>
+            <div class="compliance-item">
+                <div class="compliance-badge">SOC 2</div>
+                <div class="compliance-desc">Security controls aligned with SOC 2 Type II requirements for data security, availability, and confidentiality</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="resources" class="card">
         <h2>Additional Resources</h2>
-        <ul>
-            <li><a href="architecture.html">Detailed Architecture Documentation</a></li>
-            <li><a href="interactive-diagram.html">Interactive Network Diagram</a></li>
-            <li><a href="automation.html">IAM Automation Workflow</a></li>
-            <li><a href="security-simulator.html">Security Attack Simulations</a></li>
-        </ul>
+        <p>Explore related documentation and interactive tools:</p>
+        
+        <div class="resources-grid">
+            <a href="architecture.html" class="resource-link">
+                <span class="resource-icon">🏗️</span>
+                <span class="resource-title">Detailed Architecture</span>
+                <span class="resource-desc">In-depth architecture documentation with network diagrams and component details</span>
+            </a>
+            <a href="interactive-diagram.html" class="resource-link">
+                <span class="resource-icon">🗺️</span>
+                <span class="resource-title">Interactive Diagram</span>
+                <span class="resource-desc">Explore the VPC architecture visually with clickable components</span>
+            </a>
+            <a href="automation.html" class="resource-link">
+                <span class="resource-icon">⚙️</span>
+                <span class="resource-title">IAM Automation</span>
+                <span class="resource-desc">Learn about the automated provisioning workflow and Python implementation</span>
+            </a>
+            <a href="security-simulator.html" class="resource-link">
+                <span class="resource-icon">🛡️</span>
+                <span class="resource-title">Security Simulator</span>
+                <span class="resource-desc">Test and understand how security controls defend against common attack vectors</span>
+            </a>
+            <a href="cost-calculator.html" class="resource-link">
+                <span class="resource-icon">💰</span>
+                <span class="resource-title">Cost Calculator</span>
+                <span class="resource-desc">Estimate infrastructure costs and understand cost optimization strategies</span>
+            </a>
+            <a href="review.html" class="resource-link">
+                <span class="resource-icon">📋</span>
+                <span class="resource-title">Project Review</span>
+                <span class="resource-desc">View evaluation results and technical achievements</span>
+            </a>
+        </div>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>Documentation • AWS Student Data Infrastructure • 2025</p>
+    <div class="footer-content">
+        <p>Documentation • AWS Student Data Infrastructure • 2025</p>
+        <p class="footer-links">
+            <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
+                View on GitHub
+            </a>
+        </p>
+    </div>
 </footer>
+
+<script>
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('mobile-open');
+    this.classList.toggle('active');
+});
+
+// Close mobile menu when clicking a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.remove('mobile-open');
+        document.querySelector('.mobile-menu-toggle')?.classList.remove('active');
+    });
+});
+
+// Smooth scroll for TOC links
+document.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+            const headerOffset = 80;
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+</script>
 </body>
 </html>
-HTMLEOF
-
-echo "✅ docs.html created"
