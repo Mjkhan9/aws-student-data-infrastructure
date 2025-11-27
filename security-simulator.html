@@ -4,7 +4,26 @@
     <meta charset="UTF-8">
     <title>Security Simulator | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive security attack simulator demonstrating AWS GuardDuty findings, CloudTrail events, and incident response procedures for AWS Student Data Infrastructure.">
+    <meta name="keywords" content="AWS, Security Simulator, GuardDuty, CloudTrail, Incident Response, Cloud Security, Attack Simulation">
+    <meta name="author" content="Jawad Khan">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Security Simulator | AWS Student Data Infrastructure">
+    <meta property="og:description" content="Interactive security attack simulator with GuardDuty findings and incident response procedures.">
+    <meta property="og:url" content="https://mjkhan9.github.io/aws-student-data-infrastructure/security-simulator.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Security Simulator | AWS Student Data Infrastructure">
+    <meta name="twitter:description" content="Interactive security attack simulator with GuardDuty findings and incident response.">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://mjkhan9.github.io/aws-student-data-infrastructure/security-simulator.html">
+    
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     <style>
         /* Enhanced Security Simulator Styles */
         .security-page .content {
@@ -272,17 +291,26 @@
 <body class="security-page">
 <header class="site-header">
     <div>
-        <div class="logo">AWS Student Data Infrastructure</div>
+        <a href="index.html" class="logo">
+            <span class="logo-icon">☁</span>
+            AWS Student Data Infrastructure
+        </a>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="architecture.html">Architecture</a>
             <a href="automation.html">IAM Automation</a>
             <a href="docs.html">Documentation</a>
-            <a href="iac-deployment.html">Deploy IaC</a>
-            <a href="incident-runbook.html">Incident Runbook</a>
+            <a href="review.html">Project Review</a>
             <a href="live-demo.html">Live Demo</a>
+            <a href="interactive-diagram.html">Interactive Diagram</a>
+            <a href="cost-calculator.html">Cost Calculator</a>
             <a href="security-simulator.html" class="active">Security Simulator</a>
         </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
 </header>
 
@@ -1254,6 +1282,20 @@ function displayGuardDutyFinding(finding) {
 
 // Initialize
 addLogEntry("Security simulator ready. Select an attack scenario to begin.", "info");
+
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('mobile-open');
+    this.classList.toggle('active');
+});
+
+// Close mobile menu when clicking on a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', function() {
+        document.querySelector('.nav-links').classList.remove('mobile-open');
+        document.querySelector('.mobile-menu-toggle').classList.remove('active');
+    });
+});
 </script>
 </body>
 </html>
