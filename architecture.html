@@ -1,27 +1,36 @@
-cat > /mnt/user-data/outputs/architecture.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Architecture | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Three-tier VPC architecture for secure student data infrastructure with network isolation, security groups, and encryption.">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
 </head>
 <body>
 <header class="site-header">
     <div>
-        <div class="logo">AWS Student Data Infrastructure</div>
+        <div class="logo">
+            <span class="logo-icon">☁</span>
+            AWS Student Data Infrastructure
+        </div>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="architecture.html" class="active">Architecture</a>
             <a href="automation.html">IAM Automation</a>
             <a href="docs.html">Documentation</a>
-            <a href="review.html">Faculty Review</a>
+            <a href="review.html">Project Review</a>
             <a href="live-demo.html">Live Demo</a>
             <a href="interactive-diagram.html">Interactive Diagram</a>
             <a href="cost-calculator.html">Cost Calculator</a>
             <a href="security-simulator.html">Security Simulator</a>
         </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
 </header>
 
@@ -33,81 +42,293 @@ cat > /mnt/user-data/outputs/architecture.html << 'HTMLEOF'
             for academic data processing. The environment isolates administrative tools, application services, 
             and database workloads while enforcing AWS security best practices.
         </p>
+        <div class="cta-inline">
+            <a href="interactive-diagram.html" class="btn-primary">
+                <span class="btn-icon">🗺️</span> Explore Interactive Diagram
+            </a>
+        </div>
     </section>
 
     <section class="card">
         <h2>Three-Tier VPC Layout</h2>
         <p>The VPC is divided into isolated network segments with distinct security boundaries:</p>
         
-        <div class="info-box">
-            <strong>Public Tier (172.32.0.0/24)</strong><br>
-            Contains NAT Gateway and Bastion Host. Restricted to corporate IP ranges. No workloads or databases reside here.
-        </div>
-        
-        <div class="info-box">
-            <strong>Application Tier (172.32.10.0/24)</strong><br>
-            Hosts application compute resources (EC2/Lambda). Allowed outbound internet via NAT. Can access DB tier via SG references.
-        </div>
-        
-        <div class="info-box">
-            <strong>Database Tier (172.32.20.0/24)</strong><br>
-            Private-only, no internet gateway route. Contains encrypted RDS PostgreSQL. Only reachable via app-sg → db-sg rules.
+        <div class="tier-cards">
+            <div class="tier-card tier-public">
+                <div class="tier-header">
+                    <span class="tier-icon">🌐</span>
+                    <span class="tier-name">Public Tier</span>
+                </div>
+                <div class="tier-cidr">172.32.0.0/24</div>
+                <div class="tier-desc">
+                    Contains NAT Gateway and Bastion Host. Restricted to corporate IP ranges. 
+                    No workloads or databases reside here.
+                </div>
+                <ul class="tier-components">
+                    <li>Internet Gateway</li>
+                    <li>NAT Gateway (Multi-AZ)</li>
+                    <li>Bastion Host</li>
+                </ul>
+            </div>
+            
+            <div class="tier-card tier-private">
+                <div class="tier-header">
+                    <span class="tier-icon">⚙️</span>
+                    <span class="tier-name">Application Tier</span>
+                </div>
+                <div class="tier-cidr">172.32.10.0/24</div>
+                <div class="tier-desc">
+                    Hosts application compute resources (EC2/Lambda). Allowed outbound internet via NAT. 
+                    Can access DB tier via SG references.
+                </div>
+                <ul class="tier-components">
+                    <li>ECS Fargate Tasks</li>
+                    <li>Lambda Functions</li>
+                    <li>Application Load Balancer</li>
+                </ul>
+            </div>
+            
+            <div class="tier-card tier-database">
+                <div class="tier-header">
+                    <span class="tier-icon">🗄️</span>
+                    <span class="tier-name">Database Tier</span>
+                </div>
+                <div class="tier-cidr">172.32.20.0/24</div>
+                <div class="tier-desc">
+                    Private-only, no internet gateway route. Contains encrypted RDS PostgreSQL. 
+                    Only reachable via app-sg → db-sg rules.
+                </div>
+                <ul class="tier-components">
+                    <li>RDS PostgreSQL Multi-AZ</li>
+                    <li>Automated Backups</li>
+                    <li>KMS Encryption</li>
+                </ul>
+            </div>
         </div>
     </section>
 
     <section class="card">
         <h2>Security Group Model</h2>
         <p>Security groups follow least privilege principles with directional SG-to-SG rules.</p>
-        <ul>
-            <li><strong>admin-sg:</strong> SSH allowed only from corporate IPs</li>
-            <li><strong>app-sg:</strong> Allows 443/HTTPS and outbound-only mode</li>
-            <li><strong>db-sg:</strong> Only allows PostgreSQL 5432 from app-sg</li>
-            <li><strong>alb-sg:</strong> Allows inbound 443 from internet + WAF protection</li>
-        </ul>
+        
+        <div class="sg-grid">
+            <div class="sg-card">
+                <div class="sg-name">admin-sg</div>
+                <div class="sg-rule">
+                    <span class="rule-direction">Inbound</span>
+                    <span class="rule-port">TCP 22</span>
+                    <span class="rule-source">Corporate IPs only</span>
+                </div>
+            </div>
+            
+            <div class="sg-card">
+                <div class="sg-name">app-sg</div>
+                <div class="sg-rule">
+                    <span class="rule-direction">Inbound</span>
+                    <span class="rule-port">TCP 443</span>
+                    <span class="rule-source">alb-sg</span>
+                </div>
+                <div class="sg-rule">
+                    <span class="rule-direction">Outbound</span>
+                    <span class="rule-port">TCP 5432</span>
+                    <span class="rule-source">db-sg</span>
+                </div>
+            </div>
+            
+            <div class="sg-card">
+                <div class="sg-name">db-sg</div>
+                <div class="sg-rule">
+                    <span class="rule-direction">Inbound</span>
+                    <span class="rule-port">TCP 5432</span>
+                    <span class="rule-source">app-sg only</span>
+                </div>
+            </div>
+            
+            <div class="sg-card">
+                <div class="sg-name">alb-sg</div>
+                <div class="sg-rule">
+                    <span class="rule-direction">Inbound</span>
+                    <span class="rule-port">TCP 443</span>
+                    <span class="rule-source">Internet + WAF</span>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="card">
         <h2>Network Isolation Design</h2>
         <p>Each tier implements defense-in-depth with multiple security layers:</p>
-        <ul>
-            <li><strong>Network ACLs:</strong> Stateless filtering at subnet boundaries</li>
-            <li><strong>Security Groups:</strong> Stateful instance-level firewall rules</li>
-            <li><strong>Route Tables:</strong> Control traffic flow between tiers</li>
-            <li><strong>VPC Endpoints:</strong> Private access to AWS services (S3, DynamoDB)</li>
-            <li><strong>Flow Logs:</strong> Comprehensive traffic monitoring and analysis</li>
-        </ul>
+        
+        <div class="defense-layers">
+            <div class="defense-layer">
+                <div class="layer-icon">🛡️</div>
+                <div class="layer-content">
+                    <strong>Network ACLs</strong>
+                    <span>Stateless filtering at subnet boundaries</span>
+                </div>
+            </div>
+            <div class="defense-layer">
+                <div class="layer-icon">🔒</div>
+                <div class="layer-content">
+                    <strong>Security Groups</strong>
+                    <span>Stateful instance-level firewall rules</span>
+                </div>
+            </div>
+            <div class="defense-layer">
+                <div class="layer-icon">🔀</div>
+                <div class="layer-content">
+                    <strong>Route Tables</strong>
+                    <span>Control traffic flow between tiers</span>
+                </div>
+            </div>
+            <div class="defense-layer">
+                <div class="layer-icon">🔗</div>
+                <div class="layer-content">
+                    <strong>VPC Endpoints</strong>
+                    <span>Private access to AWS services (S3, DynamoDB)</span>
+                </div>
+            </div>
+            <div class="defense-layer">
+                <div class="layer-icon">📊</div>
+                <div class="layer-content">
+                    <strong>Flow Logs</strong>
+                    <span>Comprehensive traffic monitoring and analysis</span>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="card">
         <h2>High Availability Configuration</h2>
         <p>The architecture ensures business continuity through multi-AZ deployment:</p>
-        <ul>
-            <li><strong>Multi-AZ Subnets:</strong> Each tier spans multiple availability zones</li>
-            <li><strong>RDS Multi-AZ:</strong> Automatic failover for database tier</li>
-            <li><strong>NAT Gateway Redundancy:</strong> One per AZ for high availability</li>
-            <li><strong>Application Load Balancer:</strong> Distributes traffic across AZs</li>
-            <li><strong>Auto Scaling:</strong> Dynamic capacity adjustment based on demand</li>
+        
+        <ul class="ha-list">
+            <li>
+                <strong>Multi-AZ Subnets:</strong> 
+                Each tier spans us-east-1a and us-east-1b availability zones
+            </li>
+            <li>
+                <strong>RDS Multi-AZ:</strong> 
+                Automatic failover with synchronous replication to standby
+            </li>
+            <li>
+                <strong>NAT Gateway Redundancy:</strong> 
+                One NAT Gateway per AZ eliminates single points of failure
+            </li>
+            <li>
+                <strong>Application Load Balancer:</strong> 
+                Cross-zone load balancing distributes traffic across AZs
+            </li>
+            <li>
+                <strong>Auto Scaling:</strong> 
+                Dynamic capacity adjustment based on CPU and memory metrics
+            </li>
         </ul>
     </section>
 
     <section class="card">
         <h2>Data Encryption Strategy</h2>
         <p>Comprehensive encryption protects data at rest and in transit:</p>
-        <ul>
-            <li><strong>RDS Encryption:</strong> Customer-managed KMS key with automatic rotation</li>
-            <li><strong>S3 Encryption:</strong> SSE-KMS for all objects with versioning</li>
-            <li><strong>EBS Encryption:</strong> All volumes encrypted by default</li>
-            <li><strong>TLS/SSL:</strong> Required for all client connections</li>
-            <li><strong>Secrets Manager:</strong> Encrypted credential storage with rotation</li>
-        </ul>
+        
+        <div class="encryption-grid">
+            <div class="encryption-item">
+                <div class="encryption-icon">🔐</div>
+                <div class="encryption-label">RDS Encryption</div>
+                <div class="encryption-value">Customer-managed KMS key with automatic rotation</div>
+            </div>
+            <div class="encryption-item">
+                <div class="encryption-icon">📦</div>
+                <div class="encryption-label">S3 Encryption</div>
+                <div class="encryption-value">SSE-KMS for all objects with versioning enabled</div>
+            </div>
+            <div class="encryption-item">
+                <div class="encryption-icon">💾</div>
+                <div class="encryption-label">EBS Encryption</div>
+                <div class="encryption-value">All volumes encrypted by default policy</div>
+            </div>
+            <div class="encryption-item">
+                <div class="encryption-icon">🔒</div>
+                <div class="encryption-label">TLS/SSL</div>
+                <div class="encryption-value">Required for all client connections (TLS 1.2+)</div>
+            </div>
+            <div class="encryption-item">
+                <div class="encryption-icon">🗝️</div>
+                <div class="encryption-label">Secrets Manager</div>
+                <div class="encryption-value">Encrypted credential storage with auto-rotation</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Architecture Diagram</h2>
+        <div class="diagram-preview">
+            <svg width="100%" height="300" viewBox="0 0 800 300" style="display: block; margin: 20px auto;">
+                <!-- VPC Container -->
+                <rect x="20" y="20" width="760" height="260" fill="none" stroke="#3b82f6" stroke-width="2" rx="4"/>
+                <text x="400" y="45" text-anchor="middle" font-size="14" fill="#d5dbdb" font-weight="700">VPC: 172.32.0.0/16</text>
+                
+                <!-- Admin Tier -->
+                <rect x="40" y="60" width="220" height="80" fill="rgba(74, 124, 184, 0.15)" stroke="#4a7cb8" stroke-width="2" rx="3"/>
+                <text x="150" y="85" text-anchor="middle" font-size="12" fill="#d5dbdb" font-weight="700">Admin Tier (Public)</text>
+                <text x="150" y="105" text-anchor="middle" font-size="10" fill="#aab7b8">172.32.1.0/24</text>
+                <text x="150" y="125" text-anchor="middle" font-size="10" fill="#aab7b8">Bastion • NAT Gateway</text>
+                
+                <!-- App Tier -->
+                <rect x="290" y="60" width="220" height="80" fill="rgba(107, 91, 163, 0.15)" stroke="#6b5ba3" stroke-width="2" rx="3"/>
+                <text x="400" y="85" text-anchor="middle" font-size="12" fill="#d5dbdb" font-weight="700">Application Tier</text>
+                <text x="400" y="105" text-anchor="middle" font-size="10" fill="#aab7b8">172.32.10.0/24</text>
+                <text x="400" y="125" text-anchor="middle" font-size="10" fill="#aab7b8">ECS • Lambda • ALB</text>
+                
+                <!-- DB Tier -->
+                <rect x="540" y="60" width="220" height="80" fill="rgba(184, 74, 124, 0.15)" stroke="#b84a7c" stroke-width="2" rx="3"/>
+                <text x="650" y="85" text-anchor="middle" font-size="12" fill="#d5dbdb" font-weight="700">Database Tier</text>
+                <text x="650" y="105" text-anchor="middle" font-size="10" fill="#aab7b8">172.32.20.0/24</text>
+                <text x="650" y="125" text-anchor="middle" font-size="10" fill="#aab7b8">RDS PostgreSQL</text>
+                
+                <!-- Security & Logging -->
+                <rect x="40" y="160" width="720" height="100" fill="rgba(255, 153, 0, 0.08)" stroke="#ff9900" stroke-width="1" stroke-dasharray="5,5" rx="3"/>
+                <text x="400" y="185" text-anchor="middle" font-size="12" fill="#ff9900" font-weight="700">Security & Audit Layer</text>
+                <text x="200" y="210" text-anchor="middle" font-size="10" fill="#aab7b8">CloudTrail</text>
+                <text x="350" y="210" text-anchor="middle" font-size="10" fill="#aab7b8">VPC Flow Logs</text>
+                <text x="500" y="210" text-anchor="middle" font-size="10" fill="#aab7b8">GuardDuty</text>
+                <text x="650" y="210" text-anchor="middle" font-size="10" fill="#aab7b8">KMS</text>
+                
+                <!-- Arrows -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#64748b"/>
+                    </marker>
+                </defs>
+                <line x1="260" y1="100" x2="290" y2="100" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+                <line x1="510" y1="100" x2="540" y2="100" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+            </svg>
+            
+            <div class="diagram-cta">
+                <a href="interactive-diagram.html" class="btn-secondary">
+                    Open Interactive Diagram →
+                </a>
+            </div>
+        </div>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>Architecture Overview • AWS Student Data Infrastructure • 2025</p>
+    <div class="footer-content">
+        <p>Architecture Overview • AWS Student Data Infrastructure • 2025</p>
+        <p class="footer-links">
+            <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
+                View on GitHub
+            </a>
+        </p>
+    </div>
 </footer>
+
+<script>
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('mobile-open');
+    this.classList.toggle('active');
+});
+</script>
 </body>
 </html>
-HTMLEOF
-
-echo "✅ architecture.html created"
