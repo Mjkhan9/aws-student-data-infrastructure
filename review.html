@@ -5,8 +5,333 @@
     <title>Project Review | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Project evaluation results and outcomes for AWS Student Data Infrastructure demonstrating cloud architecture and security engineering skills.">
+    <meta name="keywords" content="AWS, Project Review, Cloud Architecture, Security Engineering, Portfolio, Evaluation">
+    <meta name="author" content="Jawad Khan">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Project Review | AWS Student Data Infrastructure">
+    <meta property="og:description" content="Project evaluation results demonstrating production-grade AWS architecture and security engineering capabilities.">
+    <meta property="og:url" content="https://mjkhan9.github.io/aws-student-data-infrastructure/review.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Project Review | AWS Student Data Infrastructure">
+    <meta name="twitter:description" content="Project evaluation results demonstrating production-grade AWS architecture.">
+    
+    <link rel="canonical" href="https://mjkhan9.github.io/aws-student-data-infrastructure/review.html">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
+    
+    <style>
+        /* Review Page Specific Styles */
+        .status-banner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 24px 32px;
+            margin-bottom: 32px;
+            border-radius: var(--aws-radius-lg);
+            border: 1px solid var(--aws-border);
+        }
+        
+        .status-banner.success {
+            background: linear-gradient(135deg, rgba(29, 129, 2, 0.15) 0%, rgba(46, 160, 67, 0.1) 100%);
+            border-left: 4px solid var(--aws-green);
+        }
+        
+        .status-icon {
+            font-size: 48px;
+            color: var(--aws-green-light);
+            flex-shrink: 0;
+        }
+        
+        .status-content {
+            flex: 1;
+        }
+        
+        .status-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 6px;
+        }
+        
+        .status-subtitle {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            line-height: 1.5;
+        }
+        
+        .evaluation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+        
+        .eval-card {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 4px solid var(--aws-orange);
+            border-radius: var(--aws-radius);
+            padding: 24px;
+            transition: all 0.2s ease;
+        }
+        
+        .eval-card.exceeds {
+            border-left-color: var(--aws-green-light);
+        }
+        
+        .eval-card.meets {
+            border-left-color: var(--aws-orange);
+        }
+        
+        .eval-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            background: var(--aws-card-bg);
+        }
+        
+        .eval-category {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .eval-rating {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        .eval-card.exceeds .eval-rating {
+            color: var(--aws-green-light);
+        }
+        
+        .eval-card.meets .eval-rating {
+            color: var(--aws-orange);
+        }
+        
+        .eval-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--aws-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .eval-fill {
+            height: 100%;
+            background: var(--aws-orange);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+        
+        .eval-card.exceeds .eval-fill {
+            background: var(--aws-green-light);
+        }
+        
+        .metrics-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        .metric-item {
+            text-align: center;
+            padding: 32px 24px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            transition: all 0.2s ease;
+        }
+        
+        .metric-item:hover {
+            border-color: var(--aws-orange);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .metric-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+        
+        .metric-item .metric-value {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--aws-orange);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        
+        .metric-label {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 6px;
+        }
+        
+        .metric-comparison {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+        }
+        
+        .achievements-list {
+            display: grid;
+            gap: 20px;
+            margin-top: 24px;
+        }
+        
+        .achievement-item {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 4px solid var(--aws-orange);
+            border-radius: var(--aws-radius);
+            transition: all 0.2s ease;
+        }
+        
+        .achievement-item:hover {
+            border-left-color: var(--aws-blue);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .achievement-icon {
+            font-size: 40px;
+            flex-shrink: 0;
+        }
+        
+        .achievement-content {
+            flex: 1;
+        }
+        
+        .achievement-content strong {
+            display: block;
+            font-size: 16px;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .achievement-content p {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        .skill-category {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius);
+            padding: 24px;
+        }
+        
+        .skill-category h3 {
+            font-size: 16px;
+            color: var(--aws-orange);
+            margin-bottom: 16px;
+            border: none;
+            padding: 0;
+        }
+        
+        .skill-category ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .skill-category li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: var(--aws-text-secondary);
+            font-size: 14px;
+        }
+        
+        .skill-category li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--aws-orange);
+            font-weight: 700;
+        }
+        
+        .decision-list {
+            display: grid;
+            gap: 20px;
+            margin-top: 24px;
+        }
+        
+        .decision-item {
+            padding: 24px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 4px solid var(--aws-blue);
+            border-radius: var(--aws-radius);
+            transition: all 0.2s ease;
+        }
+        
+        .decision-item:hover {
+            border-left-color: var(--aws-orange);
+            background: var(--aws-card-bg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .decision-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .decision-rationale {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .status-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .status-icon {
+                font-size: 36px;
+            }
+            
+            .evaluation-grid,
+            .metrics-showcase,
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .achievement-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .metric-item .metric-value {
+                font-size: 36px;
+            }
+        }
+    </style>
 </head>
 <body>
 <header class="site-header">
@@ -48,7 +373,7 @@
         <div class="status-icon">✓</div>
         <div class="status-content">
             <div class="status-title">Project Status: APPROVED FOR PORTFOLIO</div>
-            <div class="status-subtitle">Demonstrates cloud infrastructure and security engineering capabilities</div>
+            <div class="status-subtitle">Demonstrates senior-level cloud infrastructure and security engineering capabilities suitable for demonstration to technical recruiters and hiring managers</div>
         </div>
     </section>
 
@@ -121,28 +446,28 @@
                 <div class="achievement-icon">🏗️</div>
                 <div class="achievement-content">
                     <strong>Network Architecture</strong>
-                    <p>Three-tier VPC design with complete database isolation and multi-AZ deployment</p>
+                    <p>Three-tier VPC design with complete database isolation and multi-AZ deployment ensuring high availability and zero public attack surface</p>
                 </div>
             </div>
             <div class="achievement-item">
                 <div class="achievement-icon">🛡️</div>
                 <div class="achievement-content">
                     <strong>Security Implementation</strong>
-                    <p>Defense-in-depth with multiple security layers including encryption, access controls, and audit trails</p>
+                    <p>Defense-in-depth with multiple security layers including KMS encryption, IAM policies, CloudTrail logging, and GuardDuty integration</p>
                 </div>
             </div>
             <div class="achievement-item">
                 <div class="achievement-icon">⚙️</div>
                 <div class="achievement-content">
                     <strong>Automation Quality</strong>
-                    <p>Python-based IAM provisioning with zero configuration errors and comprehensive logging</p>
+                    <p>Python-based IAM provisioning with zero configuration errors, comprehensive error handling, retry logic, and idempotent operations</p>
                 </div>
             </div>
             <div class="achievement-item">
                 <div class="achievement-icon">📚</div>
                 <div class="achievement-content">
                     <strong>Documentation</strong>
-                    <p>Comprehensive technical documentation with interactive diagrams and operational runbooks</p>
+                    <p>Comprehensive technical documentation with interactive diagrams, operational runbooks, security control documentation, and compliance mapping</p>
                 </div>
             </div>
         </div>
@@ -160,6 +485,7 @@
                     <li>Route table configuration</li>
                     <li>Security groups and NACLs</li>
                     <li>NAT Gateway deployment</li>
+                    <li>VPC Endpoints configuration</li>
                 </ul>
             </div>
             <div class="skill-category">
@@ -169,6 +495,7 @@
                     <li>IAM policy design</li>
                     <li>Audit logging configuration</li>
                     <li>Threat detection setup</li>
+                    <li>FERPA compliance alignment</li>
                 </ul>
             </div>
             <div class="skill-category">
@@ -178,6 +505,7 @@
                     <li>AWS SDK integration</li>
                     <li>Error handling patterns</li>
                     <li>Idempotent operations</li>
+                    <li>Retry logic implementation</li>
                 </ul>
             </div>
             <div class="skill-category">
@@ -187,6 +515,7 @@
                     <li>Security control documentation</li>
                     <li>Operational runbooks</li>
                     <li>Compliance mapping</li>
+                    <li>Interactive demonstrations</li>
                 </ul>
             </div>
         </div>
@@ -201,28 +530,40 @@
                 <div class="decision-title">Three-Tier Network Isolation</div>
                 <div class="decision-rationale">
                     Separates public admin access, private application workloads, and isolated database storage 
-                    to prevent lateral movement and limit blast radius of any security incident.
+                    to prevent lateral movement and limit blast radius of any security incident. This architecture 
+                    follows enterprise security patterns used in production student information systems.
                 </div>
             </div>
             <div class="decision-item">
                 <div class="decision-title">Security Group Referencing</div>
                 <div class="decision-rationale">
                     Uses SG-to-SG references instead of IP-based rules to maintain security posture even 
-                    as instances scale or IP addresses change dynamically.
+                    as instances scale or IP addresses change dynamically. This approach provides better 
+                    maintainability and reduces configuration errors.
                 </div>
             </div>
             <div class="decision-item">
                 <div class="decision-title">Customer-Managed KMS Keys</div>
                 <div class="decision-rationale">
                     Provides full control over encryption key lifecycle, rotation policies, and access 
-                    controls versus AWS-managed keys.
+                    controls versus AWS-managed keys. This enables compliance with FERPA requirements 
+                    for educational data protection.
                 </div>
             </div>
             <div class="decision-item">
                 <div class="decision-title">Multi-AZ Deployment</div>
                 <div class="decision-rationale">
                     Ensures high availability and automatic failover in case of AZ outage, meeting 
-                    business continuity requirements.
+                    business continuity requirements. RDS Multi-AZ deployment provides synchronous 
+                    replication and automatic failover capabilities.
+                </div>
+            </div>
+            <div class="decision-item">
+                <div class="decision-title">Comprehensive Audit Logging</div>
+                <div class="decision-rationale">
+                    CloudTrail, VPC Flow Logs, and GuardDuty provide complete visibility into all API 
+                    calls, network traffic, and potential security threats. This enables security 
+                    monitoring and compliance auditing.
                 </div>
             </div>
         </div>
@@ -235,19 +576,37 @@
             This project provided hands-on experience with production-grade AWS architecture patterns 
             and security best practices applicable to real-world cloud infrastructure operations.
         </p>
-        <ul>
-            <li>Practical application of AWS networking concepts and security controls</li>
-            <li>Understanding of defense-in-depth security architecture</li>
-            <li>Experience with infrastructure automation and scripting</li>
-            <li>Knowledge of compliance requirements and audit trail implementation</li>
-            <li>Documentation practices for technical architecture handoff</li>
+        <ul class="feature-list">
+            <li><strong>Practical Application:</strong> Real-world implementation of AWS networking concepts and security controls in a production-like environment</li>
+            <li><strong>Security Architecture:</strong> Deep understanding of defense-in-depth security principles and multi-layered protection strategies</li>
+            <li><strong>Automation Skills:</strong> Experience with infrastructure automation, scripting, and error handling patterns</li>
+            <li><strong>Compliance Knowledge:</strong> Understanding of compliance requirements (FERPA) and audit trail implementation</li>
+            <li><strong>Documentation Practices:</strong> Skills in creating comprehensive technical documentation for architecture handoff</li>
+            <li><strong>Problem Solving:</strong> Ability to design solutions that balance security, availability, and cost considerations</li>
+        </ul>
+    </section>
+
+    <!-- Recommendations -->
+    <section class="card">
+        <h2>Future Enhancement Opportunities</h2>
+        <p>
+            While the project meets production standards, the following enhancements could further 
+            improve the infrastructure:
+        </p>
+        <ul class="feature-list">
+            <li><strong>Infrastructure as Code:</strong> Migrate to Terraform or CloudFormation for version-controlled infrastructure deployment</li>
+            <li><strong>CI/CD Pipeline:</strong> Implement automated testing and deployment pipelines for infrastructure changes</li>
+            <li><strong>WAF Integration:</strong> Add AWS WAF for application-layer protection against common web exploits</li>
+            <li><strong>Automated Compliance:</strong> Deploy AWS Config rules for continuous compliance checking</li>
+            <li><strong>Secrets Management:</strong> Integrate AWS Secrets Manager for credential management with automatic rotation</li>
+            <li><strong>Monitoring & Alerting:</strong> Enhanced CloudWatch dashboards and SNS notifications for proactive issue detection</li>
         </ul>
     </section>
 </main>
 
 <footer class="site-footer">
     <div class="footer-content">
-        <p>Project Review • AWS Student Data Infrastructure • University of Houston • 2025</p>
+        <p>Project Review • AWS Student Data Infrastructure • 2025</p>
         <p class="footer-links">
             <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
                 View on GitHub
@@ -261,6 +620,14 @@
 document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
     document.querySelector('.nav-links').classList.toggle('mobile-open');
     this.classList.toggle('active');
+});
+
+// Close mobile menu when clicking a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.remove('mobile-open');
+        document.querySelector('.mobile-menu-toggle')?.classList.remove('active');
+    });
 });
 </script>
 </body>
