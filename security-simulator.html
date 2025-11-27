@@ -613,10 +613,10 @@ aws iam delete-access-key --user-name student_readonly_user --access-key-id AKIA
 \`\`\`bash
 # CloudWatch Insights query for all IAM actions by this user
 fields @timestamp, eventName, errorCode, sourceIPAddress
-| filter userIdentity.userName = "student_readonly_user"
-| filter eventSource = "iam.amazonaws.com"
-| sort @timestamp desc
-| limit 100
+|| filter userIdentity.userName = "student_readonly_user"
+|| filter eventSource = "iam.amazonaws.com"
+|| sort @timestamp desc
+|| limit 100
 \`\`\`
 
 ### 3. Remediation
