@@ -2,38 +2,102 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home | AWS Student Data Infrastructure</title>
+    <title>AWS Student Data Infrastructure | Cloud Security Portfolio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Production-grade AWS cloud architecture for student data systems featuring three-tier VPC, IAM automation, KMS encryption, and comprehensive security controls.">
+    <meta name="keywords" content="AWS, Cloud Architecture, VPC, IAM, Security, Student Data, Portfolio, DevOps, Cloud Engineering">
+    <meta name="author" content="Jawad Khan">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AWS Student Data Infrastructure">
+    <meta property="og:description" content="Secure three-tier AWS architecture for academic data with IAM automation and defense-in-depth security.">
+    <meta property="og:url" content="https://mjkhan9.github.io/aws-student-data-infrastructure/">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AWS Student Data Infrastructure">
+    <meta name="twitter:description" content="Production-grade AWS cloud architecture portfolio project.">
+    
+    <link rel="canonical" href="https://mjkhan9.github.io/aws-student-data-infrastructure/">
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
 </head>
 <body>
 <header class="site-header">
     <div>
-        <div class="logo">AWS Student Data Infrastructure</div>
+        <div class="logo">
+            <span class="logo-icon">☁</span>
+            AWS Student Data Infrastructure
+        </div>
         <nav class="nav-links">
             <a href="index.html" class="active">Home</a>
             <a href="architecture.html">Architecture</a>
             <a href="automation.html">IAM Automation</a>
             <a href="docs.html">Documentation</a>
-            <a href="review.html">Faculty Review</a>
+            <a href="review.html">Project Review</a>
             <a href="live-demo.html">Live Demo</a>
             <a href="interactive-diagram.html">Interactive Diagram</a>
             <a href="cost-calculator.html">Cost Calculator</a>
             <a href="security-simulator.html">Security Simulator</a>
         </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
 </header>
 
 <main class="content">
-    <section class="card">
-        <h1>AWS Student Data Infrastructure</h1>
-        <p>
-            A secure, automated cloud environment for academic data processing featuring 
-            IAM automation, multi-tier VPC security, encryption, and network segmentation. 
-            Built for learning AWS cloud architecture and demonstrating infrastructure skills.
-        </p>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>AWS Student Data Infrastructure</h1>
+            <p class="hero-subtitle">
+                A secure, automated cloud environment for academic data processing featuring 
+                IAM automation, multi-tier VPC security, encryption, and network segmentation.
+            </p>
+            <div class="hero-badges">
+                <span class="badge badge-ec2">AWS Certified</span>
+                <span class="badge badge-vpc">Three-Tier VPC</span>
+                <span class="badge badge-iam">IAM Automation</span>
+                <span class="badge badge-s3">KMS Encryption</span>
+            </div>
+            <div class="hero-actions">
+                <a href="live-demo.html" class="btn-primary">
+                    <span class="btn-icon">▶</span> Launch Live Demo
+                </a>
+                <a href="architecture.html" class="btn-secondary">
+                    View Architecture
+                </a>
+            </div>
+        </div>
     </section>
 
+    <!-- Quick Stats -->
+    <section class="stats-section">
+        <div class="stat-item">
+            <div class="stat-value">67%</div>
+            <div class="stat-label">Faster Provisioning</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">0%</div>
+            <div class="stat-label">Error Rate</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Encryption Coverage</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Security Tiers</div>
+        </div>
+    </section>
+
+    <!-- Project Overview -->
     <section class="card">
         <h2>Project Overview</h2>
         <p>
@@ -42,86 +106,127 @@
             automated IAM provisioning, comprehensive encryption, and defense-in-depth security controls.
         </p>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px;">
-            <div style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); border-left: 3px solid var(--aws-orange); padding: 16px; border-radius: var(--aws-radius);">
-                <div class="aws-label">Network Architecture</div>
-                <div class="aws-value">Three-tier VPC with complete database isolation</div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🏗️</div>
+                <div class="feature-title">Network Architecture</div>
+                <div class="feature-desc">Three-tier VPC with complete database isolation and zero public attack surface</div>
             </div>
             
-            <div style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); border-left: 3px solid var(--aws-blue); padding: 16px; border-radius: var(--aws-radius);">
-                <div class="aws-label">Security Controls</div>
-                <div class="aws-value">Defense-in-depth with encryption and audit trails</div>
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <div class="feature-title">Security Controls</div>
+                <div class="feature-desc">Defense-in-depth with encryption, audit trails, and least-privilege access</div>
             </div>
             
-            <div style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); border-left: 3px solid var(--aws-green); padding: 16px; border-radius: var(--aws-radius);">
-                <div class="aws-label">Automation</div>
-                <div class="aws-value">Python-based IAM provisioning with zero errors</div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <div class="feature-title">Automation</div>
+                <div class="feature-desc">Python-based IAM provisioning with zero configuration errors</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">Monitoring</div>
+                <div class="feature-desc">CloudTrail, VPC Flow Logs, and GuardDuty for complete visibility</div>
             </div>
         </div>
     </section>
 
+    <!-- Core Features -->
     <section class="card">
         <h2>Core Features</h2>
-        <ul>
-            <li><strong>Multi-tier VPC Architecture:</strong> Public admin tier, private application tier, and isolated database tier with proper network segmentation</li>
-            <li><strong>Zero-Trust Security Model:</strong> Security groups with SG-to-SG references, no 0.0.0.0/0 rules, explicit allow lists</li>
-            <li><strong>IAM Automation:</strong> Python script reducing provisioning time by 67% with zero configuration errors</li>
-            <li><strong>Comprehensive Encryption:</strong> Customer-managed KMS keys with automatic rotation for all data at rest and in transit</li>
-            <li><strong>Complete Audit Trail:</strong> CloudTrail, VPC Flow Logs, and GuardDuty providing full visibility</li>
-            <li><strong>High Availability:</strong> Multi-AZ deployment with automated failover and backup strategies</li>
+        <ul class="feature-list">
+            <li>
+                <strong>Multi-tier VPC Architecture:</strong> 
+                Public admin tier, private application tier, and isolated database tier with proper network segmentation
+            </li>
+            <li>
+                <strong>Zero-Trust Security Model:</strong> 
+                Security groups with SG-to-SG references, no 0.0.0.0/0 rules, explicit allow lists only
+            </li>
+            <li>
+                <strong>IAM Automation:</strong> 
+                Python script reducing provisioning time by 67% with zero configuration errors
+            </li>
+            <li>
+                <strong>Comprehensive Encryption:</strong> 
+                Customer-managed KMS keys with automatic rotation for all data at rest and in transit
+            </li>
+            <li>
+                <strong>Complete Audit Trail:</strong> 
+                CloudTrail, VPC Flow Logs, and GuardDuty providing full visibility
+            </li>
+            <li>
+                <strong>High Availability:</strong> 
+                Multi-AZ deployment with automated failover and backup strategies
+            </li>
         </ul>
     </section>
 
+    <!-- Technology Stack -->
     <section class="card">
         <h2>Technology Stack</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px;">
-            <div style="background: var(--aws-panel-bg); padding: 12px; border-radius: var(--aws-radius); border: 1px solid var(--aws-border);">
-                <div style="font-size: 11px; color: var(--aws-text-tertiary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Networking</div>
-                <div style="font-size: 13px; color: var(--aws-text-secondary);">AWS VPC, Security Groups, NACLs, NAT Gateway, VPC Endpoints</div>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="tech-label">Networking</div>
+                <div class="tech-value">AWS VPC, Security Groups, NACLs, NAT Gateway, VPC Endpoints</div>
             </div>
             
-            <div style="background: var(--aws-panel-bg); padding: 12px; border-radius: var(--aws-radius); border: 1px solid var(--aws-border);">
-                <div style="font-size: 11px; color: var(--aws-text-tertiary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Compute & Storage</div>
-                <div style="font-size: 13px; color: var(--aws-text-secondary);">EC2, ECS Fargate, Lambda, RDS PostgreSQL, S3</div>
+            <div class="tech-card">
+                <div class="tech-label">Compute & Storage</div>
+                <div class="tech-value">EC2, ECS Fargate, Lambda, RDS PostgreSQL, S3</div>
             </div>
             
-            <div style="background: var(--aws-panel-bg); padding: 12px; border-radius: var(--aws-radius); border: 1px solid var(--aws-border);">
-                <div style="font-size: 11px; color: var(--aws-text-tertiary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Security</div>
-                <div style="font-size: 13px; color: var(--aws-text-secondary);">IAM, KMS, CloudTrail, GuardDuty, VPC Flow Logs</div>
+            <div class="tech-card">
+                <div class="tech-label">Security</div>
+                <div class="tech-value">IAM, KMS, CloudTrail, GuardDuty, VPC Flow Logs</div>
             </div>
             
-            <div style="background: var(--aws-panel-bg); padding: 12px; border-radius: var(--aws-radius); border: 1px solid var(--aws-border);">
-                <div style="font-size: 11px; color: var(--aws-text-tertiary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Automation</div>
-                <div style="font-size: 13px; color: var(--aws-text-secondary);">Python 3.11, Boto3, AWS CLI</div>
+            <div class="tech-card">
+                <div class="tech-label">Automation</div>
+                <div class="tech-value">Python 3.11, Boto3, AWS CLI</div>
             </div>
         </div>
     </section>
 
+    <!-- Interactive Tools Section -->
     <section class="card">
-        <h2>Explore the Project</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-top: 12px;">
-            <a href="interactive-diagram.html" style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); padding: 16px; border-radius: var(--aws-radius); text-decoration: none; display: block; transition: all 0.15s ease;">
-                <div style="font-size: 14px; font-weight: 700; color: var(--aws-orange); margin-bottom: 4px;">Interactive VPC Diagram</div>
-                <div style="font-size: 12px; color: var(--aws-text-tertiary);">Click network tiers to see detailed configuration and security rules</div>
+        <h2>Interactive Tools</h2>
+        <p>Explore the infrastructure through interactive demonstrations and simulations.</p>
+        
+        <div class="tools-grid">
+            <a href="interactive-diagram.html" class="tool-card tool-diagram">
+                <div class="tool-icon">🗺️</div>
+                <div class="tool-title">Interactive VPC Diagram</div>
+                <div class="tool-desc">Click network tiers to see detailed configuration and security rules</div>
+                <span class="tool-cta">Open Diagram →</span>
             </a>
             
-            <a href="live-demo.html" style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); padding: 16px; border-radius: var(--aws-radius); text-decoration: none; display: block; transition: all 0.15s ease;">
-                <div style="font-size: 14px; font-weight: 700; color: var(--aws-blue); margin-bottom: 4px;">IAM Automation Demo</div>
-                <div style="font-size: 12px; color: var(--aws-text-tertiary);">Watch automated provisioning execute in real-time in your browser</div>
+            <a href="live-demo.html" class="tool-card tool-demo">
+                <div class="tool-icon">▶️</div>
+                <div class="tool-title">IAM Automation Demo</div>
+                <div class="tool-desc">Watch automated provisioning execute in real-time in your browser</div>
+                <span class="tool-cta">Launch Demo →</span>
             </a>
             
-            <a href="security-simulator.html" style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); padding: 16px; border-radius: var(--aws-radius); text-decoration: none; display: block; transition: all 0.15s ease;">
-                <div style="font-size: 14px; font-weight: 700; color: var(--aws-green); margin-bottom: 4px;">Security Attack Simulator</div>
-                <div style="font-size: 12px; color: var(--aws-text-tertiary);">Test defense mechanisms against common attack vectors</div>
+            <a href="security-simulator.html" class="tool-card tool-security">
+                <div class="tool-icon">🛡️</div>
+                <div class="tool-title">Security Attack Simulator</div>
+                <div class="tool-desc">Test defense mechanisms against common attack vectors</div>
+                <span class="tool-cta">Launch Simulator →</span>
             </a>
             
-            <a href="cost-calculator.html" style="background: var(--aws-panel-bg); border: 1px solid var(--aws-border); padding: 16px; border-radius: var(--aws-radius); text-decoration: none; display: block; transition: all 0.15s ease;">
-                <div style="font-size: 14px; font-weight: 700; color: var(--aws-orange); margin-bottom: 4px;">AWS Cost Calculator</div>
-                <div style="font-size: 12px; color: var(--aws-text-tertiary);">Calculate infrastructure costs and automation ROI</div>
+            <a href="cost-calculator.html" class="tool-card tool-cost">
+                <div class="tool-icon">💰</div>
+                <div class="tool-title">AWS Cost Calculator</div>
+                <div class="tool-desc">Calculate infrastructure costs and automation ROI</div>
+                <span class="tool-cta">Open Calculator →</span>
             </a>
         </div>
     </section>
 
+    <!-- Project Context -->
     <section class="card">
         <h2>Project Context</h2>
         <p>
@@ -134,11 +239,73 @@
             systems, implementing FERPA-aligned data protection principles including encryption, access 
             controls, and comprehensive audit trails.
         </p>
+        
+        <div class="cta-section">
+            <a href="review.html" class="btn-secondary">View Project Review →</a>
+            <a href="docs.html" class="btn-secondary">Read Documentation →</a>
+        </div>
+    </section>
+
+    <!-- Author Section -->
+    <section class="author-section">
+        <div class="author-card">
+            <div class="author-info">
+                <h3>About the Author</h3>
+                <p class="author-name">Jawad Khan</p>
+                <p class="author-title">IT Operations Specialist | AWS Certified</p>
+                <p class="author-bio">
+                    IT professional with expertise in IAM lifecycle management, Active Directory, 
+                    and cloud platforms. AWS Solutions Architect Associate certified with experience 
+                    supporting enterprise infrastructure for 8,000+ users.
+                </p>
+                <div class="author-links">
+                    <a href="https://github.com/mjkhan9" target="_blank" rel="noopener noreferrer" class="author-link">
+                        GitHub
+                    </a>
+                    <a href="https://linkedin.com/in/jawadkhann" target="_blank" rel="noopener noreferrer" class="author-link">
+                        LinkedIn
+                    </a>
+                </div>
+            </div>
+            <div class="author-certs">
+                <div class="cert-badge">
+                    <span class="cert-icon">🏆</span>
+                    <span class="cert-name">AWS Solutions Architect Associate</span>
+                </div>
+                <div class="cert-badge">
+                    <span class="cert-icon">☁️</span>
+                    <span class="cert-name">AWS Cloud Practitioner</span>
+                </div>
+            </div>
+        </div>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>AWS Student Data Infrastructure • Portfolio Project • 2025</p>
+    <div class="footer-content">
+        <p>AWS Student Data Infrastructure • Portfolio Project • 2025</p>
+        <p class="footer-links">
+            <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
+                View on GitHub
+            </a>
+        </p>
+    </div>
 </footer>
+
+<script>
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('mobile-open');
+    this.classList.toggle('active');
+});
+
+// Close mobile menu when clicking a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.remove('mobile-open');
+        document.querySelector('.mobile-menu-toggle')?.classList.remove('active');
+    });
+});
+</script>
 </body>
 </html>
