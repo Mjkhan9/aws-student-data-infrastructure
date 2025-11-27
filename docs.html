@@ -1,102 +1,292 @@
-cat > /mnt/user-data/outputs/docs.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Documentation | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Technical documentation for AWS Student Data Infrastructure including architecture decisions, security controls, and operational procedures.">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
 </head>
 <body>
 <header class="site-header">
     <div>
-        <div class="logo">AWS Student Data Infrastructure</div>
+        <div class="logo">
+            <span class="logo-icon">☁</span>
+            AWS Student Data Infrastructure
+        </div>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="architecture.html">Architecture</a>
             <a href="automation.html">IAM Automation</a>
             <a href="docs.html" class="active">Documentation</a>
-            <a href="review.html">Faculty Review</a>
+            <a href="review.html">Project Review</a>
             <a href="live-demo.html">Live Demo</a>
             <a href="interactive-diagram.html">Interactive Diagram</a>
             <a href="cost-calculator.html">Cost Calculator</a>
             <a href="security-simulator.html">Security Simulator</a>
         </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
 </header>
 
 <main class="content">
     <section class="card">
-        <h1>Project Documentation Overview</h1>
+        <h1>Project Documentation</h1>
         <p>
-            Full documentation for the AWS Student Data Infrastructure project, including architecture summary, 
-            automation design, execution outputs, and technical specifications.
+            Comprehensive documentation for the AWS Student Data Infrastructure project, including 
+            architecture summary, automation design, security controls, and technical specifications.
         </p>
     </section>
 
-    <section class="card">
+    <!-- Table of Contents -->
+    <section class="card toc-card">
+        <h2>Table of Contents</h2>
+        <nav class="toc">
+            <a href="#architecture-summary" class="toc-link">Architecture Summary</a>
+            <a href="#design-goals" class="toc-link">Core Design Goals</a>
+            <a href="#security-controls" class="toc-link">Security Controls</a>
+            <a href="#technology-components" class="toc-link">Technology Components</a>
+            <a href="#compliance" class="toc-link">Compliance & Standards</a>
+            <a href="#resources" class="toc-link">Additional Resources</a>
+        </nav>
+    </section>
+
+    <section id="architecture-summary" class="card">
         <h2>Architecture Summary</h2>
+        <p>The infrastructure implements a production-grade three-tier architecture optimized for security and compliance:</p>
+        
         <ul>
-            <li>Three-tier VPC architecture with public, private app, and private database subnets</li>
-            <li>NAT gateway for outbound-only internet access from private tiers</li>
-            <li>RDS PostgreSQL with encryption and private networking</li>
-            <li>Security groups configured with least privilege and SG-to-SG references</li>
-            <li>CloudTrail enabled for all regions with log file validation</li>
-            <li>VPC Flow Logs capturing all accepted and rejected traffic</li>
+            <li><strong>Three-tier VPC architecture</strong> with public, private app, and private database subnets</li>
+            <li><strong>NAT gateway</strong> for outbound-only internet access from private tiers</li>
+            <li><strong>RDS PostgreSQL</strong> with encryption and private networking</li>
+            <li><strong>Security groups</strong> configured with least privilege and SG-to-SG references</li>
+            <li><strong>CloudTrail</strong> enabled for all regions with log file validation</li>
+            <li><strong>VPC Flow Logs</strong> capturing all accepted and rejected traffic</li>
         </ul>
+        
+        <div class="doc-diagram">
+            <pre class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────┐
+│                    VPC: 172.32.0.0/16                       │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │ Admin Tier  │  │  App Tier   │  │  DB Tier    │         │
+│  │ (Public)    │→ │ (Private)   │→ │ (Isolated)  │         │
+│  │ 172.32.1.0  │  │ 172.32.10.0 │  │ 172.32.20.0 │         │
+│  │   /24       │  │    /24      │  │    /24      │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘         │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │      Security Layer: CloudTrail + Flow Logs         │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+            </pre>
+        </div>
     </section>
 
-    <section class="card">
+    <section id="design-goals" class="card">
         <h2>Core Design Goals</h2>
-        <ul>
-            <li>Maintain FERPA-aligned data isolation and access controls</li>
-            <li>Eliminate all public attack surfaces through network segmentation</li>
-            <li>Enforce IAM least privilege and multi-factor authentication</li>
-            <li>Ensure full auditability via CloudTrail and VPC Flow Logs</li>
-            <li>Implement defense-in-depth with multiple security layers</li>
-            <li>Enable high availability through multi-AZ deployment</li>
-        </ul>
+        
+        <div class="goals-grid">
+            <div class="goal-card">
+                <div class="goal-icon">🔐</div>
+                <div class="goal-title">FERPA Alignment</div>
+                <div class="goal-desc">Maintain data isolation and access controls aligned with educational privacy requirements</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">🛡️</div>
+                <div class="goal-title">Zero Public Exposure</div>
+                <div class="goal-desc">Eliminate all public attack surfaces through network segmentation</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">👤</div>
+                <div class="goal-title">Least Privilege</div>
+                <div class="goal-desc">Enforce IAM least privilege and multi-factor authentication</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">📊</div>
+                <div class="goal-title">Full Auditability</div>
+                <div class="goal-desc">Ensure complete audit trail via CloudTrail and VPC Flow Logs</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">🏗️</div>
+                <div class="goal-title">Defense-in-Depth</div>
+                <div class="goal-desc">Implement multiple security layers at each tier</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">🔄</div>
+                <div class="goal-title">High Availability</div>
+                <div class="goal-desc">Enable multi-AZ deployment for business continuity</div>
+            </div>
+        </div>
     </section>
 
-    <section class="card">
+    <section id="security-controls" class="card">
         <h2>Security Controls</h2>
-        <ul>
-            <li><strong>Network Isolation:</strong> Database tier has no internet gateway route</li>
-            <li><strong>Encryption:</strong> Customer-managed KMS keys for all data at rest</li>
-            <li><strong>Access Control:</strong> Tag-based S3 access policies and IAM conditions</li>
-            <li><strong>Monitoring:</strong> GuardDuty threat detection and CloudWatch alarms</li>
-            <li><strong>Audit Logging:</strong> Complete audit trail of all API calls and network traffic</li>
-        </ul>
+        
+        <div class="controls-table">
+            <div class="control-row header">
+                <div class="control-category">Control</div>
+                <div class="control-implementation">Implementation</div>
+                <div class="control-status">Status</div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Network Isolation</div>
+                <div class="control-implementation">Database tier has no internet gateway route</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Encryption at Rest</div>
+                <div class="control-implementation">Customer-managed KMS keys for all data</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Access Control</div>
+                <div class="control-implementation">Tag-based S3 access policies and IAM conditions</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Threat Detection</div>
+                <div class="control-implementation">GuardDuty threat detection and CloudWatch alarms</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+            <div class="control-row">
+                <div class="control-category">Audit Logging</div>
+                <div class="control-implementation">Complete audit trail of all API calls and network traffic</div>
+                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+            </div>
+        </div>
     </section>
 
-    <section class="card">
+    <section id="technology-components" class="card">
         <h2>Technology Components</h2>
-        <ul>
-            <li><strong>Networking:</strong> AWS VPC, Security Groups, NACLs, NAT Gateway, VPC Endpoints</li>
-            <li><strong>Compute:</strong> EC2, ECS Fargate, Lambda, Application Load Balancer</li>
-            <li><strong>Database:</strong> RDS PostgreSQL Multi-AZ with automated backups</li>
-            <li><strong>Storage:</strong> S3 with SSE-KMS encryption and versioning</li>
-            <li><strong>Security:</strong> IAM, KMS, CloudTrail, GuardDuty, AWS WAF</li>
-            <li><strong>Monitoring:</strong> CloudWatch, VPC Flow Logs, CloudTrail</li>
-        </ul>
+        
+        <div class="tech-table">
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">🌐</span>
+                    Networking
+                </div>
+                <div class="tech-items">AWS VPC, Security Groups, NACLs, NAT Gateway, VPC Endpoints</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">⚙️</span>
+                    Compute
+                </div>
+                <div class="tech-items">EC2, ECS Fargate, Lambda, Application Load Balancer</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">🗄️</span>
+                    Database
+                </div>
+                <div class="tech-items">RDS PostgreSQL Multi-AZ with automated backups</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">📦</span>
+                    Storage
+                </div>
+                <div class="tech-items">S3 with SSE-KMS encryption and versioning</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">🔐</span>
+                    Security
+                </div>
+                <div class="tech-items">IAM, KMS, CloudTrail, GuardDuty, AWS WAF</div>
+            </div>
+            <div class="tech-row">
+                <div class="tech-category">
+                    <span class="tech-icon">📊</span>
+                    Monitoring
+                </div>
+                <div class="tech-items">CloudWatch, VPC Flow Logs, CloudTrail</div>
+            </div>
+        </div>
     </section>
 
-    <section class="card">
+    <section id="compliance" class="card">
+        <h2>Compliance & Standards</h2>
+        
+        <div class="compliance-grid">
+            <div class="compliance-item">
+                <div class="compliance-badge">FERPA</div>
+                <div class="compliance-desc">Family Educational Rights and Privacy Act alignment for student data protection</div>
+            </div>
+            <div class="compliance-item">
+                <div class="compliance-badge">CIS</div>
+                <div class="compliance-desc">Center for Internet Security AWS Foundations Benchmark compliance</div>
+            </div>
+            <div class="compliance-item">
+                <div class="compliance-badge">Well-Architected</div>
+                <div class="compliance-desc">AWS Well-Architected Framework security pillar best practices</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="resources" class="card">
         <h2>Additional Resources</h2>
-        <ul>
-            <li><a href="architecture.html">Detailed Architecture Documentation</a></li>
-            <li><a href="interactive-diagram.html">Interactive Network Diagram</a></li>
-            <li><a href="automation.html">IAM Automation Workflow</a></li>
-            <li><a href="security-simulator.html">Security Attack Simulations</a></li>
-        </ul>
+        
+        <div class="resources-grid">
+            <a href="architecture.html" class="resource-link">
+                <span class="resource-icon">🏗️</span>
+                <span class="resource-title">Detailed Architecture</span>
+                <span class="resource-desc">In-depth architecture documentation</span>
+            </a>
+            <a href="interactive-diagram.html" class="resource-link">
+                <span class="resource-icon">🗺️</span>
+                <span class="resource-title">Interactive Diagram</span>
+                <span class="resource-desc">Explore the VPC visually</span>
+            </a>
+            <a href="automation.html" class="resource-link">
+                <span class="resource-icon">⚙️</span>
+                <span class="resource-title">IAM Automation</span>
+                <span class="resource-desc">Provisioning workflow details</span>
+            </a>
+            <a href="security-simulator.html" class="resource-link">
+                <span class="resource-icon">🛡️</span>
+                <span class="resource-title">Security Simulator</span>
+                <span class="resource-desc">Test attack defenses</span>
+            </a>
+        </div>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>Documentation • AWS Student Data Infrastructure • 2025</p>
+    <div class="footer-content">
+        <p>Documentation • AWS Student Data Infrastructure • 2025</p>
+        <p class="footer-links">
+            <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
+                View on GitHub
+            </a>
+        </p>
+    </div>
 </footer>
+
+<script>
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('mobile-open');
+    this.classList.toggle('active');
+});
+
+// Smooth scroll for TOC links
+document.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
+</script>
 </body>
 </html>
-HTMLEOF
-
-echo "✅ docs.html created"
