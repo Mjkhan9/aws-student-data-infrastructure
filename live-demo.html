@@ -5,6 +5,23 @@
     <title>Live IAM Demo | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Interactive IAM automation demo showing real-time user provisioning with security controls and audit logging.">
+    <meta name="keywords" content="AWS, IAM Demo, Live Demo, Interactive Demo, Cloud Automation, DevOps">
+    <meta name="author" content="Jawad Khan">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Live IAM Demo | AWS Student Data Infrastructure">
+    <meta property="og:description" content="Interactive IAM automation demo showing real-time user provisioning with security controls.">
+    <meta property="og:url" content="https://mjkhan9.github.io/aws-student-data-infrastructure/live-demo.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Live IAM Demo | AWS Student Data Infrastructure">
+    <meta name="twitter:description" content="Interactive IAM automation demo with real-time provisioning simulation.">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://mjkhan9.github.io/aws-student-data-infrastructure/live-demo.html">
+    
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     <style>
@@ -187,10 +204,10 @@
 <body>
 <header class="site-header">
     <div>
-        <div class="logo">
+        <a href="index.html" class="logo">
             <span class="logo-icon">☁</span>
             AWS Student Data Infrastructure
-        </div>
+        </a>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="architecture.html">Architecture</a>
@@ -455,6 +472,14 @@ async function runDemo() {
 document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
     document.querySelector('.nav-links').classList.toggle('mobile-open');
     this.classList.toggle('active');
+});
+
+// Close mobile menu when clicking on a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', function() {
+        document.querySelector('.nav-links').classList.remove('mobile-open');
+        document.querySelector('.mobile-menu-toggle').classList.remove('active');
+    });
 });
 </script>
 </body>
