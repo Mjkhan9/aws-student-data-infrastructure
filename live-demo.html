@@ -4,29 +4,20 @@
     <meta charset="UTF-8">
     <title>Live IAM Demo | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive IAM automation demo showing real-time user provisioning with security controls and audit logging.">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     <style>
-        /* Live Demo - AWS Console Style */
-        .demo-page .content {
-            padding-top: 8px !important;
-        }
-        
-        .demo-page .card {
-            margin-top: 8px !important;
-            padding-top: 12px !important;
-            padding-bottom: 12px !important;
-        }
-        
         .demo-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-            margin-top: 12px;
+            margin-top: 16px;
         }
         
         .run-button-container {
             text-align: center;
-            padding: 32px 0;
+            padding: 32px;
             background: var(--aws-panel-bg);
             border: 1px solid var(--aws-border);
             border-radius: var(--aws-radius);
@@ -35,9 +26,9 @@
         
         .run-button {
             background: var(--aws-orange);
-            color: white;
+            color: var(--aws-squid-ink);
             border: none;
-            padding: 16px 40px;
+            padding: 16px 48px;
             font-size: 16px;
             font-weight: 700;
             border-radius: var(--aws-radius);
@@ -48,37 +39,52 @@
         }
         
         .run-button:hover:not(:disabled) {
-            background: #e88b00;
-            transform: translateY(-1px);
+            background: var(--aws-orange-dark);
+            transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
         
         .run-button:disabled {
             background: var(--aws-border);
             cursor: not-allowed;
-            opacity: 0.5;
+            opacity: 0.6;
+            transform: none;
         }
         
-        .console-output {
+        .console-section {
             background: var(--aws-card-bg);
             border: 1px solid var(--aws-border);
             border-radius: var(--aws-radius);
-            padding: 16px;
+            overflow: hidden;
         }
         
-        .console-output h2 {
-            font-size: 16px;
-            color: var(--aws-text-primary);
-            margin-bottom: 12px;
-            font-weight: 700;
-            border: none;
-            padding: 0;
+        .console-header {
+            background: var(--aws-squid-ink);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--aws-border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .console-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .console-dot.red { background: #ff5f56; }
+        .console-dot.yellow { background: #ffbd2e; }
+        .console-dot.green { background: #27c93f; }
+        
+        .console-title {
+            color: var(--aws-text-tertiary);
+            font-size: 13px;
+            margin-left: 8px;
         }
         
         .console-window {
             background: #0d1117;
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
             padding: 16px;
             min-height: 400px;
             max-height: 500px;
@@ -103,48 +109,60 @@
         .log-warning { color: #d29922; }
         .log-error { color: #f85149; }
         .log-dim { color: #8b949e; }
+        .log-header { color: var(--aws-orange); font-weight: 700; }
         
-        .iam-state {
+        .state-section {
             background: var(--aws-card-bg);
             border: 1px solid var(--aws-border);
             border-radius: var(--aws-radius);
             padding: 16px;
         }
         
-        .iam-state h2 {
-            font-size: 16px;
-            color: var(--aws-text-primary);
-            margin-bottom: 12px;
-            font-weight: 700;
-            border: none;
-            padding: 0;
-        }
-        
-        .state-section {
-            background: var(--aws-panel-bg);
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-        
         .state-section h3 {
+            font-size: 14px;
+            color: var(--aws-text-primary);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--aws-border);
+        }
+        
+        .state-group {
+            margin-bottom: 16px;
+        }
+        
+        .state-group-title {
             font-size: 11px;
             color: var(--aws-text-tertiary);
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
-            border: none;
+        }
+        
+        .state-items {
+            min-height: 60px;
         }
         
         .state-item {
-            background: var(--aws-card-bg);
+            background: var(--aws-panel-bg);
             border-left: 3px solid var(--aws-green);
             padding: 8px 12px;
             margin: 4px 0;
             border-radius: var(--aws-radius);
             font-size: 12px;
+            color: var(--aws-text-secondary);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
         .state-item.pending {
@@ -166,21 +184,29 @@
         }
     </style>
 </head>
-<body class="demo-page">
+<body>
 <header class="site-header">
     <div>
-        <div class="logo">AWS Student Data Infrastructure</div>
+        <div class="logo">
+            <span class="logo-icon">☁</span>
+            AWS Student Data Infrastructure
+        </div>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="architecture.html">Architecture</a>
             <a href="automation.html">IAM Automation</a>
             <a href="docs.html">Documentation</a>
-            <a href="review.html">Faculty Review</a>
+            <a href="review.html">Project Review</a>
             <a href="live-demo.html" class="active">Live Demo</a>
             <a href="interactive-diagram.html">Interactive Diagram</a>
             <a href="cost-calculator.html">Cost Calculator</a>
             <a href="security-simulator.html">Security Simulator</a>
         </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
 </header>
 
@@ -190,7 +216,7 @@
         <p>
             Watch the IAM provisioning pipeline execute in real-time in your browser. This demonstration 
             simulates the production automation workflow including group validation, policy attachment, 
-            user creation, and compliance reporting. No AWS credentials required.
+            user creation, and compliance reporting. <strong>No AWS credentials required</strong> — this is a safe simulation.
         </p>
     </section>
 
@@ -198,37 +224,60 @@
         <button id="runButton" class="run-button" onclick="runDemo()">
             ▶ Run IAM Automation
         </button>
+        <p style="margin-top: 12px; font-size: 12px; color: var(--aws-text-tertiary);">
+            Click to start the provisioning simulation
+        </p>
     </div>
 
     <div class="demo-layout">
-        <div class="console-output">
-            <h2>Console Output</h2>
-            <div id="consoleWindow" class="console-window"></div>
+        <div class="console-section">
+            <div class="console-header">
+                <span class="console-dot red"></span>
+                <span class="console-dot yellow"></span>
+                <span class="console-dot green"></span>
+                <span class="console-title">iam_provisioner.py — Output</span>
+            </div>
+            <div id="consoleWindow" class="console-window">
+                <div class="log-line log-dim">Waiting to start...</div>
+            </div>
         </div>
         
-        <div class="iam-state">
-            <h2>IAM State</h2>
+        <div class="state-section">
+            <h3>IAM State Monitor</h3>
             
-            <div class="state-section">
-                <h3>IAM Groups</h3>
-                <div id="groupsList" class="state-empty">Groups will appear here...</div>
+            <div class="state-group">
+                <div class="state-group-title">IAM Groups</div>
+                <div id="groupsList" class="state-items">
+                    <div class="state-empty">Groups will appear here...</div>
+                </div>
             </div>
             
-            <div class="state-section">
-                <h3>Provisioned Users</h3>
-                <div id="usersList" class="state-empty">Users will appear here...</div>
+            <div class="state-group">
+                <div class="state-group-title">Provisioned Users</div>
+                <div id="usersList" class="state-items">
+                    <div class="state-empty">Users will appear here...</div>
+                </div>
             </div>
             
-            <div class="state-section">
-                <h3>Applied Policies</h3>
-                <div id="policiesList" class="state-empty">Policies will appear here...</div>
+            <div class="state-group">
+                <div class="state-group-title">Applied Policies</div>
+                <div id="policiesList" class="state-items">
+                    <div class="state-empty">Policies will appear here...</div>
+                </div>
             </div>
         </div>
     </div>
 </main>
 
 <footer class="site-footer">
-    <p>Live IAM Automation Demo • AWS Student Data Infrastructure • 2025</p>
+    <div class="footer-content">
+        <p>Live IAM Automation Demo • AWS Student Data Infrastructure • 2025</p>
+        <p class="footer-links">
+            <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
+                View on GitHub
+            </a>
+        </p>
+    </div>
 </footer>
 
 <script>
@@ -247,16 +296,23 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function addStateItem(listId, content, pending = false) {
+function addStateItem(listId, content) {
     const list = document.getElementById(listId);
     if (list.querySelector('.state-empty')) {
         list.innerHTML = '';
     }
     const item = document.createElement('div');
-    item.className = pending ? 'state-item pending' : 'state-item';
+    item.className = 'state-item';
     item.textContent = content;
     list.appendChild(item);
     return item;
+}
+
+function clearState() {
+    document.getElementById('consoleWindow').innerHTML = '';
+    document.getElementById('groupsList').innerHTML = '<div class="state-empty">Groups will appear here...</div>';
+    document.getElementById('usersList').innerHTML = '<div class="state-empty">Users will appear here...</div>';
+    document.getElementById('policiesList').innerHTML = '<div class="state-empty">Policies will appear here...</div>';
 }
 
 async function runDemo() {
@@ -267,24 +323,28 @@ async function runDemo() {
     button.disabled = true;
     button.textContent = '⏳ Running...';
     
-    document.getElementById('consoleWindow').innerHTML = '';
-    document.getElementById('groupsList').innerHTML = '<div class="state-empty">Groups will appear here...</div>';
-    document.getElementById('usersList').innerHTML = '<div class="state-empty">Users will appear here...</div>';
-    document.getElementById('policiesList').innerHTML = '<div class="state-empty">Policies will appear here...</div>';
+    clearState();
     
-    log('═══════════════════════════════════════════════', 'dim');
-    log('IAM AUTOMATION PIPELINE v2.1.0', 'info');
-    log('University of Houston Student Data Infrastructure', 'dim');
-    log('═══════════════════════════════════════════════', 'dim');
+    // Header
+    log('═══════════════════════════════════════════════════════', 'dim');
+    log('  AWS IAM PROVISIONING AUTOMATION v2.1.0', 'header');
+    log('  Student Data Infrastructure Project', 'dim');
+    log('═══════════════════════════════════════════════════════', 'dim');
     await sleep(800);
     
+    // Initialization
+    log('', 'dim');
     log('[INIT] Initializing IAM automation workflow...', 'info');
     await sleep(600);
     log('[INIT] Loading configuration from provisioning.yaml', 'dim');
     await sleep(500);
     log('[INIT] Validating AWS credentials... ✓', 'success');
+    await sleep(400);
+    log('[INIT] Session established in us-east-1', 'dim');
     await sleep(700);
     
+    // Groups
+    log('', 'dim');
     log('[GROUPS] Creating IAM groups...', 'info');
     await sleep(600);
     
@@ -298,84 +358,104 @@ async function runDemo() {
     for (const group of groups) {
         log(`[GROUPS] Creating group: ${group}`, 'dim');
         addStateItem('groupsList', group);
-        await sleep(500);
-        log(`[GROUPS] ✓ ${group} created successfully`, 'success');
         await sleep(400);
+        log(`[GROUPS] ✓ ${group} created successfully`, 'success');
+        await sleep(300);
     }
     
+    // Policies
+    log('', 'dim');
     log('[POLICY] Attaching managed policies to groups...', 'info');
     await sleep(600);
     
     const policies = [
-        'AmazonS3ReadOnlyAccess → StudentDataReadOnly',
-        'StudentDataCustomPolicy → StudentDataAdmin',
-        'CloudWatchLogsReadOnlyAccess → AuditViewers'
+        { name: 'AmazonS3ReadOnlyAccess', group: 'StudentDataReadOnly' },
+        { name: 'StudentDataCustomPolicy', group: 'StudentDataAdmin' },
+        { name: 'CloudWatchLogsReadOnly', group: 'AuditViewers' }
     ];
     
     for (const policy of policies) {
-        log(`[POLICY] Attaching: ${policy}`, 'dim');
-        addStateItem('policiesList', policy.split(' → ')[0]);
-        await sleep(500);
-        log(`[POLICY] ✓ Policy attached successfully`, 'success');
+        log(`[POLICY] Attaching: ${policy.name}`, 'dim');
+        addStateItem('policiesList', policy.name);
         await sleep(400);
+        log(`[POLICY] ✓ Attached to ${policy.group}`, 'success');
+        await sleep(300);
     }
     
+    // Users
+    log('', 'dim');
     log('[USERS] Provisioning IAM users...', 'info');
     await sleep(600);
     
     const users = [
-        { name: 'john.smith', group: 'StudentDataReadOnly' },
-        { name: 'sarah.johnson', group: 'StudentDataAdmin' },
-        { name: 'mike.williams', group: 'ReportsGeneration' }
+        { name: 'registrar_analyst', group: 'StudentDataReadOnly', dept: 'Registrar' },
+        { name: 'data_admin', group: 'StudentDataAdmin', dept: 'IT' },
+        { name: 'report_generator', group: 'ReportsGeneration', dept: 'Analytics' },
+        { name: 'compliance_auditor', group: 'AuditViewers', dept: 'Compliance' }
     ];
     
     for (const user of users) {
         log(`[USERS] Creating user: ${user.name}`, 'dim');
-        await sleep(500);
+        await sleep(300);
+        log(`[USERS] Tagging: Department=${user.dept}, MFARequired=true`, 'dim');
+        await sleep(300);
         log(`[USERS] Adding ${user.name} to ${user.group}`, 'dim');
         addStateItem('usersList', `${user.name} (${user.group})`);
-        await sleep(500);
+        await sleep(300);
         log(`[USERS] ✓ ${user.name} provisioned successfully`, 'success');
         await sleep(400);
     }
     
-    log('[TAGS] Applying resource tags...', 'info');
-    await sleep(600);
+    // Tags
+    log('', 'dim');
+    log('[TAGS] Applying compliance tags...', 'info');
+    await sleep(500);
     log('[TAGS] Environment: Production', 'dim');
-    await sleep(300);
+    await sleep(200);
     log('[TAGS] Project: StudentDataInfrastructure', 'dim');
-    await sleep(300);
+    await sleep(200);
     log('[TAGS] ManagedBy: Automation', 'dim');
-    await sleep(500);
-    log('[TAGS] ✓ Tags applied successfully', 'success');
+    await sleep(200);
+    log('[TAGS] ✓ Tags applied to all resources', 'success');
     await sleep(700);
     
-    log('[AUDIT] Generating CloudTrail compliance report...', 'info');
-    await sleep(800);
-    log('[AUDIT] ✓ All actions logged to CloudTrail', 'success');
-    await sleep(500);
-    
+    // Validation
+    log('', 'dim');
     log('[VALIDATE] Running post-provisioning validation...', 'info');
-    await sleep(700);
-    log('[VALIDATE] ✓ All users have MFA enforcement', 'success');
-    await sleep(400);
+    await sleep(600);
+    log('[VALIDATE] ✓ All users have MFA enforcement tag', 'success');
+    await sleep(300);
     log('[VALIDATE] ✓ Password policy meets requirements', 'success');
-    await sleep(400);
+    await sleep(300);
     log('[VALIDATE] ✓ No overly permissive policies detected', 'success');
+    await sleep(300);
+    log('[VALIDATE] ✓ All actions logged to CloudTrail', 'success');
     await sleep(700);
     
-    log('═══════════════════════════════════════════════', 'dim');
-    log('✓ PROVISIONING COMPLETE', 'success');
-    log(`Total users created: ${users.length}`, 'info');
-    log(`Total groups created: ${groups.length}`, 'info');
-    log(`Execution time: 12.3 seconds`, 'info');
-    log(`Error rate: 0%`, 'success');
-    log('═══════════════════════════════════════════════', 'dim');
+    // Summary
+    log('', 'dim');
+    log('═══════════════════════════════════════════════════════', 'dim');
+    log('  ✓ PROVISIONING COMPLETE', 'success');
+    log('═══════════════════════════════════════════════════════', 'dim');
+    log('', 'dim');
+    log(`  Users created:     ${users.length}`, 'info');
+    log(`  Groups created:    ${groups.length}`, 'info');
+    log(`  Policies attached: ${policies.length}`, 'info');
+    log(`  Execution time:    2.4 seconds`, 'info');
+    log(`  Error rate:        0%`, 'success');
+    log('', 'dim');
+    log('═══════════════════════════════════════════════════════', 'dim');
     
     button.disabled = false;
-    button.textContent = '▶ Run IAM Automation';
+    button.textContent = '▶ Run Again';
     isRunning = false;
 }
+
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('mobile-open');
+    this.classList.toggle('active');
+});
 </script>
 </body>
 </html>
