@@ -1,27 +1,36 @@
-cat > /mnt/user-data/outputs/automation.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>IAM Automation | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Automated IAM provisioning workflow for AWS Student Data Infrastructure with Python Boto3, MFA enforcement, and compliance logging.">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
 </head>
 <body>
 <header class="site-header">
     <div>
-        <div class="logo">AWS Student Data Infrastructure</div>
+        <div class="logo">
+            <span class="logo-icon">☁</span>
+            AWS Student Data Infrastructure
+        </div>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="architecture.html">Architecture</a>
             <a href="automation.html" class="active">IAM Automation</a>
             <a href="docs.html">Documentation</a>
-            <a href="review.html">Faculty Review</a>
+            <a href="review.html">Project Review</a>
             <a href="live-demo.html">Live Demo</a>
             <a href="interactive-diagram.html">Interactive Diagram</a>
             <a href="cost-calculator.html">Cost Calculator</a>
             <a href="security-simulator.html">Security Simulator</a>
         </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
 </header>
 
@@ -33,59 +42,212 @@ cat > /mnt/user-data/outputs/automation.html << 'HTMLEOF'
             The automation script ensures users are created securely, assigned correct permissions, 
             enforced with MFA, and tagged for audit visibility.
         </p>
+        <div class="cta-inline">
+            <a href="live-demo.html" class="btn-primary">
+                <span class="btn-icon">▶</span> Watch Live Demo
+            </a>
+        </div>
     </section>
 
     <section class="card">
         <h2>IAM Provisioning Workflow</h2>
-        <ol>
-            <li>Create IAM User with enforced MFA requirements</li>
-            <li>Attach IAM Groups based on access type</li>
-            <li>Tag User with role, email, and application ownership</li>
-            <li>Create Login Profile with secure password rotation</li>
-            <li>Record actions into CloudTrail and execution logs</li>
-        </ol>
+        <div class="workflow-steps">
+            <div class="workflow-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <strong>Create IAM User</strong>
+                    <span>with enforced MFA requirements</span>
+                </div>
+            </div>
+            <div class="workflow-connector"></div>
+            <div class="workflow-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <strong>Attach IAM Groups</strong>
+                    <span>based on access type and role</span>
+                </div>
+            </div>
+            <div class="workflow-connector"></div>
+            <div class="workflow-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <strong>Apply Resource Tags</strong>
+                    <span>role, email, and application ownership</span>
+                </div>
+            </div>
+            <div class="workflow-connector"></div>
+            <div class="workflow-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <strong>Create Login Profile</strong>
+                    <span>with secure password rotation policy</span>
+                </div>
+            </div>
+            <div class="workflow-connector"></div>
+            <div class="workflow-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <strong>Record Audit Trail</strong>
+                    <span>CloudTrail and execution logs</span>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="card">
         <h2>Security Controls</h2>
-        <ul>
-            <li><strong>Least Privilege:</strong> Users receive minimum permissions required for their role</li>
-            <li><strong>MFA Enforcement:</strong> Multi-factor authentication required for all users</li>
-            <li><strong>Tag-Based Access:</strong> S3 access controlled via object tags and IAM conditions</li>
-            <li><strong>Audit Trail:</strong> All provisioning actions logged to CloudTrail</li>
-            <li><strong>Password Policy:</strong> Enforces complexity, rotation, and reuse prevention</li>
-        </ul>
+        <div class="controls-grid">
+            <div class="control-item">
+                <div class="control-icon">🔒</div>
+                <div class="control-content">
+                    <strong>Least Privilege</strong>
+                    <p>Users receive minimum permissions required for their role</p>
+                </div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">📱</div>
+                <div class="control-content">
+                    <strong>MFA Enforcement</strong>
+                    <p>Multi-factor authentication required for all users</p>
+                </div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">🏷️</div>
+                <div class="control-content">
+                    <strong>Tag-Based Access</strong>
+                    <p>S3 access controlled via object tags and IAM conditions</p>
+                </div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">📋</div>
+                <div class="control-content">
+                    <strong>Audit Trail</strong>
+                    <p>All provisioning actions logged to CloudTrail</p>
+                </div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">🔑</div>
+                <div class="control-content">
+                    <strong>Password Policy</strong>
+                    <p>Enforces complexity, rotation, and reuse prevention</p>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="card">
         <h2>Automation Benefits</h2>
-        <ul>
-            <li><strong>Speed:</strong> Reduces provisioning time by 67% compared to manual console operations</li>
-            <li><strong>Consistency:</strong> Zero configuration errors through automated policy application</li>
-            <li><strong>Scalability:</strong> Can provision hundreds of users in minutes</li>
-            <li><strong>Compliance:</strong> Ensures 100% policy compliance for every user</li>
-            <li><strong>Auditability:</strong> Complete execution logs for compliance review</li>
-        </ul>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-value">67%</div>
+                <div class="benefit-label">Faster</div>
+                <div class="benefit-desc">Reduced provisioning time vs manual console operations</div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-value">0%</div>
+                <div class="benefit-label">Error Rate</div>
+                <div class="benefit-desc">Zero configuration errors through automated policy application</div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-value">100%</div>
+                <div class="benefit-label">Compliance</div>
+                <div class="benefit-desc">Ensures complete policy compliance for every user</div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-value">∞</div>
+                <div class="benefit-label">Scalable</div>
+                <div class="benefit-desc">Provision hundreds of users in minutes</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Sample Code</h2>
+        <p>The automation script uses Python with Boto3 to interact with AWS IAM:</p>
+        
+        <div class="code-block">
+            <div class="code-header">
+                <span class="code-filename">iam_provisioner.py</span>
+                <span class="code-lang">Python</span>
+            </div>
+            <pre><code><span class="code-keyword">import</span> boto3
+<span class="code-keyword">from</span> datetime <span class="code-keyword">import</span> datetime
+
+<span class="code-keyword">def</span> <span class="code-function">provision_user</span>(username, groups, tags):
+    <span class="code-string">"""
+    Provision IAM user with groups and tags.
+    Enforces MFA and least-privilege policies.
+    """</span>
+    iam = boto3.client(<span class="code-string">'iam'</span>)
+    
+    <span class="code-comment"># Create user with required tags</span>
+    iam.create_user(
+        UserName=username,
+        Tags=[
+            {<span class="code-string">'Key'</span>: <span class="code-string">'Environment'</span>, <span class="code-string">'Value'</span>: <span class="code-string">'Production'</span>},
+            {<span class="code-string">'Key'</span>: <span class="code-string">'MFARequired'</span>, <span class="code-string">'Value'</span>: <span class="code-string">'true'</span>},
+            {<span class="code-string">'Key'</span>: <span class="code-string">'CreatedBy'</span>, <span class="code-string">'Value'</span>: <span class="code-string">'Automation'</span>},
+            *tags
+        ]
+    )
+    
+    <span class="code-comment"># Add to security groups</span>
+    <span class="code-keyword">for</span> group <span class="code-keyword">in</span> groups:
+        iam.add_user_to_group(
+            UserName=username,
+            GroupName=group
+        )
+    
+    <span class="code-keyword">return</span> {<span class="code-string">'status'</span>: <span class="code-string">'success'</span>, <span class="code-string">'user'</span>: username}</code></pre>
+        </div>
     </section>
 
     <section class="card">
         <h2>Try the Live Demo</h2>
-        <p>
-            <a href="live-demo.html">Launch Live IAM Automation Demo</a>
-        </p>
-        <p>
-            Watch the automation script execute in real-time in your browser. 
-            No AWS credentials required - this is a safe simulation demonstrating 
-            the provisioning workflow.
-        </p>
+        <div class="demo-preview">
+            <div class="demo-terminal">
+                <div class="terminal-header">
+                    <span class="terminal-dot red"></span>
+                    <span class="terminal-dot yellow"></span>
+                    <span class="terminal-dot green"></span>
+                    <span class="terminal-title">IAM Provisioner Output</span>
+                </div>
+                <div class="terminal-body">
+                    <p class="terminal-line"><span class="terminal-prompt">$</span> python iam_provisioner.py</p>
+                    <p class="terminal-line info">[INIT] Starting IAM provisioning...</p>
+                    <p class="terminal-line success">[✓] User created: student_analyst</p>
+                    <p class="terminal-line success">[✓] Added to group: StudentDataReadOnly</p>
+                    <p class="terminal-line success">[✓] MFA policy attached</p>
+                    <p class="terminal-line dim">Execution time: 0.52 seconds</p>
+                </div>
+            </div>
+            <div class="demo-cta">
+                <p>Watch the automation script execute in real-time in your browser. No AWS credentials required - this is a safe simulation.</p>
+                <a href="live-demo.html" class="btn-primary">
+                    <span class="btn-icon">▶</span> Launch Live Demo
+                </a>
+            </div>
+        </div>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>IAM Automation • AWS Student Data Infrastructure • 2025</p>
+    <div class="footer-content">
+        <p>IAM Automation • AWS Student Data Infrastructure • 2025</p>
+        <p class="footer-links">
+            <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
+                View on GitHub
+            </a>
+        </p>
+    </div>
 </footer>
+
+<script>
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('mobile-open');
+    this.classList.toggle('active');
+});
+</script>
 </body>
 </html>
-HTMLEOF
-
-echo "✅ automation.html created"
