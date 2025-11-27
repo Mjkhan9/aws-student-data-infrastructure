@@ -1,11 +1,29 @@
-cat > /mnt/user-data/outputs/cost-calculator.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Cost Calculator | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate AWS infrastructure costs and ROI for student data infrastructure with real-time cost estimation and automation savings analysis.">
+    <meta name="keywords" content="AWS, Cost Calculator, Cloud Cost Estimation, ROI Analysis, AWS Pricing, Infrastructure Costs">
+    <meta name="author" content="Jawad Khan">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Cost Calculator | AWS Student Data Infrastructure">
+    <meta property="og:description" content="Calculate AWS infrastructure costs and ROI with real-time estimation and automation savings analysis.">
+    <meta property="og:url" content="https://mjkhan9.github.io/aws-student-data-infrastructure/cost-calculator.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cost Calculator | AWS Student Data Infrastructure">
+    <meta name="twitter:description" content="Calculate AWS infrastructure costs and ROI with real-time estimation.">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://mjkhan9.github.io/aws-student-data-infrastructure/cost-calculator.html">
+    
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     <style>
         /* Cost Calculator - AWS Console Style */
         
@@ -265,18 +283,26 @@ cat > /mnt/user-data/outputs/cost-calculator.html << 'HTMLEOF'
 <body class="calculator-page">
 <header class="site-header">
     <div>
-        <div class="logo">AWS Student Data Infrastructure</div>
+        <a href="index.html" class="logo">
+            <span class="logo-icon">☁</span>
+            AWS Student Data Infrastructure
+        </a>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="architecture.html">Architecture</a>
             <a href="automation.html">IAM Automation</a>
             <a href="docs.html">Documentation</a>
-            <a href="review.html">Project Summary</a>
+            <a href="review.html">Project Review</a>
             <a href="live-demo.html">Live Demo</a>
             <a href="interactive-diagram.html">Interactive Diagram</a>
             <a href="cost-calculator.html" class="active">Cost Calculator</a>
             <a href="security-simulator.html">Security Simulator</a>
         </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
 </header>
 
@@ -443,7 +469,14 @@ cat > /mnt/user-data/outputs/cost-calculator.html << 'HTMLEOF'
 </main>
 
 <footer class="site-footer">
-    <p>AWS Cost & ROI Calculator • AWS Student Data Infrastructure • 2025</p>
+    <div class="footer-content">
+        <p>AWS Cost & ROI Calculator • AWS Student Data Infrastructure • 2025</p>
+        <p class="footer-links">
+            <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
+                View on GitHub
+            </a>
+        </p>
+    </div>
 </footer>
 
 <script>
@@ -540,9 +573,20 @@ updateSliderValue("ecsTaskCount", "ecsTaskCountValue", "");
 updateSliderValue("dataTransfer", "dataTransferValue", " GB");
 
 calculateCosts();
+
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('mobile-open');
+    this.classList.toggle('active');
+});
+
+// Close mobile menu when clicking on a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', function() {
+        document.querySelector('.nav-links').classList.remove('mobile-open');
+        document.querySelector('.mobile-menu-toggle').classList.remove('active');
+    });
+});
 </script>
 </body>
 </html>
-HTMLEOF
-
-echo "✅ cost-calculator.html FIXED - AWS theme with tight spacing"
