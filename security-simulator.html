@@ -34,7 +34,7 @@
 
         .simulator-grid {
             display: grid;
-            grid-template-columns: 300px minmax(0, 1.4fr) minmax(0, 1fr);
+            grid-template-columns: 280px minmax(0, 1.5fr) minmax(280px, 1fr);
             gap: 16px;
             align-items: flex-start;
         }
@@ -55,7 +55,7 @@
             margin-top: 8px;
         }
 
-        /* Attack scenario buttons reuse AWS attack-button styles but tuned for panel */
+        /* Attack scenario buttons */
         .attack-list-header {
             margin-bottom: 8px;
             font-size: 12px;
@@ -75,7 +75,7 @@
         }
 
         .threat-high    { background: rgba(209, 50, 18, 0.12);  border-color: var(--aws-red);    color: var(--aws-red-light); }
-        .threat-medium { background: rgba(255, 153, 0, 0.08); border-color: var(--aws-yellow); color: var(--aws-yellow); }
+        .threat-medium  { background: rgba(255, 153, 0, 0.08);  border-color: var(--aws-yellow); color: var(--aws-yellow); }
         .threat-critical { background: rgba(123, 97, 255, 0.12); border-color: #7b61ff; color: #e5deff; }
 
         .attack-title-row {
@@ -97,8 +97,8 @@
             background: var(--aws-panel-bg);
             border-radius: var(--aws-radius-lg);
             border: 1px solid var(--aws-border);
-            padding: 20px 20px 16px 52px;
-            overflow: hidden;
+            padding: 20px;
+            overflow: visible; /* Changed from hidden to visible */
         }
 
         .arch-label {
@@ -115,8 +115,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 24px;
-            margin-top: 12px;
+            gap: 16px;
+            margin-top: 24px;
+            padding: 0 8px;
+            position: relative;
         }
 
         .connections-svg {
@@ -138,11 +140,15 @@
             background: var(--aws-card-bg);
             border-radius: var(--aws-radius);
             border: 1px solid var(--aws-border);
-            padding: 12px 14px;
-            min-width: 120px;
+            padding: 12px 10px;
+            min-width: 100px;
+            max-width: 120px;
+            flex: 1;
             text-align: center;
             box-shadow: var(--aws-shadow-sm);
             transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+            position: relative;
+            z-index: 2;
         }
 
         .node-icon {
@@ -158,21 +164,21 @@
         }
 
         .node-name {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: var(--aws-text-primary);
             margin-bottom: 2px;
         }
 
         .node-detail {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--aws-text-tertiary);
         }
 
         .node.highlight {
             border-color: var(--aws-yellow);
             background: #293541;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
         }
 
         .node.blocked {
@@ -182,20 +188,21 @@
 
         .attacker {
             position: absolute;
-            left: 8px;
+            left: -36px;
             top: 50%;
-            transform: translateY(-50%) translateX(-40px);
-            width: 40px;
-            height: 40px;
+            transform: translateY(-50%) translateX(-20px);
+            width: 36px;
+            height: 36px;
             border-radius: 999px;
             background: linear-gradient(135deg, var(--aws-red), var(--aws-red-light));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             box-shadow: 0 0 12px rgba(209, 50, 18, 0.6);
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
         }
 
         .attacker.active {
@@ -213,6 +220,7 @@
             border: 2px solid var(--aws-green-light);
             opacity: 0;
             pointer-events: none;
+            z-index: 20;
         }
 
         .shield.active {
@@ -239,6 +247,7 @@
             opacity: 0;
             box-shadow: var(--aws-shadow-lg);
             white-space: nowrap;
+            z-index: 30;
         }
 
         .blocked-banner.show {
@@ -287,7 +296,7 @@
             box-shadow: 0 0 8px rgba(46, 160, 67, 0.7);
         }
 
-        /* Event log uses console-output styles */
+        /* Event log */
         .log-container {
             max-height: 220px;
             overflow-y: auto;
@@ -302,10 +311,15 @@
             animation: fadeInUp 0.15s ease-out;
         }
 
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
         .log-time {
             opacity: 0.7;
             flex-shrink: 0;
-            width: 90px;
+            width: 80px;
         }
 
         .log-entry.info    { color: var(--aws-blue-light); }
@@ -314,6 +328,13 @@
         .log-entry.error   { color: var(--aws-red-light); }
 
         /* Tabs */
+        .tech-tabs {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: var(--aws-radius-lg);
+            overflow: hidden;
+        }
+
         .tabs-nav {
             display: flex;
             border-bottom: 1px solid var(--aws-border);
@@ -332,6 +353,10 @@
             letter-spacing: 0.5px;
             cursor: pointer;
             transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .tab-btn:hover {
+            background: var(--aws-card-bg);
         }
 
         .tab-btn.active {
@@ -447,6 +472,18 @@
             color: var(--aws-text-primary);
         }
 
+        .runbook h4:first-child {
+            margin-top: 0;
+        }
+
+        .runbook ul {
+            margin-left: 16px;
+        }
+
+        .runbook li {
+            margin: 4px 0;
+        }
+
         /* Right-side explanation */
         .whats-happening {
             background: linear-gradient(135deg, #244372, #16191f);
@@ -466,12 +503,18 @@
         .wh-content {
             font-size: 13px;
             color: var(--aws-text-secondary);
+            line-height: 1.5;
+        }
+
+        .wh-content strong {
+            color: var(--aws-orange);
         }
 
         .analogy-card {
             border-radius: var(--aws-radius-lg);
             border: 1px solid var(--aws-border);
             background: var(--aws-panel-bg);
+            overflow: hidden;
         }
 
         .analogy-header {
@@ -486,6 +529,7 @@
             padding: 12px 14px 14px;
             font-size: 13px;
             color: var(--aws-text-secondary);
+            line-height: 1.5;
         }
 
         .emoji-icon {
@@ -493,9 +537,10 @@
             margin-right: 6px;
         }
 
+        /* Responsive */
         @media (max-width: 1200px) {
             .simulator-grid {
-                grid-template-columns: minmax(0, 1fr);
+                grid-template-columns: 1fr;
             }
 
             .sim-left,
@@ -503,12 +548,35 @@
             .sim-right {
                 width: 100%;
             }
+
+            .architecture-diagram {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .node {
+                min-width: 100px;
+                max-width: 140px;
+            }
         }
 
         @media (max-width: 768px) {
             .sim-title-row {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+
+            .architecture-diagram {
+                gap: 12px;
+            }
+
+            .node {
+                min-width: 80px;
+                padding: 10px 8px;
+            }
+
+            .node-name {
+                font-size: 10px;
             }
         }
     </style>
@@ -589,7 +657,7 @@
                     <span>Attack Scenarios</span>
                 </div>
                 <div class="attack-list-header">
-                    Select an attack to launch a guided simulation of how this architecture responds.
+                    Select an attack to launch a guided simulation.
                 </div>
 
                 <button class="attack-button" data-attack="direct-db">
@@ -647,12 +715,6 @@
             <div class="architecture-container">
                 <div class="arch-label">Three-Tier VPC Path</div>
 
-                <svg class="connections-svg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
-                    <path id="conn1" class="connection" d="M100,100 L200,100" />
-                    <path id="conn2" class="connection" d="M260,100 L360,100" />
-                    <path id="conn3" class="connection" d="M420,100 L520,100" />
-                </svg>
-
                 <div class="architecture-diagram">
                     <div class="attacker" id="attacker">🥷</div>
 
@@ -664,30 +726,30 @@
 
                     <div class="node" id="node-gateway">
                         <div class="node-icon">🚧</div>
-                        <div class="node-name">Entry Gateway</div>
-                        <div class="node-detail">ALB + (WAF-ready)</div>
+                        <div class="node-name">Gateway</div>
+                        <div class="node-detail">ALB + WAF</div>
                     </div>
 
                     <div class="node" id="node-app">
                         <div class="node-icon">⚙️</div>
                         <div class="node-name">App Tier</div>
-                        <div class="node-detail">Private Subnets</div>
+                        <div class="node-detail">Private</div>
                     </div>
 
                     <div class="node" id="node-db">
                         <div class="node-icon">🗄️</div>
-                        <div class="node-name">RDS Tier</div>
-                        <div class="node-detail">Isolated Subnets</div>
+                        <div class="node-name">Database</div>
+                        <div class="node-detail">Isolated</div>
                     </div>
 
                     <div class="shield" id="shield"></div>
-                    <div class="blocked-banner" id="blockedBanner">✓ Attack blocked by defense-in-depth</div>
+                    <div class="blocked-banner" id="blockedBanner">✓ Attack Blocked</div>
                 </div>
 
-                <div class="defense-layers mt-sm">
+                <div class="defense-layers">
                     <div class="defense-layer" id="layer-sg">
                         <span class="dot"></span>
-                        Security Groups (tier-to-tier)
+                        Security Groups
                     </div>
                     <div class="defense-layer" id="layer-nacl">
                         <span class="dot"></span>
@@ -695,7 +757,7 @@
                     </div>
                     <div class="defense-layer" id="layer-iam">
                         <span class="dot"></span>
-                        IAM &amp; SCPs
+                        IAM Policies
                     </div>
                     <div class="defense-layer" id="layer-encryption">
                         <span class="dot"></span>
@@ -703,24 +765,22 @@
                     </div>
                     <div class="defense-layer" id="layer-monitoring">
                         <span class="dot"></span>
-                        GuardDuty &amp; CloudTrail
+                        GuardDuty
                     </div>
                 </div>
             </div>
 
-            <div class="state-section mt-md">
+            <div class="card">
                 <h3>Security Event Stream</h3>
-                <div class="console-output" id="logContainer">
-                    <div class="console-line info" style="margin-bottom: 4px;">
-                        [--:--:--] Security monitoring active. Select an attack scenario to begin.
-                    </div>
-                    <div class="console-line success">
-                        [--:--:--] ✓ All tiers isolated; IAM and logging are enabled.
+                <div class="console-output log-container" id="logContainer">
+                    <div class="log-entry info">
+                        <span class="log-time">[--:--:--]</span>
+                        <span>Security monitoring active. Select an attack scenario to begin.</span>
                     </div>
                 </div>
             </div>
 
-            <div class="tech-tabs mt-md">
+            <div class="tech-tabs">
                 <div class="tabs-nav">
                     <button class="tab-btn active" data-tab="code">Attack Code</button>
                     <button class="tab-btn" data-tab="finding">Security Alert</button>
@@ -728,19 +788,19 @@
                 </div>
                 <div class="tab-content active" id="tab-code">
                     <div class="placeholder" id="codePlaceholder">
-                        💻 Select an attack on the left to see what the attacker would run.
+                        💻 Select an attack to see what the attacker would run.
                     </div>
                     <div class="code-block" id="codeDisplay" style="display: none;"></div>
                 </div>
                 <div class="tab-content" id="tab-finding">
                     <div class="placeholder" id="findingPlaceholder">
-                        🔍 When an attack runs, a GuardDuty-style finding will be rendered here.
+                        🔍 When an attack runs, a GuardDuty-style finding will appear here.
                     </div>
                     <div id="findingDisplay" style="display: none;"></div>
                 </div>
                 <div class="tab-content" id="tab-response">
                     <div class="placeholder" id="responsePlaceholder">
-                        🛠️ You’ll see incident response steps for each scenario here.
+                        🛠️ Incident response steps will appear here.
                     </div>
                     <div class="runbook" id="responseDisplay" style="display: none;"></div>
                 </div>
@@ -749,10 +809,8 @@
 
         <!-- Right: Narrative & context -->
         <aside class="sim-right">
-            <div class="whats-happening" id="whatsHappening">
-                <div class="wh-title">
-                    💡 What’s happening in this simulation
-                </div>
+            <div class="whats-happening">
+                <div class="wh-title">💡 What's Happening</div>
                 <div class="wh-content" id="whContent">
                     This simulator walks through realistic attack paths against a FERPA-aligned AWS environment.
                     Each step shows which control fires (network, IAM, encryption, or monitoring) and why the
@@ -760,10 +818,8 @@
                 </div>
             </div>
 
-            <div class="analogy-card" id="analogyCard">
-                <div class="analogy-header">
-                    Real-world analogy
-                </div>
+            <div class="analogy-card">
+                <div class="analogy-header">🏠 Real-World Analogy</div>
                 <div class="analogy-body" id="analogyContent">
                     <span class="emoji-icon">🏢</span>
                     Think of a secured university records office: a receptionist up front, badge-locked doors between
@@ -773,11 +829,11 @@
             </div>
 
             <div class="card">
-                <h2>Why this matters for student data</h2>
-                <p id="whyMatters">
+                <h3>Why This Matters</h3>
+                <p id="whyMatters" style="font-size: 13px; color: var(--aws-text-secondary); line-height: 1.5;">
                     Student information systems hold grades, addresses, and financial aid details. A single misconfigured
-                    control can turn into a reportable breach. These simulations mirror the kind of attacks that actually
-                    hit universities and show how layered AWS controls help keep FERPA-regulated data safe.
+                    control can turn into a reportable breach. These simulations show how layered AWS controls help keep
+                    FERPA-regulated data safe.
                 </p>
             </div>
         </aside>
@@ -801,7 +857,6 @@ const attacks = {
         targetNodes: ["node-internet", "node-db"],
         defenseLayers: ["layer-sg", "layer-nacl"],
         
-        // Plain English explanation
         whatsHappening: `A hacker is trying to <strong>connect directly to our database</strong> from the internet — like trying to walk straight into a bank vault from the street.
         <br><br>
         Our security stops this because the database is in a <strong>private network</strong> with no public address. It's literally unreachable from outside.`,
@@ -1215,9 +1270,9 @@ aws s3api put-bucket-policy --bucket student-records \\
 };
 
 // ============================================
-// DOM ELEMENTS
+// DOM ELEMENTS - FIXED: Use .attack-button not .attack-btn
 // ============================================
-const attackBtns = document.querySelectorAll('.attack-btn');
+const attackBtns = document.querySelectorAll('.attack-button');
 const tabBtns = document.querySelectorAll('.tab-btn');
 const logContainer = document.getElementById('logContainer');
 const attacker = document.getElementById('attacker');
@@ -1237,7 +1292,7 @@ function timestamp() {
 
 function log(type, msg) {
     const entry = document.createElement('div');
-    entry.className = `console-line ${type}`;
+    entry.className = `log-entry ${type}`;
     entry.innerHTML = `<span class="log-time">[${timestamp()}]</span><span>${msg}</span>`;
     logContainer.appendChild(entry);
     logContainer.scrollTop = logContainer.scrollHeight;
@@ -1327,7 +1382,10 @@ async function runSimulation(attackId) {
     isSimulating = true;
 
     const attack = attacks[attackId];
-    if (!attack) return;
+    if (!attack) {
+        isSimulating = false;
+        return;
+    }
 
     // Disable buttons
     attackBtns.forEach(b => b.disabled = true);
@@ -1410,16 +1468,23 @@ async function runSimulation(attackId) {
 // EVENT LISTENERS
 // ============================================
 attackBtns.forEach(btn => {
-    btn.addEventListener('click', () => runSimulation(btn.dataset.attack));
+    btn.addEventListener('click', () => {
+        const attackId = btn.dataset.attack;
+        if (attackId) {
+            runSimulation(attackId);
+        }
+    });
 });
 
 tabBtns.forEach(btn => {
     btn.addEventListener('click', () => showTab(btn.dataset.tab));
 });
 
-// Init
-log('info', 'Security monitoring active');
-log('success', '✓ All defense layers operational');
+// Initialize with welcome message
+document.addEventListener('DOMContentLoaded', () => {
+    log('info', 'Security monitoring active');
+    log('success', '✓ All defense layers operational');
+});
 </script>
 
 </body>
