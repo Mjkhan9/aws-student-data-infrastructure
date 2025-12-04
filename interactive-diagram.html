@@ -2,579 +2,651 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Interactive Architecture | AWS Student Data Infrastructure</title>
+    <title>AWS Student Data Infrastructure | Cloud Security Portfolio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interactive VPC architecture diagram with animated network traffic, real-time security visualization, and attack simulation.">
+    <meta name="description" content="Production-grade AWS cloud architecture for student data systems featuring three-tier VPC, IAM automation, KMS encryption, and comprehensive security controls.">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     <style>
         /* ============================================
-           INTERACTIVE DIAGRAM - CINEMATIC EXPERIENCE
+           STUNNING HOME PAGE
            ============================================ */
         
-        .diagram-container {
+        /* Hero with animated background */
+        .hero-spectacular {
             position: relative;
-            background: linear-gradient(180deg, #0a0e14 0%, #111820 50%, #0d1117 100%);
-            border-radius: 12px;
-            padding: 0;
-            overflow: hidden;
-            min-height: 700px;
-            border: 1px solid rgba(255, 153, 0, 0.2);
-        }
-        
-        /* Animated grid background */
-        .diagram-container::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: 
-                linear-gradient(rgba(30, 143, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(30, 143, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridPulse 4s ease-in-out infinite;
-        }
-        
-        @keyframes gridPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-        
-        /* Control bar */
-        .diagram-controls {
-            position: relative;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 24px;
-            background: rgba(22, 25, 31, 0.95);
-            border-bottom: 1px solid var(--aws-border);
-            backdrop-filter: blur(10px);
-        }
-        
-        .view-modes {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .view-btn {
-            padding: 10px 20px;
-            background: transparent;
-            border: 1px solid var(--aws-border);
-            border-radius: 6px;
-            color: var(--aws-text-secondary);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-        
-        .view-btn:hover {
-            background: rgba(255, 153, 0, 0.1);
-            border-color: var(--aws-orange);
-            color: var(--aws-orange);
-        }
-        
-        .view-btn.active {
-            background: var(--aws-orange);
-            border-color: var(--aws-orange);
-            color: #000;
-        }
-        
-        .traffic-toggle {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .toggle-label {
-            font-size: 13px;
-            color: var(--aws-text-secondary);
-        }
-        
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 26px;
-            background: var(--aws-border);
-            border-radius: 13px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        
-        .toggle-switch.active {
-            background: var(--aws-green);
-        }
-        
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-        }
-        
-        .toggle-switch.active::after {
-            transform: translateX(24px);
-        }
-        
-        /* Main SVG canvas */
-        .network-canvas {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            height: 550px;
-        }
-        
-        .network-canvas svg {
-            width: 100%;
-            height: 100%;
-        }
-        
-        /* Node styling */
-        .node-group {
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        
-        .node-group:hover {
-            transform: scale(1.05);
-        }
-        
-        .node-bg {
-            transition: all 0.3s ease;
-        }
-        
-        .node-group:hover .node-bg {
-            filter: brightness(1.2);
-        }
-        
-        .node-group.selected .node-bg {
-            stroke: var(--aws-orange);
-            stroke-width: 3;
-            filter: drop-shadow(0 0 20px rgba(255, 153, 0, 0.5));
-        }
-        
-        .node-icon {
-            font-size: 28px;
-            pointer-events: none;
-        }
-        
-        .node-label {
-            font-size: 13px;
-            font-weight: 700;
-            fill: var(--aws-text-primary);
-            pointer-events: none;
-        }
-        
-        .node-sublabel {
-            font-size: 10px;
-            fill: var(--aws-text-tertiary);
-            pointer-events: none;
-        }
-        
-        /* Animated connection lines */
-        .connection-line {
-            stroke: rgba(100, 116, 139, 0.4);
-            stroke-width: 2;
-            fill: none;
-        }
-        
-        .connection-line.active {
-            stroke: rgba(46, 160, 67, 0.6);
-            stroke-width: 3;
-        }
-        
-        /* Animated traffic particles */
-        .traffic-particle {
-            fill: var(--aws-green-light);
-            filter: drop-shadow(0 0 6px rgba(46, 160, 67, 0.8));
-        }
-        
-        .traffic-particle.request {
-            fill: var(--aws-blue-light);
-            filter: drop-shadow(0 0 6px rgba(30, 143, 255, 0.8));
-        }
-        
-        .traffic-particle.attack {
-            fill: var(--aws-red-light);
-            filter: drop-shadow(0 0 8px rgba(255, 89, 71, 0.9));
-        }
-        
-        .traffic-particle.blocked {
-            fill: var(--aws-red);
-            animation: particleBlock 0.3s ease-out forwards;
-        }
-        
-        @keyframes particleBlock {
-            0% { r: 6; opacity: 1; }
-            100% { r: 20; opacity: 0; }
-        }
-        
-        /* Security shield effect */
-        .shield-ring {
-            fill: none;
-            stroke: var(--aws-green-light);
-            stroke-width: 2;
-            opacity: 0;
-        }
-        
-        .shield-ring.active {
-            animation: shieldPulse 0.6s ease-out;
-        }
-        
-        @keyframes shieldPulse {
-            0% { r: 30; opacity: 0.8; stroke-width: 4; }
-            100% { r: 60; opacity: 0; stroke-width: 1; }
-        }
-        
-        /* Node glow effects */
-        .node-glow {
-            fill: none;
-            stroke: var(--aws-green-light);
-            stroke-width: 2;
-            opacity: 0;
-            animation: nodeGlow 2s ease-in-out infinite;
-        }
-        
-        .node-glow.pulse {
-            animation: nodeGlow 1s ease-in-out infinite;
-        }
-        
-        @keyframes nodeGlow {
-            0%, 100% { opacity: 0; r: 45; }
-            50% { opacity: 0.5; r: 50; }
-        }
-        
-        /* Info panel */
-        .info-panel {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: rgba(22, 25, 31, 0.95);
-            border: 1px solid var(--aws-border);
-            border-radius: 12px;
-            padding: 24px;
-            backdrop-filter: blur(10px);
-            z-index: 50;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-        
-        .info-panel.visible {
-            transform: translateY(0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-        
-        .info-panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-        }
-        
-        .info-panel-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--aws-text-primary);
-            margin: 0;
-        }
-        
-        .info-panel-badge {
-            padding: 6px 12px;
-            background: rgba(255, 153, 0, 0.15);
-            border: 1px solid var(--aws-orange);
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--aws-orange);
-            text-transform: uppercase;
-        }
-        
-        .info-panel-desc {
-            color: var(--aws-text-secondary);
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        
-        .info-panel-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
-        
-        .info-item {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 14px;
-            border-radius: 8px;
-            border-left: 3px solid var(--aws-orange);
-        }
-        
-        .info-item-label {
-            font-size: 11px;
-            color: var(--aws-text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
-        
-        .info-item-value {
-            font-size: 14px;
-            color: var(--aws-text-primary);
-            font-weight: 600;
-        }
-        
-        .close-panel {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 32px;
-            height: 32px;
-            background: transparent;
-            border: 1px solid var(--aws-border);
-            border-radius: 50%;
-            color: var(--aws-text-secondary);
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            min-height: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(135deg, #0a0e14 0%, #16191f 50%, #0d1117 100%);
+            border-radius: 16px;
+            margin-bottom: 32px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 153, 0, 0.2);
         }
         
-        .close-panel:hover {
-            background: var(--aws-red);
-            border-color: var(--aws-red);
-            color: white;
-        }
-        
-        /* Live stats overlay */
-        .live-stats {
+        /* Animated grid */
+        .hero-grid {
             position: absolute;
-            top: 80px;
-            right: 20px;
-            background: rgba(22, 25, 31, 0.9);
-            border: 1px solid var(--aws-border);
-            border-radius: 8px;
-            padding: 16px;
-            z-index: 20;
-            min-width: 180px;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255, 153, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 153, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridFloat 20s linear infinite;
         }
         
-        .live-stats-title {
-            font-size: 11px;
-            color: var(--aws-text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            display: flex;
+        @keyframes gridFloat {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Glowing orbs */
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        
+        .hero-orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 153, 0, 0.4), transparent 70%);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+        
+        .hero-orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(30, 143, 255, 0.3), transparent 70%);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: -4s;
+        }
+        
+        .hero-orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.3), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -2s;
+        }
+        
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -20px) scale(1.05); }
+            50% { transform: translate(-10px, 10px) scale(0.95); }
+            75% { transform: translate(15px, 15px) scale(1.02); }
+        }
+        
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--aws-orange);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 10s linear infinite;
+        }
+        
+        @keyframes particleFloat {
+            0% { 
+                opacity: 0;
+                transform: translateY(100%) scale(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                opacity: 0;
+                transform: translateY(-100vh) scale(1);
+            }
+        }
+        
+        /* Hero content */
+        .hero-content-wrap {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px 40px;
+            max-width: 900px;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
             align-items: center;
             gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 153, 0, 0.1);
+            border: 1px solid rgba(255, 153, 0, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--aws-orange);
+            font-weight: 600;
+            margin-bottom: 24px;
+            animation: badgePulse 2s ease-in-out infinite;
         }
         
-        .live-dot {
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0.2); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 153, 0, 0); }
+        }
+        
+        .hero-badge .dot {
             width: 8px;
             height: 8px;
             background: var(--aws-green-light);
             border-radius: 50%;
-            animation: livePulse 1.5s ease-in-out infinite;
+            animation: dotPulse 1.5s ease-in-out infinite;
         }
         
-        @keyframes livePulse {
+        @keyframes dotPulse {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.5; transform: scale(0.8); }
         }
         
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .stat-row:last-child {
-            border-bottom: none;
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: var(--aws-text-secondary);
-        }
-        
-        .stat-value {
-            font-size: 14px;
+        .hero-spectacular h1 {
+            font-size: 56px;
             font-weight: 700;
-            color: var(--aws-green-light);
-            font-family: Monaco, monospace;
+            color: var(--aws-text-primary);
+            margin-bottom: 20px;
+            line-height: 1.1;
+            letter-spacing: -1px;
         }
         
-        .stat-value.warning {
-            color: var(--aws-yellow);
+        .hero-spectacular h1 .highlight {
+            background: linear-gradient(135deg, var(--aws-orange), var(--aws-orange-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
-        .stat-value.danger {
-            color: var(--aws-red-light);
+        .hero-typing {
+            height: 32px;
+            margin-bottom: 32px;
         }
         
-        /* Security layers indicator */
-        .security-layers {
-            position: absolute;
-            top: 80px;
-            left: 20px;
-            background: rgba(22, 25, 31, 0.9);
+        .typing-text {
+            font-size: 20px;
+            color: var(--aws-text-secondary);
+            border-right: 2px solid var(--aws-orange);
+            padding-right: 4px;
+            animation: cursorBlink 0.8s infinite;
+        }
+        
+        @keyframes cursorBlink {
+            0%, 50% { border-color: var(--aws-orange); }
+            51%, 100% { border-color: transparent; }
+        }
+        
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        
+        .hero-tag {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--aws-border);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+            transition: all 0.2s ease;
+        }
+        
+        .hero-tag:hover {
+            border-color: var(--aws-orange);
+            color: var(--aws-orange);
+            transform: translateY(-2px);
+        }
+        
+        .hero-tag .tag-icon {
+            margin-right: 6px;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-hero-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--aws-orange), var(--aws-orange-dark));
+            color: var(--aws-squid-ink);
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 8px 32px rgba(255, 153, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hero-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 153, 0, 0.4);
+        }
+        
+        .btn-hero-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: transparent;
+            color: var(--aws-text-primary);
+            font-size: 16px;
+            font-weight: 600;
             border: 1px solid var(--aws-border);
             border-radius: 8px;
-            padding: 16px;
-            z-index: 20;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
         
-        .security-layers-title {
-            font-size: 11px;
+        .btn-hero-secondary:hover {
+            border-color: var(--aws-orange);
+            color: var(--aws-orange);
+            transform: translateY(-2px);
+        }
+        
+        /* Stats with animations */
+        .stats-spectacular {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--aws-card-bg), var(--aws-panel-bg));
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 28px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--aws-orange), transparent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--aws-orange);
+        }
+        
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        
+        .stat-number {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--aws-orange);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        
+        .stat-number.green { color: var(--aws-green-light); }
+        .stat-number.blue { color: var(--aws-blue-light); }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+            font-weight: 600;
+        }
+        
+        /* Feature showcase */
+        .features-showcase {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin: 40px 0;
+        }
+        
+        .feature-showcase-card {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+            display: flex;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-showcase-card:hover {
+            border-color: var(--aws-orange);
+            transform: translateX(8px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-icon-large {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+        
+        .feature-icon-large.orange { background: rgba(255, 153, 0, 0.15); }
+        .feature-icon-large.blue { background: rgba(30, 143, 255, 0.15); }
+        .feature-icon-large.green { background: rgba(46, 160, 67, 0.15); }
+        .feature-icon-large.purple { background: rgba(123, 97, 255, 0.15); }
+        
+        .feature-content h3 {
+            font-size: 18px;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
+            border: none;
+            padding: 0;
+        }
+        
+        .feature-content p {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        /* Interactive tools grid */
+        .tools-spectacular {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 32px 0;
+        }
+        
+        .tool-spectacular {
+            position: relative;
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 28px;
+            text-decoration: none;
+            color: inherit;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-spectacular::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 153, 0, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .tool-spectacular:hover::before {
+            opacity: 1;
+        }
+        
+        .tool-spectacular:hover {
+            border-color: var(--aws-orange);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .tool-icon-wrap {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+        }
+        
+        .tool-title-wrap h3 {
+            font-size: 18px;
+            color: var(--aws-text-primary);
+            margin: 0 0 4px 0;
+            border: none;
+            padding: 0;
+        }
+        
+        .tool-badge {
+            font-size: 10px;
+            color: var(--aws-orange);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        
+        .tool-desc {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .tool-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--aws-orange);
+            font-weight: 600;
+            position: relative;
+            transition: gap 0.2s ease;
+        }
+        
+        .tool-spectacular:hover .tool-cta {
+            gap: 12px;
+        }
+        
+        /* Author section */
+        .author-spectacular {
+            background: linear-gradient(135deg, var(--aws-card-bg), var(--aws-panel-bg));
+            border: 1px solid var(--aws-border);
+            border-radius: 16px;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .author-info h3 {
+            font-size: 14px;
             color: var(--aws-text-tertiary);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            border: none;
+            padding: 0;
         }
         
-        .layer-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            font-size: 12px;
+        .author-name-large {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .author-role {
+            font-size: 16px;
+            color: var(--aws-orange);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        .author-bio {
+            font-size: 14px;
             color: var(--aws-text-secondary);
+            line-height: 1.7;
+            margin-bottom: 24px;
+            max-width: 500px;
         }
         
-        .layer-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--aws-border);
-            transition: all 0.3s ease;
-        }
-        
-        .layer-dot.active {
-            background: var(--aws-green-light);
-            box-shadow: 0 0 10px rgba(46, 160, 67, 0.6);
-        }
-        
-        /* Attack mode overlay */
-        .attack-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(209, 50, 18, 0.05);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            z-index: 5;
-        }
-        
-        .attack-overlay.active {
-            opacity: 1;
-            animation: attackPulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes attackPulse {
-            0%, 100% { background: rgba(209, 50, 18, 0.03); }
-            50% { background: rgba(209, 50, 18, 0.08); }
-        }
-        
-        /* Legend */
-        .diagram-legend {
+        .author-links-row {
             display: flex;
-            justify-content: center;
-            gap: 32px;
-            padding: 16px;
-            background: rgba(22, 25, 31, 0.8);
-            border-top: 1px solid var(--aws-border);
+            gap: 16px;
         }
         
-        .legend-item {
-            display: flex;
+        .author-link-btn {
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 12px;
+            padding: 10px 20px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 6px;
+            font-size: 14px;
             color: var(--aws-text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
         }
         
-        .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
+        .author-link-btn:hover {
+            border-color: var(--aws-orange);
+            color: var(--aws-orange);
         }
         
-        .legend-color.public { background: #4a7cb8; }
-        .legend-color.private { background: #6b5ba3; }
-        .legend-color.isolated { background: #b84a7c; }
-        .legend-color.storage { background: #2d8659; }
-        .legend-color.security { background: var(--aws-orange); }
-        
-        /* Attack blocked notification */
-        .attack-notification {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            background: linear-gradient(135deg, rgba(29, 129, 2, 0.95), rgba(46, 160, 67, 0.95));
-            padding: 24px 48px;
-            border-radius: 12px;
-            z-index: 100;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(46, 160, 67, 0.4);
+        .certifications {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
         
-        .attack-notification.show {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
+        .cert-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 10px;
+            transition: all 0.2s ease;
         }
         
-        .attack-notification-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
+        .cert-card:hover {
+            border-color: var(--aws-orange);
+            transform: translateX(4px);
         }
         
-        .attack-notification-text {
-            font-size: 20px;
-            font-weight: 700;
-            color: white;
+        .cert-icon {
+            font-size: 32px;
         }
         
-        .attack-notification-sub {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.8);
-            margin-top: 8px;
+        .cert-info {
+            flex: 1;
+        }
+        
+        .cert-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--aws-text-primary);
+        }
+        
+        .cert-issuer {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
         }
         
         /* Responsive */
         @media (max-width: 1024px) {
-            .diagram-controls {
-                flex-direction: column;
-                gap: 16px;
+            .stats-spectacular {
+                grid-template-columns: repeat(2, 1fr);
             }
             
-            .live-stats, .security-layers {
-                position: relative;
-                top: auto;
-                left: auto;
-                right: auto;
-                margin: 16px;
-            }
-            
-            .info-panel-grid {
+            .features-showcase,
+            .tools-spectacular {
                 grid-template-columns: 1fr;
+            }
+            
+            .author-spectacular {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-spectacular h1 {
+                font-size: 36px;
+            }
+            
+            .hero-content-wrap {
+                padding: 40px 24px;
+            }
+            
+            .stats-spectacular {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            
+            .stat-card {
+                padding: 20px;
+            }
+            
+            .stat-number {
+                font-size: 32px;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+            }
+            
+            .btn-hero-primary,
+            .btn-hero-secondary {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -587,13 +659,13 @@
             AWS Student Data Infrastructure
         </a>
         <nav class="nav-links">
-            <a href="index.html">Home</a>
+            <a href="index.html" class="active">Home</a>
             <a href="architecture.html">Architecture</a>
             <a href="automation.html">IAM Automation</a>
             <a href="docs.html">Documentation</a>
             <a href="review.html">Project Review</a>
             <a href="live-demo.html">Live Demo</a>
-            <a href="interactive-diagram.html" class="active">Interactive Diagram</a>
+            <a href="interactive-diagram.html">Interactive Diagram</a>
             <a href="cost-calculator.html">Cost Calculator</a>
             <a href="security-simulator.html">Security Simulator</a>
         </nav>
@@ -606,252 +678,237 @@
 </header>
 
 <main class="content">
-    <section class="card" style="margin-bottom: 24px;">
-        <h1>Interactive Network Architecture</h1>
-        <p>
-            Experience the three-tier VPC architecture in real-time. Watch encrypted traffic flow between tiers, 
-            see security controls activate, and simulate attack scenarios to understand defense-in-depth protection.
-        </p>
+    <!-- Spectacular Hero -->
+    <section class="hero-spectacular">
+        <div class="hero-grid"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        
+        <div class="particles" id="particles"></div>
+        
+        <div class="hero-content-wrap">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                AWS Certified • Production Ready
+            </div>
+            
+            <h1>
+                AWS Student Data<br>
+                <span class="highlight">Infrastructure</span>
+            </h1>
+            
+            <div class="hero-typing">
+                <span class="typing-text" id="typingText"></span>
+            </div>
+            
+            <div class="hero-tags">
+                <span class="hero-tag"><span class="tag-icon">🏗️</span>Three-Tier VPC</span>
+                <span class="hero-tag"><span class="tag-icon">🔐</span>KMS Encryption</span>
+                <span class="hero-tag"><span class="tag-icon">⚙️</span>IAM Automation</span>
+                <span class="hero-tag"><span class="tag-icon">🛡️</span>GuardDuty</span>
+                <span class="hero-tag"><span class="tag-icon">📊</span>CloudTrail</span>
+            </div>
+            
+            <div class="hero-cta">
+                <a href="live-demo.html" class="btn-hero-primary">
+                    <span>▶</span>
+                    <span>Launch Live Demo</span>
+                </a>
+                <a href="architecture.html" class="btn-hero-secondary">
+                    <span>View Architecture</span>
+                    <span>→</span>
+                </a>
+            </div>
+        </div>
     </section>
-
-    <div class="diagram-container">
-        <div class="diagram-controls">
-            <div class="view-modes">
-                <button class="view-btn active" data-view="architecture">🏗️ Architecture</button>
-                <button class="view-btn" data-view="traffic">📡 Data Flow</button>
-                <button class="view-btn" data-view="attack">🛡️ Attack Simulation</button>
+    
+    <!-- Stats -->
+    <section class="stats-spectacular">
+        <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-number green" data-target="67">0</div>
+            <div class="stat-label">% Faster Provisioning</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✓</div>
+            <div class="stat-number green" data-target="0">0</div>
+            <div class="stat-label">% Error Rate</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔒</div>
+            <div class="stat-number" data-target="100">0</div>
+            <div class="stat-label">% Encryption Coverage</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🛡️</div>
+            <div class="stat-number blue" data-target="3">0</div>
+            <div class="stat-label">Security Tiers</div>
+        </div>
+    </section>
+    
+    <!-- Overview Card -->
+    <section class="card">
+        <h2>Project Overview</h2>
+        <p>
+            This portfolio project demonstrates production-grade AWS deployment patterns for 
+            securing sensitive student data systems. The implementation showcases three-tier VPC architecture, 
+            automated IAM provisioning, comprehensive encryption, and defense-in-depth security controls.
+        </p>
+        
+        <div class="features-showcase">
+            <div class="feature-showcase-card">
+                <div class="feature-icon-large orange">🏗️</div>
+                <div class="feature-content">
+                    <h3>Network Architecture</h3>
+                    <p>Three-tier VPC with complete database isolation, NAT gateways for secure outbound access, and zero public attack surface for sensitive resources.</p>
+                </div>
             </div>
-            <div class="traffic-toggle">
-                <span class="toggle-label">Live Traffic</span>
-                <div class="toggle-switch" id="trafficToggle"></div>
+            <div class="feature-showcase-card">
+                <div class="feature-icon-large blue">🔐</div>
+                <div class="feature-content">
+                    <h3>Security Controls</h3>
+                    <p>Defense-in-depth with customer-managed KMS encryption, comprehensive audit trails via CloudTrail, and GuardDuty threat detection.</p>
+                </div>
+            </div>
+            <div class="feature-showcase-card">
+                <div class="feature-icon-large green">⚙️</div>
+                <div class="feature-content">
+                    <h3>IAM Automation</h3>
+                    <p>Python-based provisioning pipeline reducing user setup time by 67% with zero configuration errors and full audit logging.</p>
+                </div>
+            </div>
+            <div class="feature-showcase-card">
+                <div class="feature-icon-large purple">📊</div>
+                <div class="feature-content">
+                    <h3>Monitoring & Logging</h3>
+                    <p>Complete visibility through VPC Flow Logs, CloudWatch metrics, and centralized log aggregation for security analysis.</p>
+                </div>
             </div>
         </div>
+    </section>
+    
+    <!-- Interactive Tools -->
+    <section class="card">
+        <h2>Interactive Demonstrations</h2>
+        <p>Explore the infrastructure through hands-on simulations and visualizations.</p>
         
-        <div class="attack-overlay" id="attackOverlay"></div>
-        
-        <div class="security-layers" id="securityLayers">
-            <div class="security-layers-title">Defense Layers</div>
-            <div class="layer-item">
-                <span class="layer-dot" id="layer-nacl"></span>
-                <span>Network ACLs</span>
+        <div class="tools-spectacular">
+            <a href="live-demo.html" class="tool-spectacular">
+                <div class="tool-header">
+                    <div class="tool-icon-wrap">▶️</div>
+                    <div class="tool-title-wrap">
+                        <h3>IAM Automation Demo</h3>
+                        <span class="tool-badge">Watch Live</span>
+                    </div>
+                </div>
+                <p class="tool-desc">Watch the complete IAM provisioning pipeline execute in real-time with visual progress tracking and audit logging.</p>
+                <span class="tool-cta">Launch Demo <span>→</span></span>
+            </a>
+            
+            <a href="security-simulator.html" class="tool-spectacular">
+                <div class="tool-header">
+                    <div class="tool-icon-wrap">🛡️</div>
+                    <div class="tool-title-wrap">
+                        <h3>Security Attack Simulator</h3>
+                        <span class="tool-badge">Interactive</span>
+                    </div>
+                </div>
+                <p class="tool-desc">Simulate real attack scenarios and watch how each security control activates to protect student data.</p>
+                <span class="tool-cta">Launch Simulator <span>→</span></span>
+            </a>
+            
+            <a href="interactive-diagram.html" class="tool-spectacular">
+                <div class="tool-header">
+                    <div class="tool-icon-wrap">🗺️</div>
+                    <div class="tool-title-wrap">
+                        <h3>Network Architecture</h3>
+                        <span class="tool-badge">Explorable</span>
+                    </div>
+                </div>
+                <p class="tool-desc">Interactive VPC diagram with clickable components showing security configurations and data flow.</p>
+                <span class="tool-cta">Explore Diagram <span>→</span></span>
+            </a>
+            
+            <a href="cost-calculator.html" class="tool-spectacular">
+                <div class="tool-header">
+                    <div class="tool-icon-wrap">💰</div>
+                    <div class="tool-title-wrap">
+                        <h3>Cost Calculator</h3>
+                        <span class="tool-badge">Real Pricing</span>
+                    </div>
+                </div>
+                <p class="tool-desc">Calculate monthly infrastructure costs with animated visualizations and ROI analysis.</p>
+                <span class="tool-cta">Open Calculator <span>→</span></span>
+            </a>
+        </div>
+    </section>
+    
+    <!-- Technology Stack -->
+    <section class="card">
+        <h2>Technology Stack</h2>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="tech-label">Networking</div>
+                <div class="tech-value">AWS VPC, Security Groups, NACLs, NAT Gateway, VPC Endpoints</div>
             </div>
-            <div class="layer-item">
-                <span class="layer-dot" id="layer-sg"></span>
-                <span>Security Groups</span>
+            <div class="tech-card">
+                <div class="tech-label">Compute & Storage</div>
+                <div class="tech-value">EC2, ECS Fargate, Lambda, RDS PostgreSQL, S3</div>
             </div>
-            <div class="layer-item">
-                <span class="layer-dot" id="layer-iam"></span>
-                <span>IAM Policies</span>
+            <div class="tech-card">
+                <div class="tech-label">Security</div>
+                <div class="tech-value">IAM, KMS, CloudTrail, GuardDuty, VPC Flow Logs</div>
             </div>
-            <div class="layer-item">
-                <span class="layer-dot" id="layer-kms"></span>
-                <span>KMS Encryption</span>
-            </div>
-            <div class="layer-item">
-                <span class="layer-dot" id="layer-guardduty"></span>
-                <span>GuardDuty</span>
+            <div class="tech-card">
+                <div class="tech-label">Automation</div>
+                <div class="tech-value">Python 3.11, Boto3, AWS CLI</div>
             </div>
         </div>
-        
-        <div class="live-stats" id="liveStats">
-            <div class="live-stats-title">
-                <span class="live-dot"></span>
-                Live Metrics
-            </div>
-            <div class="stat-row">
-                <span class="stat-label">Requests/sec</span>
-                <span class="stat-value" id="statRequests">0</span>
-            </div>
-            <div class="stat-row">
-                <span class="stat-label">Latency</span>
-                <span class="stat-value" id="statLatency">0ms</span>
-            </div>
-            <div class="stat-row">
-                <span class="stat-label">Blocked</span>
-                <span class="stat-value danger" id="statBlocked">0</span>
-            </div>
-            <div class="stat-row">
-                <span class="stat-label">Encrypted</span>
-                <span class="stat-value" id="statEncrypted">100%</span>
-            </div>
-        </div>
-        
-        <div class="network-canvas" id="networkCanvas">
-            <svg viewBox="0 0 1200 550" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                    <!-- Gradients for nodes -->
-                    <linearGradient id="gradInternet" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#b8860b;stop-opacity:0.3" />
-                        <stop offset="100%" style="stop-color:#8b6914;stop-opacity:0.1" />
-                    </linearGradient>
-                    <linearGradient id="gradAdmin" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#4a7cb8;stop-opacity:0.3" />
-                        <stop offset="100%" style="stop-color:#3a5d8a;stop-opacity:0.1" />
-                    </linearGradient>
-                    <linearGradient id="gradApp" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#6b5ba3;stop-opacity:0.3" />
-                        <stop offset="100%" style="stop-color:#524680;stop-opacity:0.1" />
-                    </linearGradient>
-                    <linearGradient id="gradDb" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#b84a7c;stop-opacity:0.3" />
-                        <stop offset="100%" style="stop-color:#8a3860;stop-opacity:0.1" />
-                    </linearGradient>
-                    <linearGradient id="gradS3" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#2d8659;stop-opacity:0.3" />
-                        <stop offset="100%" style="stop-color:#1f5c3d;stop-opacity:0.1" />
-                    </linearGradient>
-                    <linearGradient id="gradSecurity" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#ff9900;stop-opacity:0.3" />
-                        <stop offset="100%" style="stop-color:#cc7a00;stop-opacity:0.1" />
-                    </linearGradient>
-                    
-                    <!-- Arrow marker -->
-                    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                        <polygon points="0 0, 10 3, 0 6" fill="#2ea043"/>
-                    </marker>
-                    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                        <polygon points="0 0, 10 3, 0 6" fill="#1e8fff"/>
-                    </marker>
-                    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                        <polygon points="0 0, 10 3, 0 6" fill="#ff5947"/>
-                    </marker>
-                    
-                    <!-- Glow filter -->
-                    <filter id="glow">
-                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                        <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                    </filter>
-                </defs>
-                
-                <!-- VPC Border -->
-                <rect x="80" y="30" width="1040" height="480" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="8 4" rx="8" opacity="0.5"/>
-                <text x="600" y="55" text-anchor="middle" font-size="14" fill="#3b82f6" font-weight="600">VPC: 172.32.0.0/16 (us-east-1)</text>
-                
-                <!-- Connection lines (drawn first, behind nodes) -->
-                <g id="connections">
-                    <!-- Internet to Gateway -->
-                    <path id="conn-inet-gateway" class="connection-line" d="M 200 275 Q 270 275, 340 275"/>
-                    <!-- Gateway to App -->
-                    <path id="conn-gateway-app" class="connection-line" d="M 440 275 Q 510 275, 580 275"/>
-                    <!-- App to DB -->
-                    <path id="conn-app-db" class="connection-line" d="M 680 275 Q 750 275, 820 275"/>
-                    <!-- App to S3 -->
-                    <path id="conn-app-s3" class="connection-line" d="M 630 320 Q 630 400, 630 430"/>
-                    <!-- Security monitoring lines -->
-                    <path id="conn-security-1" class="connection-line" d="M 1020 150 Q 950 200, 870 230" stroke-dasharray="4 4" opacity="0.3"/>
-                    <path id="conn-security-2" class="connection-line" d="M 1020 150 Q 900 180, 630 230" stroke-dasharray="4 4" opacity="0.3"/>
-                    <path id="conn-security-3" class="connection-line" d="M 1020 150 Q 800 150, 390 230" stroke-dasharray="4 4" opacity="0.3"/>
-                </g>
-                
-                <!-- Traffic particles container -->
-                <g id="trafficParticles"></g>
-                
-                <!-- Shield effects container -->
-                <g id="shieldEffects"></g>
-                
-                <!-- Nodes -->
-                <g class="node-group" id="node-internet" data-node="internet">
-                    <circle class="node-glow" cx="150" cy="275" r="45"/>
-                    <circle class="node-bg" cx="150" cy="275" r="45" fill="url(#gradInternet)" stroke="#b8860b" stroke-width="2"/>
-                    <text class="node-icon" x="150" y="268" text-anchor="middle" dominant-baseline="middle">🌐</text>
-                    <text class="node-label" x="150" y="340" text-anchor="middle">Internet</text>
-                    <text class="node-sublabel" x="150" y="356" text-anchor="middle">Untrusted Zone</text>
-                </g>
-                
-                <g class="node-group" id="node-gateway" data-node="gateway">
-                    <circle class="node-glow" cx="390" cy="275" r="45"/>
-                    <circle class="node-bg" cx="390" cy="275" r="45" fill="url(#gradAdmin)" stroke="#4a7cb8" stroke-width="2"/>
-                    <text class="node-icon" x="390" y="268" text-anchor="middle" dominant-baseline="middle">🚧</text>
-                    <text class="node-label" x="390" y="340" text-anchor="middle">Gateway</text>
-                    <text class="node-sublabel" x="390" y="356" text-anchor="middle">ALB + WAF</text>
-                </g>
-                
-                <g class="node-group" id="node-app" data-node="app">
-                    <circle class="node-glow" cx="630" cy="275" r="45"/>
-                    <circle class="node-bg" cx="630" cy="275" r="45" fill="url(#gradApp)" stroke="#6b5ba3" stroke-width="2"/>
-                    <text class="node-icon" x="630" y="268" text-anchor="middle" dominant-baseline="middle">⚙️</text>
-                    <text class="node-label" x="630" y="340" text-anchor="middle">App Tier</text>
-                    <text class="node-sublabel" x="630" y="356" text-anchor="middle">Private Subnet</text>
-                </g>
-                
-                <g class="node-group" id="node-db" data-node="database">
-                    <circle class="node-glow" cx="870" cy="275" r="45"/>
-                    <circle class="node-bg" cx="870" cy="275" r="45" fill="url(#gradDb)" stroke="#b84a7c" stroke-width="2"/>
-                    <text class="node-icon" x="870" y="268" text-anchor="middle" dominant-baseline="middle">🗄️</text>
-                    <text class="node-label" x="870" y="340" text-anchor="middle">Database</text>
-                    <text class="node-sublabel" x="870" y="356" text-anchor="middle">Isolated Subnet</text>
-                </g>
-                
-                <g class="node-group" id="node-s3" data-node="s3">
-                    <circle class="node-glow" cx="630" cy="470" r="40"/>
-                    <circle class="node-bg" cx="630" cy="470" r="40" fill="url(#gradS3)" stroke="#2d8659" stroke-width="2"/>
-                    <text class="node-icon" x="630" y="463" text-anchor="middle" dominant-baseline="middle">📦</text>
-                    <text class="node-label" x="630" y="525" text-anchor="middle">S3 Storage</text>
-                </g>
-                
-                <g class="node-group" id="node-security" data-node="security">
-                    <circle class="node-glow" cx="1020" cy="150" r="50"/>
-                    <circle class="node-bg" cx="1020" cy="150" r="50" fill="url(#gradSecurity)" stroke="#ff9900" stroke-width="2"/>
-                    <text class="node-icon" x="1020" y="143" text-anchor="middle" dominant-baseline="middle">🛡️</text>
-                    <text class="node-label" x="1020" y="220" text-anchor="middle">Security</text>
-                    <text class="node-sublabel" x="1020" y="236" text-anchor="middle">CloudTrail + GuardDuty</text>
-                </g>
-                
-                <!-- Attacker (hidden by default) -->
-                <g id="attacker" style="opacity: 0; transform: translateX(-100px);">
-                    <circle cx="50" cy="275" r="30" fill="#d13212" filter="url(#glow)"/>
-                    <text x="50" y="275" text-anchor="middle" dominant-baseline="middle" font-size="24">🥷</text>
-                </g>
-            </svg>
-        </div>
-        
-        <div class="attack-notification" id="attackNotification">
-            <div class="attack-notification-icon">🛡️</div>
-            <div class="attack-notification-text">Attack Blocked!</div>
-            <div class="attack-notification-sub">Defense-in-depth protection activated</div>
-        </div>
-        
-        <div class="info-panel" id="infoPanel">
-            <button class="close-panel" onclick="closeInfoPanel()">×</button>
-            <div class="info-panel-header">
-                <h3 class="info-panel-title" id="panelTitle">Component Details</h3>
-                <span class="info-panel-badge" id="panelBadge">Active</span>
-            </div>
-            <p class="info-panel-desc" id="panelDesc">Select a component to view details.</p>
-            <div class="info-panel-grid" id="panelGrid"></div>
-        </div>
-        
-        <div class="diagram-legend">
-            <div class="legend-item">
-                <div class="legend-color public"></div>
-                <span>Public Tier</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color private"></div>
-                <span>Private Tier</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color isolated"></div>
-                <span>Isolated Tier</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color storage"></div>
-                <span>Storage</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color security"></div>
-                <span>Security & Audit</span>
+    </section>
+    
+    <!-- Author -->
+    <section class="author-spectacular">
+        <div class="author-info">
+            <h3>About the Author</h3>
+            <div class="author-name-large">Jawad Khan</div>
+            <div class="author-role">IT Operations Specialist | AWS Certified</div>
+            <p class="author-bio">
+                IT professional with expertise in IAM lifecycle management, Active Directory, 
+                and cloud platforms. Experience supporting enterprise infrastructure for 8,000+ users 
+                with a focus on security, automation, and operational excellence.
+            </p>
+            <div class="author-links-row">
+                <a href="https://github.com/mjkhan9" target="_blank" rel="noopener noreferrer" class="author-link-btn">
+                    <span>GitHub</span>
+                </a>
+                <a href="https://linkedin.com/in/mohammad-jkhan/" target="_blank" rel="noopener noreferrer" class="author-link-btn">
+                    <span>LinkedIn</span>
+                </a>
             </div>
         </div>
-    </div>
+        <div class="certifications">
+            <div class="cert-card">
+                <div class="cert-icon">🏆</div>
+                <div class="cert-info">
+                    <div class="cert-name">AWS Solutions Architect Associate</div>
+                    <div class="cert-issuer">Amazon Web Services</div>
+                </div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-icon">☁️</div>
+                <div class="cert-info">
+                    <div class="cert-name">AWS Cloud Practitioner</div>
+                    <div class="cert-issuer">Amazon Web Services</div>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer class="site-footer">
     <div class="footer-content">
-        <p>Interactive Network Architecture • AWS Student Data Infrastructure • 2025</p>
+        <p>AWS Student Data Infrastructure • Portfolio Project • 2025</p>
         <p class="footer-links">
             <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
                 View on GitHub
@@ -862,376 +919,102 @@
 
 <script>
 // ============================================
-// INTERACTIVE DIAGRAM - FULL EXPERIENCE
+// SPECTACULAR HOME PAGE ANIMATIONS
 // ============================================
 
-// State
-let currentView = 'architecture';
-let trafficEnabled = false;
-let trafficInterval = null;
-let attackMode = false;
-let statsInterval = null;
-let selectedNode = null;
+// Typing effect
+const typingTexts = [
+    "Secure three-tier AWS architecture",
+    "Zero-trust security model",
+    "Automated IAM provisioning",
+    "FERPA-compliant data protection",
+    "Defense-in-depth security controls"
+];
 
-// Node data
-const nodeData = {
-    internet: {
-        title: "Internet Gateway",
-        badge: "Entry Point",
-        desc: "The public entry point for all external traffic. All requests are filtered through WAF rules before reaching internal resources. Only HTTPS traffic (port 443) is allowed.",
-        details: [
-            { label: "Type", value: "Internet Gateway" },
-            { label: "Attached VPC", value: "172.32.0.0/16" },
-            { label: "Route Target", value: "Public subnets only" },
-            { label: "Security", value: "WAF + Rate limiting" }
-        ]
-    },
-    gateway: {
-        title: "Application Load Balancer",
-        badge: "Public Tier",
-        desc: "The ALB distributes traffic across application instances in multiple availability zones. It terminates SSL/TLS connections and performs health checks on backend targets.",
-        details: [
-            { label: "Subnet CIDR", value: "172.32.1.0/24" },
-            { label: "Availability Zones", value: "us-east-1a, 1b" },
-            { label: "Protocol", value: "HTTPS (TLS 1.2+)" },
-            { label: "Health Check", value: "/health (30s interval)" }
-        ]
-    },
-    app: {
-        title: "Application Tier",
-        badge: "Private Tier",
-        desc: "ECS Fargate containers running the application workload. No direct internet access - all outbound traffic goes through NAT Gateway. Can only be accessed from the ALB.",
-        details: [
-            { label: "Subnet CIDR", value: "172.32.10.0/24" },
-            { label: "Compute", value: "ECS Fargate" },
-            { label: "Internet Access", value: "NAT Gateway (outbound only)" },
-            { label: "Security Group", value: "app-sg (ALB inbound only)" }
-        ]
-    },
-    database: {
-        title: "Database Tier",
-        badge: "Isolated",
-        desc: "RDS PostgreSQL Multi-AZ deployment in completely isolated subnets. No internet gateway route exists - only application tier security groups can connect on port 5432.",
-        details: [
-            { label: "Subnet CIDR", value: "172.32.20.0/24" },
-            { label: "Engine", value: "PostgreSQL 15.3 Multi-AZ" },
-            { label: "Encryption", value: "KMS (CMK with rotation)" },
-            { label: "Security Group", value: "db-sg (app-sg only)" }
-        ]
-    },
-    s3: {
-        title: "S3 Storage",
-        badge: "Encrypted",
-        desc: "Student data storage bucket with SSE-KMS encryption, versioning enabled, and Block Public Access enforced at account level. Accessed via VPC Endpoint (no internet).",
-        details: [
-            { label: "Bucket", value: "student-data-reports" },
-            { label: "Encryption", value: "SSE-KMS (CMK)" },
-            { label: "Access", value: "VPC Endpoint only" },
-            { label: "Features", value: "Versioning + Lifecycle" }
-        ]
-    },
-    security: {
-        title: "Security & Audit",
-        badge: "Monitoring",
-        desc: "Comprehensive logging and threat detection. CloudTrail captures all API calls, VPC Flow Logs record network traffic, and GuardDuty provides intelligent threat detection.",
-        details: [
-            { label: "CloudTrail", value: "All regions, all events" },
-            { label: "VPC Flow Logs", value: "Accept + Reject" },
-            { label: "GuardDuty", value: "Threat detection active" },
-            { label: "Log Retention", value: "90 days (S3 archive)" }
-        ]
-    }
-};
+let textIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+const typingElement = document.getElementById('typingText');
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    setupViewModes();
-    setupTrafficToggle();
-    setupNodeClicks();
-    startStatsUpdate();
-});
-
-// View mode switching
-function setupViewModes() {
-    document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentView = btn.dataset.view;
-            handleViewChange();
-        });
-    });
-}
-
-function handleViewChange() {
-    const overlay = document.getElementById('attackOverlay');
-    const attacker = document.getElementById('attacker');
+function type() {
+    const currentText = typingTexts[textIndex];
     
-    if (currentView === 'attack') {
-        attackMode = true;
-        overlay.classList.add('active');
-        // Start attack simulation
-        setTimeout(simulateAttack, 1000);
+    if (isDeleting) {
+        typingElement.textContent = currentText.substring(0, charIndex - 1);
+        charIndex--;
     } else {
-        attackMode = false;
-        overlay.classList.remove('active');
-        attacker.style.opacity = '0';
-        attacker.style.transform = 'translateX(-100px)';
+        typingElement.textContent = currentText.substring(0, charIndex + 1);
+        charIndex++;
     }
     
-    if (currentView === 'traffic' && !trafficEnabled) {
-        document.getElementById('trafficToggle').click();
+    let delay = isDeleting ? 30 : 50;
+    
+    if (!isDeleting && charIndex === currentText.length) {
+        delay = 2000;
+        isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        textIndex = (textIndex + 1) % typingTexts.length;
+        delay = 500;
     }
+    
+    setTimeout(type, delay);
 }
 
-// Traffic toggle
-function setupTrafficToggle() {
-    const toggle = document.getElementById('trafficToggle');
-    toggle.addEventListener('click', () => {
-        trafficEnabled = !trafficEnabled;
-        toggle.classList.toggle('active', trafficEnabled);
+// Start typing
+type();
+
+// Animate stats on scroll
+const statNumbers = document.querySelectorAll('.stat-number');
+
+function animateStats() {
+    statNumbers.forEach(stat => {
+        const target = parseInt(stat.dataset.target);
+        const duration = 2000;
+        const step = target / (duration / 16);
+        let current = 0;
         
-        if (trafficEnabled) {
-            startTrafficAnimation();
-            activateSecurityLayers();
-        } else {
-            stopTrafficAnimation();
-            deactivateSecurityLayers();
-        }
-    });
-}
-
-// Traffic animation
-function startTrafficAnimation() {
-    if (trafficInterval) return;
-    
-    trafficInterval = setInterval(() => {
-        if (!attackMode) {
-            createTrafficParticle('conn-inet-gateway', 'request', 0);
-            setTimeout(() => createTrafficParticle('conn-gateway-app', 'request', 0), 500);
-            setTimeout(() => createTrafficParticle('conn-app-db', 'request', 0), 1000);
-            setTimeout(() => createTrafficParticle('conn-app-s3', 'request', 0), 800);
-        }
-    }, 2000);
-    
-    // Immediate first particle
-    createTrafficParticle('conn-inet-gateway', 'request', 0);
-}
-
-function stopTrafficAnimation() {
-    if (trafficInterval) {
-        clearInterval(trafficInterval);
-        trafficInterval = null;
-    }
-    document.getElementById('trafficParticles').innerHTML = '';
-}
-
-function createTrafficParticle(pathId, type, delay) {
-    const path = document.getElementById(pathId);
-    if (!path) return;
-    
-    const container = document.getElementById('trafficParticles');
-    const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    particle.setAttribute('r', '6');
-    particle.classList.add('traffic-particle', type);
-    
-    const pathLength = path.getTotalLength();
-    
-    setTimeout(() => {
-        container.appendChild(particle);
-        
-        let progress = 0;
-        const speed = type === 'attack' ? 15 : 8;
-        
-        function animate() {
-            progress += speed;
-            if (progress >= pathLength) {
-                particle.remove();
-                return;
+        const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                stat.textContent = target;
+                clearInterval(timer);
+            } else {
+                stat.textContent = Math.floor(current);
             }
-            
-            const point = path.getPointAtLength(progress);
-            particle.setAttribute('cx', point.x);
-            particle.setAttribute('cy', point.y);
-            
-            requestAnimationFrame(animate);
-        }
-        
-        animate();
-    }, delay);
-}
-
-// Security layers
-function activateSecurityLayers() {
-    const layers = ['layer-nacl', 'layer-sg', 'layer-iam', 'layer-kms', 'layer-guardduty'];
-    layers.forEach((id, i) => {
-        setTimeout(() => {
-            document.getElementById(id)?.classList.add('active');
-        }, i * 200);
+        }, 16);
     });
 }
 
-function deactivateSecurityLayers() {
-    document.querySelectorAll('.layer-dot').forEach(dot => dot.classList.remove('active'));
-}
-
-// Attack simulation
-function simulateAttack() {
-    if (!attackMode) return;
-    
-    const attacker = document.getElementById('attacker');
-    attacker.style.transition = 'all 0.5s ease';
-    attacker.style.opacity = '1';
-    attacker.style.transform = 'translateX(0)';
-    
-    // Send attack particles
-    setTimeout(() => {
-        for (let i = 0; i < 5; i++) {
-            setTimeout(() => {
-                createAttackParticle();
-            }, i * 300);
+// Intersection observer for stats
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            animateStats();
+            statsObserver.disconnect();
         }
-    }, 600);
-    
-    // Show blocked notification
-    setTimeout(() => {
-        showBlockedNotification();
-        pulseSecurityLayers();
-    }, 2500);
-    
-    // Reset and repeat
-    setTimeout(() => {
-        if (attackMode) {
-            attacker.style.opacity = '0';
-            attacker.style.transform = 'translateX(-100px)';
-            setTimeout(() => {
-                if (attackMode) simulateAttack();
-            }, 2000);
-        }
-    }, 4000);
-}
-
-function createAttackParticle() {
-    const container = document.getElementById('trafficParticles');
-    const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    particle.setAttribute('r', '8');
-    particle.classList.add('traffic-particle', 'attack');
-    
-    container.appendChild(particle);
-    
-    // Animate from attacker to gateway
-    let progress = 0;
-    const startX = 80;
-    const endX = 345;
-    const y = 275;
-    
-    function animate() {
-        progress += 12;
-        const x = startX + (endX - startX) * (progress / 100);
-        
-        particle.setAttribute('cx', x);
-        particle.setAttribute('cy', y);
-        
-        if (progress >= 100) {
-            // Block at gateway
-            particle.classList.add('blocked');
-            createShieldEffect(345, 275);
-            setTimeout(() => particle.remove(), 300);
-            return;
-        }
-        
-        requestAnimationFrame(animate);
-    }
-    
-    animate();
-}
-
-function createShieldEffect(x, y) {
-    const container = document.getElementById('shieldEffects');
-    const shield = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    shield.setAttribute('cx', x);
-    shield.setAttribute('cy', y);
-    shield.setAttribute('r', '30');
-    shield.classList.add('shield-ring', 'active');
-    
-    container.appendChild(shield);
-    setTimeout(() => shield.remove(), 600);
-}
-
-function showBlockedNotification() {
-    const notification = document.getElementById('attackNotification');
-    notification.classList.add('show');
-    setTimeout(() => notification.classList.remove('show'), 2000);
-}
-
-function pulseSecurityLayers() {
-    document.querySelectorAll('.layer-dot').forEach((dot, i) => {
-        setTimeout(() => {
-            dot.classList.add('active');
-            dot.style.animation = 'none';
-            dot.offsetHeight; // Trigger reflow
-            dot.style.animation = 'livePulse 0.5s ease';
-        }, i * 100);
     });
+}, { threshold: 0.5 });
+
+const statsSection = document.querySelector('.stats-spectacular');
+if (statsSection) {
+    statsObserver.observe(statsSection);
 }
 
-// Node interactions
-function setupNodeClicks() {
-    document.querySelectorAll('.node-group').forEach(node => {
-        node.addEventListener('click', () => {
-            const nodeId = node.dataset.node;
-            selectNode(nodeId, node);
-        });
-    });
-}
+// Fallback: animate stats immediately
+setTimeout(animateStats, 500);
 
-function selectNode(nodeId, nodeElement) {
-    // Clear previous selection
-    document.querySelectorAll('.node-group').forEach(n => n.classList.remove('selected'));
-    
-    // Select new node
-    nodeElement.classList.add('selected');
-    selectedNode = nodeId;
-    
-    // Show info panel
-    const data = nodeData[nodeId];
-    if (data) {
-        showInfoPanel(data);
-    }
-}
+// Floating particles
+const particlesContainer = document.getElementById('particles');
+const particleCount = 20;
 
-function showInfoPanel(data) {
-    const panel = document.getElementById('infoPanel');
-    document.getElementById('panelTitle').textContent = data.title;
-    document.getElementById('panelBadge').textContent = data.badge;
-    document.getElementById('panelDesc').textContent = data.desc;
-    
-    const grid = document.getElementById('panelGrid');
-    grid.innerHTML = data.details.map(d => `
-        <div class="info-item">
-            <div class="info-item-label">${d.label}</div>
-            <div class="info-item-value">${d.value}</div>
-        </div>
-    `).join('');
-    
-    panel.classList.add('visible');
-}
-
-function closeInfoPanel() {
-    document.getElementById('infoPanel').classList.remove('visible');
-    document.querySelectorAll('.node-group').forEach(n => n.classList.remove('selected'));
-    selectedNode = null;
-}
-
-// Live stats
-function startStatsUpdate() {
-    statsInterval = setInterval(() => {
-        if (trafficEnabled || attackMode) {
-            document.getElementById('statRequests').textContent = Math.floor(Math.random() * 50 + 120);
-            document.getElementById('statLatency').textContent = Math.floor(Math.random() * 20 + 15) + 'ms';
-            document.getElementById('statBlocked').textContent = attackMode ? Math.floor(Math.random() * 10 + 5) : 0;
-        }
-    }, 1000);
+for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.animationDelay = `${Math.random() * 10}s`;
+    particle.style.animationDuration = `${8 + Math.random() * 4}s`;
+    particlesContainer.appendChild(particle);
 }
 
 // Mobile menu
