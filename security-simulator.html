@@ -10,7 +10,6 @@
     <style>
         /* Page-level layout built on top of the AWS console theme */
         .sim-header {
-            margin-top: 16px;
             margin-bottom: 16px;
         }
 
@@ -118,9 +117,6 @@
             justify-content: space-between;
             gap: 24px;
             margin-top: 12px;
-            max-width: 520px;      /* constrain row so RDS isn't at card edge */
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .connections-svg {
@@ -292,10 +288,15 @@
         }
 
         /* Event log uses console-output styles */
+        .log-container {
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
         .log-entry {
             display: flex;
             gap: 8px;
-            padding: 2px 0;
+            padding: 4px 0;
             font-size: 12px;
             font-family: Monaco, Menlo, monospace;
             animation: fadeInUp 0.15s ease-out;
@@ -799,16 +800,20 @@ const attacks = {
         title: "Direct Database Access",
         targetNodes: ["node-internet", "node-db"],
         defenseLayers: ["layer-sg", "layer-nacl"],
+        
         // Plain English explanation
         whatsHappening: `A hacker is trying to <strong>connect directly to our database</strong> from the internet — like trying to walk straight into a bank vault from the street.
         <br><br>
         Our security stops this because the database is in a <strong>private network</strong> with no public address. It's literally unreachable from outside.`,
+        
         analogy: `<span class="emoji-icon">🏦</span>
         Imagine a bank vault that's <strong>underground with no entrance from the street</strong>. 
         You can only reach it through the bank lobby, then past the tellers, then through a secured door. 
         The hacker is trying to dig a tunnel directly to the vault — but there's no path there.`,
+        
         whyMatters: `If hackers could connect directly to databases, they could <strong>steal all student records instantly</strong> — names, grades, social security numbers, everything. 
         Our network isolation makes this physically impossible.`,
+
         code: `<span class="comment"># Hacker's attempt to connect directly to database</span>
 <span class="keyword">import</span> psycopg2
 
@@ -824,6 +829,7 @@ conn = psycopg2.connect(
     password=<span class="string">"stolen_password"</span>
 )
 <span class="comment"># Result: Connection timeout - no network path exists</span>`,
+
         finding: {
             type: "UnauthorizedAccess:EC2/MaliciousIPCaller",
             severity: "HIGH",
@@ -831,6 +837,7 @@ conn = psycopg2.connect(
             description: "Someone tried to connect to a protected resource from an IP address that shouldn't have access.",
             details: { "SourceIP": "203.0.113.45", "TargetPort": 5432, "Action": "BLOCKED", "Reason": "No network route exists" }
         },
+
         response: `<h4>1. What Our System Did Automatically</h4>
 <ul>
 <li>Blocked the connection (no network path exists)</li>
@@ -846,6 +853,7 @@ aws logs filter-log-events \\
 
 <h4>3. No Action Needed</h4>
 <p>The architecture itself prevents this attack. There's nothing to "fix" — the security worked exactly as designed.</p>`,
+
         steps: [
             { type: "info", msg: "Incoming connection from external IP: 203.0.113.45" },
             { type: "warning", msg: "Target: Database server on port 5432" },
@@ -862,14 +870,18 @@ aws logs filter-log-events \\
         title: "Privilege Escalation",
         targetNodes: ["node-app"],
         defenseLayers: ["layer-iam", "layer-monitoring"],
+        
         whatsHappening: `A user with <strong>limited access</strong> (like a student worker) is trying to <strong>give themselves admin powers</strong>.
         <br><br>
         This is like a cashier trying to promote themselves to bank manager. Our permission system says "nice try, but no."`,
+        
         analogy: `<span class="emoji-icon">🔑</span>
         Imagine an employee with a <strong>key to the supply closet</strong> trying to make a copy of the <strong>master key</strong> that opens every door. 
         The key-making machine checks their badge and says "You're not authorized to copy master keys" — and logs the suspicious request.`,
+        
         whyMatters: `If users could grant themselves admin access, a disgruntled employee could <strong>delete all records</strong>, 
         <strong>steal sensitive data</strong>, or <strong>lock everyone else out</strong>. IAM policies prevent this.`,
+
         code: `<span class="comment"># User tries to give themselves admin access</span>
 <span class="keyword">import</span> boto3
 
@@ -885,6 +897,7 @@ iam = boto3.client(<span class="string">'iam'</span>)
     print(<span class="string">"Access Denied: You cannot modify permissions"</span>)
     
 <span class="comment"># AWS logs this failed attempt in CloudTrail</span>`,
+
         finding: {
             type: "PrivilegeEscalation:IAMUser/AnomalousBehavior",
             severity: "MEDIUM",
@@ -892,6 +905,7 @@ iam = boto3.client(<span class="string">'iam'</span>)
             description: "A user tried to attach admin permissions to their account. This was blocked by IAM policies.",
             details: { "User": "student_worker", "AttemptedAction": "AttachUserPolicy", "TargetPolicy": "AdministratorAccess", "Result": "AccessDenied" }
         },
+
         response: `<h4>1. Immediate Response</h4>
 <pre># Temporarily restrict the suspicious user
 aws iam put-user-policy --user-name student_worker \\
@@ -907,6 +921,7 @@ aws iam put-user-policy --user-name student_worker \\
 
 <h4>3. Follow Up</h4>
 <p>Contact the user's supervisor. If intentional, escalate to security team.</p>`,
+
         steps: [
             { type: "info", msg: "API call detected: iam:AttachUserPolicy" },
             { type: "warning", msg: "User 'student_worker' requesting admin access" },
@@ -922,15 +937,19 @@ aws iam put-user-policy --user-name student_worker \\
         title: "Data Exposure Attempt",
         targetNodes: ["node-app"],
         defenseLayers: ["layer-encryption", "layer-monitoring"],
+        
         whatsHappening: `Someone is trying to make our <strong>private student files publicly accessible</strong> on the internet — like posting confidential records on a public bulletin board.
         <br><br>
         AWS has a safety switch called <strong>"Block Public Access"</strong> that prevents this, even if someone tries really hard.`,
+        
         analogy: `<span class="emoji-icon">📁</span>
         Imagine a filing cabinet with a <strong>special lock that prevents the drawer from being left open</strong>. 
         Even if someone tries to prop it open, the lock automatically closes it. 
         Our S3 buckets have this "auto-close" feature built in.`,
+        
         whyMatters: `Exposed student data could lead to <strong>identity theft</strong>, <strong>FERPA violations</strong>, 
         and <strong>lawsuits</strong>. Block Public Access is a safety net that catches mistakes and malicious actions.`,
+
         code: `<span class="comment"># Attempting to make student files public</span>
 <span class="keyword">import</span> boto3
 
@@ -946,6 +965,7 @@ s3 = boto3.client(<span class="string">'s3'</span>)
     print(<span class="string">"Blocked by S3 Block Public Access"</span>)
 
 <span class="comment"># The setting physically prevents public access</span>`,
+
         finding: {
             type: "Policy:S3/BucketPublicAccessGranted",
             severity: "CRITICAL",
@@ -953,6 +973,7 @@ s3 = boto3.client(<span class="string">'s3'</span>)
             description: "Someone tried to change bucket permissions to allow public access. S3 Block Public Access prevented this.",
             details: { "Bucket": "student-records-bucket", "AttemptedACL": "public-read", "BlockedBy": "S3 Block Public Access", "AccountLevel": true }
         },
+
         response: `<h4>1. Verify Protection is Active</h4>
 <pre># Check that Block Public Access is enabled
 aws s3api get-public-access-block \\
@@ -965,6 +986,7 @@ aws cloudtrail lookup-events \\
 
 <h4>3. Review Access</h4>
 <p>Determine if this user should have bucket permissions at all. Consider restricting access.</p>`,
+
         steps: [
             { type: "info", msg: "API call: s3:PutBucketAcl" },
             { type: "warning", msg: "Requested permission: public-read" },
@@ -980,14 +1002,18 @@ aws cloudtrail lookup-events \\
         title: "Stolen Credentials",
         targetNodes: ["node-internet", "node-gateway", "node-app"],
         defenseLayers: ["layer-monitoring"],
+        
         whatsHappening: `Someone <strong>stole login credentials</strong> (maybe through phishing) and is now using them from a <strong>different country</strong>.
         <br><br>
         Our monitoring system notices: "Wait, this user normally logs in from New York, but now they're suddenly in Russia?" 🚨`,
+        
         analogy: `<span class="emoji-icon">💳</span>
         It's like your credit card company calling to ask: "Did you just buy something in Nigeria? You were in Texas an hour ago." 
         They detect <strong>impossible travel</strong> — and so does our system.`,
+        
         whyMatters: `Stolen credentials are the #1 way hackers get into systems. 
         Even with a valid password, <strong>behavioral detection</strong> catches when something doesn't add up.`,
+
         code: `<span class="comment"># Hacker using stolen credentials from unusual location</span>
 <span class="keyword">import</span> boto3
 
@@ -1007,6 +1033,7 @@ ec2 = session.client(<span class="string">'ec2'</span>)
     ec2.describe_instances()
     
 <span class="comment"># GuardDuty: "This user never uses eu-west-1..."</span>`,
+
         finding: {
             type: "UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration",
             severity: "HIGH",
@@ -1014,6 +1041,7 @@ ec2 = session.client(<span class="string">'ec2'</span>)
             description: "Login credentials are being used from an IP address in a different geographic location than normal. Possible credential theft.",
             details: { "NormalLocation": "New York, USA", "CurrentLocation": "Dublin, Ireland", "UnusualAPICount": 50, "TimeWindow": "2 minutes" }
         },
+
         response: `<h4>1. Disable Credentials Immediately</h4>
 <pre># Disable the compromised access key
 aws iam update-access-key \\
@@ -1031,6 +1059,7 @@ aws cloudtrail lookup-events \\
 <li>Have them change their password</li>
 <li>Enable MFA if not already active</li>
 </ul>`,
+
         steps: [
             { type: "warning", msg: "Login from unusual location: Dublin, Ireland" },
             { type: "info", msg: "User baseline: New York, USA" },
@@ -1046,14 +1075,18 @@ aws cloudtrail lookup-events \\
         title: "Network Reconnaissance",
         targetNodes: ["node-app", "node-db"],
         defenseLayers: ["layer-sg", "layer-nacl", "layer-monitoring"],
+        
         whatsHappening: `A hacker is <strong>scanning our network</strong> to find open doors — checking thousands of ports to see what services are running.
         <br><br>
         This is like a burglar walking down a street, <strong>trying every door handle</strong> to see which ones are unlocked.`,
+        
         analogy: `<span class="emoji-icon">🚪</span>
         Imagine someone walking down your street, <strong>jiggling every door handle</strong> on every house. 
         Even if all doors are locked, it's suspicious behavior! Our system notices this "jiggling" and alerts us.`,
+        
         whyMatters: `Port scanning is often the <strong>first step before an attack</strong>. 
         By detecting it early, we know someone is probing our defenses and can watch them closely.`,
+
         code: `<span class="comment"># Hacker scanning for open ports</span>
 <span class="keyword">import</span> socket
 <span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor
@@ -1071,6 +1104,7 @@ ports = [22, 80, 443, 3306, 5432, 27017]
 
 <span class="comment"># Rapid scanning creates thousands of REJECT log entries</span>
 <span class="comment"># GuardDuty correlates this as reconnaissance</span>`,
+
         finding: {
             type: "Recon:EC2/PortScan",
             severity: "MEDIUM",
@@ -1078,6 +1112,7 @@ ports = [22, 80, 443, 3306, 5432, 27017]
             description: "An instance is probing multiple ports on other hosts. This is typically reconnaissance before an attack.",
             details: { "SourceIP": "172.32.10.55", "TargetSubnet": "172.32.20.0/24", "PortsScanned": 6, "ConnectionAttempts": 2048 }
         },
+
         response: `<h4>1. Identify the Scanner</h4>
 <pre># Find the instance doing the scanning
 aws ec2 describe-instances \\
@@ -1095,6 +1130,7 @@ aws ec2 modify-instance-attribute \\
 <li>Was the instance compromised?</li>
 <li>Check for malware or unauthorized software</li>
 </ul>`,
+
         steps: [
             { type: "warning", msg: "Unusual network activity from 172.32.10.55" },
             { type: "info", msg: "Scanning database subnet: 172.32.20.0/24" },
@@ -1110,14 +1146,18 @@ aws ec2 modify-instance-attribute \\
         title: "Mass Data Download",
         targetNodes: ["node-app"],
         defenseLayers: ["layer-iam", "layer-monitoring"],
+        
         whatsHappening: `Someone is <strong>downloading huge amounts of student data</strong> very quickly — way more than normal usage would require.
         <br><br>
         Our monitoring notices: "This user usually downloads 5 files a day. Why are they suddenly grabbing 500 files in 10 minutes?"`,
+        
         analogy: `<span class="emoji-icon">📚</span>
         Imagine a library where you normally check out 2-3 books. Suddenly you're loading <strong>a shopping cart with 500 books</strong>. 
         The librarian would definitely ask questions! Our system does the same thing.`,
+        
         whyMatters: `Data exfiltration is how breaches happen. 
         Even if someone has legitimate access, <strong>unusual download patterns</strong> could mean they're stealing data to sell or leak.`,
+
         code: `<span class="comment"># Attempting to download massive amounts of data</span>
 <span class="keyword">import</span> boto3
 
@@ -1138,6 +1178,7 @@ objects = s3.list_objects_v2(
     )
 
 <span class="comment"># This unusual volume triggers alerts</span>`,
+
         finding: {
             type: "Exfiltration:S3/ObjectRead.Unusual",
             severity: "HIGH",
@@ -1145,6 +1186,7 @@ objects = s3.list_objects_v2(
             description: "A user is downloading far more data than their normal baseline. This matches data exfiltration patterns.",
             details: { "FilesDownloaded": 127, "DataVolume": "52.4 MB", "TimeWindow": "15 minutes", "NormalBaseline": "5 files/day" }
         },
+
         response: `<h4>1. Restrict Access Immediately</h4>
 <pre># Block the user's access to the bucket
 aws s3api put-bucket-policy --bucket student-records \\
@@ -1159,6 +1201,7 @@ aws s3api put-bucket-policy --bucket student-records \\
 
 <h4>3. Contact User</h4>
 <p>There may be a legitimate reason (end of semester reports). But verify before restoring access.</p>`,
+
         steps: [
             { type: "warning", msg: "Unusual download volume: 127 files in 15 minutes" },
             { type: "info", msg: "User baseline: 5 files per day" },
@@ -1174,7 +1217,7 @@ aws s3api put-bucket-policy --bucket student-records \\
 // ============================================
 // DOM ELEMENTS
 // ============================================
-const attackBtns = document.querySelectorAll('.attack-button');
+const attackBtns = document.querySelectorAll('.attack-btn');
 const tabBtns = document.querySelectorAll('.tab-btn');
 const logContainer = document.getElementById('logContainer');
 const attacker = document.getElementById('attacker');
@@ -1252,7 +1295,7 @@ function updateFinding(attack) {
     document.getElementById('findingPlaceholder').style.display = 'none';
     const display = document.getElementById('findingDisplay');
     display.style.display = 'block';
-
+    
     const f = attack.finding;
     display.innerHTML = `
         <div class="finding-card">
@@ -1319,11 +1362,11 @@ async function runSimulation(attackId) {
     // Run steps
     for (const step of attack.steps) {
         log(step.type, step.msg);
-
+        
         if (step.type === 'success') {
             activateLayers(attack.defenseLayers);
         }
-
+        
         await sleep(600);
     }
 
