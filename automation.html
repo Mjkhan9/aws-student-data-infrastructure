@@ -24,6 +24,561 @@
     
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
+    <style>
+        /* ============================================
+           SPECTACULAR AUTOMATION PAGE
+           ============================================ */
+        
+        /* Hero Section */
+        .auto-hero {
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            border-radius: 16px;
+            padding: 48px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--aws-border);
+        }
+        
+        .auto-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(255, 153, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(107, 91, 163, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        
+        .auto-hero h1 {
+            font-size: 42px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .auto-hero p {
+            font-size: 16px;
+            max-width: 700px;
+            position: relative;
+            color: var(--aws-text-secondary);
+            margin-bottom: 24px;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            position: relative;
+        }
+        
+        .btn-demo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--aws-orange), var(--aws-orange-dark));
+            color: var(--aws-squid-ink);
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(255, 153, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-demo:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(255, 153, 0, 0.4);
+        }
+        
+        .btn-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: transparent;
+            color: var(--aws-text-primary);
+            font-size: 15px;
+            font-weight: 600;
+            border: 1px solid var(--aws-border);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-github:hover {
+            border-color: var(--aws-orange);
+            color: var(--aws-orange);
+        }
+        
+        /* Workflow Section */
+        .workflow-section {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+        
+        .workflow-section h2 {
+            font-size: 20px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            padding: 0;
+        }
+        
+        .workflow-pipeline {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            position: relative;
+        }
+        
+        .workflow-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding: 24px 16px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            transition: all 0.3s ease;
+        }
+        
+        .workflow-step:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+        
+        .workflow-step:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+        
+        .workflow-step:hover {
+            background: var(--aws-card-bg);
+            transform: translateY(-4px);
+            z-index: 10;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--aws-orange);
+            color: var(--aws-squid-ink);
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+        }
+        
+        .step-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        
+        .step-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .step-desc {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+            line-height: 1.4;
+        }
+        
+        .step-connector {
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--aws-card-bg);
+            border: 2px solid var(--aws-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--aws-orange);
+            z-index: 5;
+        }
+        
+        .workflow-step:last-child .step-connector {
+            display: none;
+        }
+        
+        /* Security Controls */
+        .controls-section {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+        
+        .controls-section h2 {
+            font-size: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            padding: 0;
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        
+        .control-card {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 10px;
+            padding: 24px 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .control-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--aws-green);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .control-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .control-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--aws-green);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .control-icon {
+            font-size: 36px;
+            margin-bottom: 16px;
+        }
+        
+        .control-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .control-desc {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+            line-height: 1.5;
+        }
+        
+        /* Benefits Section */
+        .benefits-section {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+        
+        .benefits-section h2 {
+            font-size: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            padding: 0;
+            color: var(--aws-green-light);
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .benefit-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 28px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--aws-green-light);
+            box-shadow: 0 12px 32px rgba(46, 160, 67, 0.2);
+        }
+        
+        .benefit-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--aws-green-light);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        
+        .benefit-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .benefit-desc {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+            line-height: 1.4;
+        }
+        
+        /* Code Section */
+        .code-section {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+        
+        .code-header {
+            background: linear-gradient(180deg, #2d333b 0%, #22272e 100%);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--aws-border);
+        }
+        
+        .code-filename {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: Monaco, monospace;
+            font-size: 14px;
+            color: var(--aws-text-primary);
+        }
+        
+        .code-filename .icon {
+            color: var(--aws-orange);
+        }
+        
+        .code-lang {
+            padding: 4px 12px;
+            background: var(--aws-panel-bg);
+            border-radius: 12px;
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+        }
+        
+        .code-body {
+            background: #0d1117;
+            padding: 24px;
+            overflow-x: auto;
+        }
+        
+        .code-body pre {
+            margin: 0;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        
+        .code-keyword { color: #ff7b72; }
+        .code-function { color: #d2a8ff; }
+        .code-string { color: #a5d6ff; }
+        .code-comment { color: #8b949e; }
+        .code-param { color: #79c0ff; }
+        
+        /* Demo Preview */
+        .demo-section {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+        }
+        
+        .demo-section h2 {
+            font-size: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            padding: 0;
+        }
+        
+        .demo-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+        
+        .demo-terminal {
+            background: #0d1117;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--aws-border);
+        }
+        
+        .terminal-header {
+            background: #161b22;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--aws-border);
+        }
+        
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27c93f; }
+        
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+        }
+        
+        .terminal-body {
+            padding: 20px;
+            font-family: Monaco, monospace;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+        
+        .terminal-line {
+            margin: 4px 0;
+        }
+        
+        .terminal-prompt {
+            color: var(--aws-green-light);
+            margin-right: 8px;
+        }
+        
+        .terminal-info { color: #58a6ff; }
+        .terminal-success { color: #3fb950; }
+        .terminal-dim { color: #8b949e; }
+        
+        .demo-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .demo-info p {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            line-height: 1.6;
+        }
+        
+        .demo-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--aws-orange), var(--aws-orange-dark));
+            color: var(--aws-squid-ink);
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(255, 153, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .demo-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(255, 153, 0, 0.4);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .controls-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .demo-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .auto-hero {
+                padding: 32px 24px;
+            }
+            
+            .auto-hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+            }
+            
+            .workflow-pipeline {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .workflow-step {
+                border-radius: 10px !important;
+            }
+            
+            .step-connector {
+                display: none;
+            }
+            
+            .controls-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .benefit-value {
+                font-size: 36px;
+            }
+        }
+    </style>
 </head>
 <body>
 <header class="site-header">
@@ -52,124 +607,130 @@
 </header>
 
 <main class="content">
-    <section class="card">
-        <h1>IAM Automation Overview</h1>
+    <!-- Hero Section -->
+    <section class="auto-hero">
+        <h1>⚙️ IAM Automation Pipeline</h1>
         <p>
-            Automated IAM provisioning workflow designed for the AWS Student Data Infrastructure project. 
-            The automation script ensures users are created securely, assigned correct permissions, 
-            enforced with MFA, and tagged for audit visibility.
+            Production-grade automated IAM provisioning workflow designed for the AWS Student Data Infrastructure. 
+            The automation ensures users are created securely, assigned correct permissions, enforced with MFA, 
+            and tagged for audit visibility — all with zero manual intervention.
         </p>
-        <div class="cta-inline">
-            <a href="live-demo.html" class="btn-primary">
-                <span class="btn-icon">▶</span> Watch Live Demo
+        <div class="hero-cta">
+            <a href="live-demo.html" class="btn-demo">
+                <span>▶</span> Watch Live Demo
+            </a>
+            <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" class="btn-github">
+                <span>📂</span> View Source Code
             </a>
         </div>
     </section>
-
-    <section class="card">
-        <h2>IAM Provisioning Workflow</h2>
-        <div class="workflow-steps">
+    
+    <!-- Workflow Section -->
+    <section class="workflow-section">
+        <h2>🔄 Provisioning Workflow</h2>
+        
+        <div class="workflow-pipeline">
             <div class="workflow-step">
                 <div class="step-number">1</div>
-                <div class="step-content">
-                    <strong>Create IAM User</strong>
-                    <span>with enforced MFA requirements</span>
-                </div>
+                <div class="step-icon">👤</div>
+                <div class="step-title">Create IAM User</div>
+                <div class="step-desc">Initialize user with enforced MFA requirements</div>
+                <div class="step-connector">→</div>
             </div>
-            <div class="workflow-connector"></div>
+            
             <div class="workflow-step">
                 <div class="step-number">2</div>
-                <div class="step-content">
-                    <strong>Attach IAM Groups</strong>
-                    <span>based on access type and role</span>
-                </div>
+                <div class="step-icon">📁</div>
+                <div class="step-title">Attach Groups</div>
+                <div class="step-desc">Assign to IAM groups based on role</div>
+                <div class="step-connector">→</div>
             </div>
-            <div class="workflow-connector"></div>
+            
             <div class="workflow-step">
                 <div class="step-number">3</div>
-                <div class="step-content">
-                    <strong>Apply Resource Tags</strong>
-                    <span>role, email, and application ownership</span>
-                </div>
+                <div class="step-icon">🏷️</div>
+                <div class="step-title">Apply Tags</div>
+                <div class="step-desc">Add role, email, and ownership tags</div>
+                <div class="step-connector">→</div>
             </div>
-            <div class="workflow-connector"></div>
+            
             <div class="workflow-step">
                 <div class="step-number">4</div>
-                <div class="step-content">
-                    <strong>Create Login Profile</strong>
-                    <span>with secure password rotation policy</span>
-                </div>
+                <div class="step-icon">🔑</div>
+                <div class="step-title">Create Login</div>
+                <div class="step-desc">Generate secure credentials</div>
+                <div class="step-connector">→</div>
             </div>
-            <div class="workflow-connector"></div>
+            
             <div class="workflow-step">
                 <div class="step-number">5</div>
-                <div class="step-content">
-                    <strong>Record Audit Trail</strong>
-                    <span>CloudTrail and execution logs</span>
-                </div>
+                <div class="step-icon">📋</div>
+                <div class="step-title">Audit Trail</div>
+                <div class="step-desc">Log to CloudTrail for compliance</div>
             </div>
         </div>
     </section>
-
-    <section class="card">
-        <h2>Security Controls</h2>
+    
+    <!-- Security Controls -->
+    <section class="controls-section">
+        <h2>🛡️ Security Controls</h2>
+        
         <div class="controls-grid">
-            <div class="control-item">
+            <div class="control-card">
                 <div class="control-icon">🔒</div>
-                <div class="control-content">
-                    <strong>Least Privilege</strong>
-                    <p>Users receive minimum permissions required for their role</p>
-                </div>
+                <div class="control-title">Least Privilege</div>
+                <div class="control-desc">Users receive minimum permissions required for their role</div>
             </div>
-            <div class="control-item">
+            
+            <div class="control-card">
                 <div class="control-icon">📱</div>
-                <div class="control-content">
-                    <strong>MFA Enforcement</strong>
-                    <p>Multi-factor authentication required for all users</p>
-                </div>
+                <div class="control-title">MFA Enforcement</div>
+                <div class="control-desc">Multi-factor authentication required for all users</div>
             </div>
-            <div class="control-item">
+            
+            <div class="control-card">
                 <div class="control-icon">🏷️</div>
-                <div class="control-content">
-                    <strong>Tag-Based Access</strong>
-                    <p>S3 access controlled via object tags and IAM conditions</p>
-                </div>
+                <div class="control-title">Tag-Based Access</div>
+                <div class="control-desc">S3 access controlled via object tags and IAM conditions</div>
             </div>
-            <div class="control-item">
+            
+            <div class="control-card">
                 <div class="control-icon">📋</div>
-                <div class="control-content">
-                    <strong>Audit Trail</strong>
-                    <p>All provisioning actions logged to CloudTrail</p>
-                </div>
+                <div class="control-title">Audit Trail</div>
+                <div class="control-desc">All provisioning actions logged to CloudTrail</div>
             </div>
-            <div class="control-item">
+            
+            <div class="control-card">
                 <div class="control-icon">🔑</div>
-                <div class="control-content">
-                    <strong>Password Policy</strong>
-                    <p>Enforces complexity, rotation, and reuse prevention</p>
-                </div>
+                <div class="control-title">Password Policy</div>
+                <div class="control-desc">Enforces complexity, rotation, and reuse prevention</div>
             </div>
         </div>
     </section>
-
-    <section class="card">
-        <h2>Automation Benefits</h2>
+    
+    <!-- Automation Benefits -->
+    <section class="benefits-section">
+        <h2>📈 Automation Benefits</h2>
+        
         <div class="benefits-grid">
             <div class="benefit-card">
                 <div class="benefit-value">67%</div>
                 <div class="benefit-label">Faster</div>
                 <div class="benefit-desc">Reduced provisioning time vs manual console operations</div>
             </div>
+            
             <div class="benefit-card">
                 <div class="benefit-value">0%</div>
                 <div class="benefit-label">Error Rate</div>
                 <div class="benefit-desc">Zero configuration errors through automated policy application</div>
             </div>
+            
             <div class="benefit-card">
                 <div class="benefit-value">100%</div>
                 <div class="benefit-label">Compliance</div>
                 <div class="benefit-desc">Ensures complete policy compliance for every user</div>
             </div>
+            
             <div class="benefit-card">
                 <div class="benefit-value">∞</div>
                 <div class="benefit-label">Scalable</div>
@@ -177,20 +738,21 @@
             </div>
         </div>
     </section>
-
-    <section class="card">
-        <h2>Sample Code</h2>
-        <p>The automation script uses Python with Boto3 to interact with AWS IAM:</p>
-        
-        <div class="code-block">
-            <div class="code-header">
-                <span class="code-filename">iam_provisioner.py</span>
-                <span class="code-lang">Python</span>
+    
+    <!-- Code Section -->
+    <section class="code-section">
+        <div class="code-header">
+            <div class="code-filename">
+                <span class="icon">🐍</span>
+                iam_provisioner.py
             </div>
+            <span class="code-lang">Python 3.11</span>
+        </div>
+        <div class="code-body">
             <pre><code><span class="code-keyword">import</span> boto3
 <span class="code-keyword">from</span> datetime <span class="code-keyword">import</span> datetime
 
-<span class="code-keyword">def</span> <span class="code-function">provision_user</span>(username, groups, tags):
+<span class="code-keyword">def</span> <span class="code-function">provision_user</span>(<span class="code-param">username</span>, <span class="code-param">groups</span>, <span class="code-param">tags</span>):
     <span class="code-string">"""
     Provision IAM user with groups and tags.
     Enforces MFA and least-privilege policies.
@@ -218,10 +780,12 @@
     <span class="code-keyword">return</span> {<span class="code-string">'status'</span>: <span class="code-string">'success'</span>, <span class="code-string">'user'</span>: username}</code></pre>
         </div>
     </section>
-
-    <section class="card">
-        <h2>Try the Live Demo</h2>
-        <div class="demo-preview">
+    
+    <!-- Demo Section -->
+    <section class="demo-section">
+        <h2>🎬 Try the Live Demo</h2>
+        
+        <div class="demo-layout">
             <div class="demo-terminal">
                 <div class="terminal-header">
                     <span class="terminal-dot red"></span>
@@ -231,17 +795,28 @@
                 </div>
                 <div class="terminal-body">
                     <p class="terminal-line"><span class="terminal-prompt">$</span> python iam_provisioner.py</p>
-                    <p class="terminal-line info">[INIT] Starting IAM provisioning...</p>
-                    <p class="terminal-line success">[✓] User created: student_analyst</p>
-                    <p class="terminal-line success">[✓] Added to group: StudentDataReadOnly</p>
-                    <p class="terminal-line success">[✓] MFA policy attached</p>
-                    <p class="terminal-line dim">Execution time: 0.52 seconds</p>
+                    <p class="terminal-line terminal-info">[INIT] Starting IAM provisioning...</p>
+                    <p class="terminal-line terminal-success">[✓] User created: student_analyst</p>
+                    <p class="terminal-line terminal-success">[✓] Added to group: StudentDataReadOnly</p>
+                    <p class="terminal-line terminal-success">[✓] MFA policy attached</p>
+                    <p class="terminal-line terminal-success">[✓] Tags applied: Department=Registrar</p>
+                    <p class="terminal-line terminal-success">[✓] Logged to CloudTrail</p>
+                    <p class="terminal-line terminal-dim">Execution time: 0.52 seconds</p>
                 </div>
             </div>
-            <div class="demo-cta">
-                <p>Watch the automation script execute in real-time in your browser. No AWS credentials required - this is a safe simulation.</p>
-                <a href="live-demo.html" class="btn-primary">
-                    <span class="btn-icon">▶</span> Launch Live Demo
+            
+            <div class="demo-info">
+                <p>
+                    Watch the automation script execute in real-time in your browser. 
+                    This safe simulation demonstrates the complete provisioning workflow 
+                    including group creation, policy attachment, and audit logging.
+                </p>
+                <p>
+                    <strong>No AWS credentials required</strong> — the demo runs entirely 
+                    in your browser without making any actual AWS API calls.
+                </p>
+                <a href="live-demo.html" class="demo-btn">
+                    <span>▶</span> Launch Live Demo
                 </a>
             </div>
         </div>
