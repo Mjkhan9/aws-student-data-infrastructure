@@ -25,100 +25,249 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     <style>
-        .demo-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 16px;
+        /* ============================================
+           SPECTACULAR LIVE DEMO PAGE
+           ============================================ */
+        
+        /* Hero Section */
+        .demo-hero {
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            border-radius: 16px;
+            padding: 48px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--aws-border);
         }
         
-        .run-button-container {
-            text-align: center;
-            padding: 32px;
-            background: var(--aws-panel-bg);
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
+        .demo-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 10% 50%, rgba(46, 160, 67, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 50%, rgba(255, 153, 0, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        
+        .demo-hero h1 {
+            font-size: 42px;
             margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .demo-hero p {
+            font-size: 16px;
+            max-width: 700px;
+            position: relative;
+            color: var(--aws-text-secondary);
+        }
+        
+        .safe-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(46, 160, 67, 0.15);
+            border: 1px solid var(--aws-green);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--aws-green-light);
+            font-weight: 600;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        .safe-badge::before {
+            content: '✓';
+            font-weight: 700;
+        }
+        
+        /* Run Button Section */
+        .run-section {
+            background: linear-gradient(135deg, #1a2332 0%, #0d1117 100%);
+            border: 1px solid var(--aws-border);
+            border-radius: 16px;
+            padding: 48px;
+            text-align: center;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .run-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 153, 0, 0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
         
         .run-button {
-            background: var(--aws-orange);
+            position: relative;
+            background: linear-gradient(135deg, var(--aws-orange), var(--aws-orange-dark));
             color: var(--aws-squid-ink);
             border: none;
-            padding: 16px 48px;
-            font-size: 16px;
+            padding: 20px 60px;
+            font-size: 18px;
             font-weight: 700;
-            border-radius: var(--aws-radius);
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.3s ease;
             font-family: inherit;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(255, 153, 0, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
         }
         
         .run-button:hover:not(:disabled) {
-            background: var(--aws-orange-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 153, 0, 0.4);
         }
         
         .run-button:disabled {
             background: var(--aws-border);
             cursor: not-allowed;
-            opacity: 0.6;
+            box-shadow: none;
             transform: none;
         }
         
-        .console-section {
-            background: var(--aws-card-bg);
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
+        .run-button .btn-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+        
+        .run-button:hover:not(:disabled) .btn-icon {
+            transform: scale(1.2);
+        }
+        
+        .run-button.running .btn-icon {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .run-hint {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--aws-text-tertiary);
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 32px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .progress-container.visible {
+            opacity: 1;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+        }
+        
+        .progress-track {
+            height: 8px;
+            background: var(--aws-panel-bg);
+            border-radius: 4px;
             overflow: hidden;
         }
         
-        .console-header {
-            background: var(--aws-squid-ink);
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--aws-green), var(--aws-green-light));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        /* Main Demo Layout */
+        .demo-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        /* Terminal Section */
+        .terminal-container {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .terminal-header {
+            background: linear-gradient(180deg, #2d333b 0%, #22272e 100%);
             padding: 12px 16px;
-            border-bottom: 1px solid var(--aws-border);
             display: flex;
             align-items: center;
             gap: 8px;
+            border-bottom: 1px solid var(--aws-border);
         }
         
-        .console-dot {
+        .terminal-dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
         }
         
-        .console-dot.red { background: #ff5f56; }
-        .console-dot.yellow { background: #ffbd2e; }
-        .console-dot.green { background: #27c93f; }
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27c93f; }
         
-        .console-title {
+        .terminal-title {
+            flex: 1;
+            text-align: center;
             color: var(--aws-text-tertiary);
             font-size: 13px;
-            margin-left: 8px;
+            font-family: Monaco, monospace;
         }
         
-        .console-window {
+        .terminal-body {
             background: #0d1117;
-            padding: 16px;
-            min-height: 400px;
-            max-height: 500px;
+            padding: 20px;
+            min-height: 500px;
+            max-height: 600px;
             overflow-y: auto;
             font-family: Monaco, Consolas, monospace;
-            font-size: 12px;
+            font-size: 13px;
             line-height: 1.6;
         }
         
-        .log-line {
-            margin: 2px 0;
-            opacity: 0;
-            animation: fadeIn 0.3s forwards;
+        .terminal-body::-webkit-scrollbar {
+            width: 8px;
         }
         
-        @keyframes fadeIn {
-            to { opacity: 1; }
+        .terminal-body::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+        
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: var(--aws-border);
+            border-radius: 4px;
+        }
+        
+        .log-line {
+            margin: 3px 0;
+            opacity: 0;
+            animation: fadeInLine 0.3s forwards;
+        }
+        
+        @keyframes fadeInLine {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         .log-info { color: #58a6ff; }
@@ -126,60 +275,102 @@
         .log-warning { color: #d29922; }
         .log-error { color: #f85149; }
         .log-dim { color: #8b949e; }
-        .log-header { color: var(--aws-orange); font-weight: 700; }
+        .log-header { 
+            color: var(--aws-orange); 
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .log-divider {
+            color: var(--aws-border);
+            margin: 8px 0;
+        }
         
-        .state-section {
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: var(--aws-green-light);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* State Monitor */
+        .state-monitor {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .state-card {
             background: var(--aws-card-bg);
             border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            padding: 16px;
+            border-radius: 12px;
+            overflow: hidden;
         }
         
-        .state-section h3 {
-            font-size: 14px;
-            color: var(--aws-text-primary);
-            margin-bottom: 16px;
-            padding-bottom: 8px;
+        .state-header {
+            background: var(--aws-panel-bg);
+            padding: 12px 16px;
             border-bottom: 1px solid var(--aws-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
-        .state-group {
-            margin-bottom: 16px;
+        .state-icon {
+            font-size: 18px;
         }
         
-        .state-group-title {
-            font-size: 11px;
-            color: var(--aws-text-tertiary);
+        .state-title {
+            font-size: 14px;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
+            color: var(--aws-text-primary);
         }
         
-        .state-items {
-            min-height: 60px;
+        .state-count {
+            margin-left: auto;
+            background: var(--aws-orange);
+            color: var(--aws-squid-ink);
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        
+        .state-body {
+            padding: 16px;
+            min-height: 100px;
+        }
+        
+        .state-empty {
+            color: var(--aws-text-tertiary);
+            font-size: 12px;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
         }
         
         .state-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
             background: var(--aws-panel-bg);
             border-left: 3px solid var(--aws-green);
-            padding: 8px 12px;
-            margin: 4px 0;
-            border-radius: var(--aws-radius);
-            font-size: 12px;
-            color: var(--aws-text-secondary);
-            animation: slideIn 0.3s ease;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            animation: slideIn 0.3s ease forwards;
         }
         
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         .state-item.pending {
@@ -187,16 +378,229 @@
             opacity: 0.5;
         }
         
-        .state-empty {
-            color: var(--aws-text-tertiary);
-            font-style: italic;
-            font-size: 12px;
-            padding: 8px;
+        .state-item-icon {
+            font-size: 16px;
         }
         
+        .state-item-text {
+            flex: 1;
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+        }
+        
+        .state-item-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--aws-green);
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Metrics Grid */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .metric-box {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--aws-orange);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-box.active::before {
+            transform: scaleX(1);
+        }
+        
+        .metric-box.active {
+            border-color: var(--aws-orange);
+            box-shadow: 0 8px 24px rgba(255, 153, 0, 0.15);
+        }
+        
+        .metric-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--aws-orange);
+            line-height: 1;
+            margin-bottom: 6px;
+            font-family: Monaco, monospace;
+        }
+        
+        .metric-value.success {
+            color: var(--aws-green-light);
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Workflow Steps */
+        .workflow-section {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+        }
+        
+        .workflow-section h2 {
+            font-size: 20px;
+            margin-bottom: 24px;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .workflow-steps {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        
+        .workflow-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--aws-panel-bg);
+            border: 2px solid var(--aws-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .workflow-step.active .step-circle {
+            background: var(--aws-orange);
+            border-color: var(--aws-orange);
+            box-shadow: 0 0 20px rgba(255, 153, 0, 0.4);
+        }
+        
+        .workflow-step.complete .step-circle {
+            background: var(--aws-green);
+            border-color: var(--aws-green);
+        }
+        
+        .step-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .step-desc {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+        }
+        
+        .step-connector {
+            flex: 0 0 40px;
+            height: 2px;
+            background: var(--aws-border);
+            margin-top: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .step-connector::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--aws-green);
+            transition: width 0.5s ease;
+        }
+        
+        .step-connector.complete::after {
+            width: 100%;
+        }
+        
+        /* Responsive */
         @media (max-width: 1024px) {
             .demo-layout {
                 grid-template-columns: 1fr;
+            }
+            
+            .metrics-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .workflow-steps {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .step-connector {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .demo-hero {
+                padding: 32px 24px;
+            }
+            
+            .demo-hero h1 {
+                font-size: 32px;
+            }
+            
+            .run-section {
+                padding: 32px 24px;
+            }
+            
+            .metrics-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .metric-box {
+                padding: 16px;
+            }
+            
+            .metric-value {
+                font-size: 24px;
+            }
+            
+            .terminal-body {
+                min-height: 400px;
+                font-size: 11px;
             }
         }
     </style>
@@ -228,62 +632,152 @@
 </header>
 
 <main class="content">
-    <section class="card">
-        <h1>Live IAM Automation Demo</h1>
+    <!-- Hero Section -->
+    <section class="demo-hero">
+        <h1>▶️ Live IAM Automation Demo</h1>
         <p>
-            Watch the IAM provisioning pipeline execute in real-time in your browser. This demonstration 
+            Watch the complete IAM provisioning pipeline execute in real-time. This interactive demonstration 
             simulates the production automation workflow including group validation, policy attachment, 
-            user creation, and compliance reporting. <strong>No AWS credentials required</strong> — this is a safe simulation.
+            user creation, and compliance reporting.
         </p>
+        <div class="safe-badge">No AWS credentials required — safe browser simulation</div>
     </section>
-
-    <div class="run-button-container">
+    
+    <!-- Metrics Row -->
+    <section class="metrics-row">
+        <div class="metric-box" id="metricUsers">
+            <div class="metric-icon">👥</div>
+            <div class="metric-value" id="usersCreated">0</div>
+            <div class="metric-label">Users Created</div>
+        </div>
+        <div class="metric-box" id="metricGroups">
+            <div class="metric-icon">📁</div>
+            <div class="metric-value" id="groupsCreated">0</div>
+            <div class="metric-label">Groups Created</div>
+        </div>
+        <div class="metric-box" id="metricPolicies">
+            <div class="metric-icon">📋</div>
+            <div class="metric-value" id="policiesAttached">0</div>
+            <div class="metric-label">Policies Attached</div>
+        </div>
+        <div class="metric-box" id="metricTime">
+            <div class="metric-icon">⚡</div>
+            <div class="metric-value success" id="execTime">0.0s</div>
+            <div class="metric-label">Execution Time</div>
+        </div>
+    </section>
+    
+    <!-- Run Section -->
+    <section class="run-section">
         <button id="runButton" class="run-button" onclick="runDemo()">
-            ▶ Run IAM Automation
+            <span class="btn-icon">▶</span>
+            <span>Run IAM Automation</span>
         </button>
-        <p style="margin-top: 12px; font-size: 12px; color: var(--aws-text-tertiary);">
-            Click to start the provisioning simulation
-        </p>
-    </div>
-
-    <div class="demo-layout">
-        <div class="console-section">
-            <div class="console-header">
-                <span class="console-dot red"></span>
-                <span class="console-dot yellow"></span>
-                <span class="console-dot green"></span>
-                <span class="console-title">iam_provisioner.py — Output</span>
+        <p class="run-hint">Click to start the provisioning simulation</p>
+        
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-label">
+                <span id="progressStage">Initializing...</span>
+                <span id="progressPercent">0%</span>
             </div>
-            <div id="consoleWindow" class="console-window">
-                <div class="log-line log-dim">Waiting to start...</div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Demo Layout -->
+    <div class="demo-layout">
+        <!-- Terminal -->
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+                <span class="terminal-title">iam_provisioner.py — Output</span>
+            </div>
+            <div id="terminalBody" class="terminal-body">
+                <div class="log-line log-dim">Waiting to start...<span class="cursor"></span></div>
             </div>
         </div>
         
-        <div class="state-section">
-            <h3>IAM State Monitor</h3>
-            
-            <div class="state-group">
-                <div class="state-group-title">IAM Groups</div>
-                <div id="groupsList" class="state-items">
+        <!-- State Monitor -->
+        <div class="state-monitor">
+            <div class="state-card">
+                <div class="state-header">
+                    <span class="state-icon">📁</span>
+                    <span class="state-title">IAM Groups</span>
+                    <span class="state-count" id="groupCount">0</span>
+                </div>
+                <div class="state-body" id="groupsList">
                     <div class="state-empty">Groups will appear here...</div>
                 </div>
             </div>
             
-            <div class="state-group">
-                <div class="state-group-title">Provisioned Users</div>
-                <div id="usersList" class="state-items">
+            <div class="state-card">
+                <div class="state-header">
+                    <span class="state-icon">👤</span>
+                    <span class="state-title">Provisioned Users</span>
+                    <span class="state-count" id="userCount">0</span>
+                </div>
+                <div class="state-body" id="usersList">
                     <div class="state-empty">Users will appear here...</div>
                 </div>
             </div>
             
-            <div class="state-group">
-                <div class="state-group-title">Applied Policies</div>
-                <div id="policiesList" class="state-items">
+            <div class="state-card">
+                <div class="state-header">
+                    <span class="state-icon">📋</span>
+                    <span class="state-title">Applied Policies</span>
+                    <span class="state-count" id="policyCount">0</span>
+                </div>
+                <div class="state-body" id="policiesList">
                     <div class="state-empty">Policies will appear here...</div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- Workflow Steps -->
+    <section class="workflow-section">
+        <h2>🔄 Automation Workflow</h2>
+        
+        <div class="workflow-steps">
+            <div class="workflow-step" id="step1">
+                <div class="step-circle">🚀</div>
+                <div class="step-title">Initialize</div>
+                <div class="step-desc">Load config & validate</div>
+            </div>
+            <div class="step-connector" id="conn1"></div>
+            
+            <div class="workflow-step" id="step2">
+                <div class="step-circle">📁</div>
+                <div class="step-title">Create Groups</div>
+                <div class="step-desc">Set up IAM groups</div>
+            </div>
+            <div class="step-connector" id="conn2"></div>
+            
+            <div class="workflow-step" id="step3">
+                <div class="step-circle">📋</div>
+                <div class="step-title">Attach Policies</div>
+                <div class="step-desc">Apply permissions</div>
+            </div>
+            <div class="step-connector" id="conn3"></div>
+            
+            <div class="workflow-step" id="step4">
+                <div class="step-circle">👥</div>
+                <div class="step-title">Create Users</div>
+                <div class="step-desc">Provision identities</div>
+            </div>
+            <div class="step-connector" id="conn4"></div>
+            
+            <div class="workflow-step" id="step5">
+                <div class="step-circle">✅</div>
+                <div class="step-title">Validate</div>
+                <div class="step-desc">Verify compliance</div>
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer class="site-footer">
@@ -298,92 +792,198 @@
 </footer>
 
 <script>
-let isRunning = false;
+// ============================================
+// SPECTACULAR LIVE DEMO
+// ============================================
 
+let isRunning = false;
+let startTime = 0;
+let groupsCreatedCount = 0;
+let usersCreatedCount = 0;
+let policiesCount = 0;
+
+// Log to terminal
 function log(message, type = 'info') {
-    const consoleWindow = document.getElementById('consoleWindow');
+    const terminal = document.getElementById('terminalBody');
+    
+    // Remove cursor from previous line
+    const cursors = terminal.querySelectorAll('.cursor');
+    cursors.forEach(c => c.remove());
+    
     const line = document.createElement('div');
     line.className = `log-line log-${type}`;
-    line.textContent = message;
-    consoleWindow.appendChild(line);
-    consoleWindow.scrollTop = consoleWindow.scrollHeight;
+    line.innerHTML = message + '<span class="cursor"></span>';
+    terminal.appendChild(line);
+    terminal.scrollTop = terminal.scrollHeight;
 }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function addStateItem(listId, content) {
+function clearTerminal() {
+    document.getElementById('terminalBody').innerHTML = '';
+}
+
+function clearState() {
+    document.getElementById('groupsList').innerHTML = '<div class="state-empty">Groups will appear here...</div>';
+    document.getElementById('usersList').innerHTML = '<div class="state-empty">Users will appear here...</div>';
+    document.getElementById('policiesList').innerHTML = '<div class="state-empty">Policies will appear here...</div>';
+    
+    document.getElementById('groupCount').textContent = '0';
+    document.getElementById('userCount').textContent = '0';
+    document.getElementById('policyCount').textContent = '0';
+    
+    document.getElementById('usersCreated').textContent = '0';
+    document.getElementById('groupsCreated').textContent = '0';
+    document.getElementById('policiesAttached').textContent = '0';
+    document.getElementById('execTime').textContent = '0.0s';
+    
+    // Reset metrics boxes
+    document.querySelectorAll('.metric-box').forEach(box => box.classList.remove('active'));
+    
+    // Reset workflow steps
+    document.querySelectorAll('.workflow-step').forEach(step => {
+        step.classList.remove('active', 'complete');
+    });
+    document.querySelectorAll('.step-connector').forEach(conn => {
+        conn.classList.remove('complete');
+    });
+    
+    groupsCreatedCount = 0;
+    usersCreatedCount = 0;
+    policiesCount = 0;
+}
+
+function addStateItem(listId, icon, content, badge = '') {
     const list = document.getElementById(listId);
     if (list.querySelector('.state-empty')) {
         list.innerHTML = '';
     }
+    
     const item = document.createElement('div');
     item.className = 'state-item';
-    item.textContent = content;
+    item.innerHTML = `
+        <span class="state-item-icon">${icon}</span>
+        <span class="state-item-text">${content}</span>
+        ${badge ? `<span class="state-item-badge">${badge}</span>` : ''}
+    `;
     list.appendChild(item);
-    return item;
 }
 
-function clearState() {
-    document.getElementById('consoleWindow').innerHTML = '';
-    document.getElementById('groupsList').innerHTML = '<div class="state-empty">Groups will appear here...</div>';
-    document.getElementById('usersList').innerHTML = '<div class="state-empty">Users will appear here...</div>';
-    document.getElementById('policiesList').innerHTML = '<div class="state-empty">Policies will appear here...</div>';
+function updateProgress(percent, stage) {
+    document.getElementById('progressFill').style.width = percent + '%';
+    document.getElementById('progressPercent').textContent = percent + '%';
+    document.getElementById('progressStage').textContent = stage;
+}
+
+function setWorkflowStep(stepNum, status) {
+    const step = document.getElementById(`step${stepNum}`);
+    if (status === 'active') {
+        step.classList.add('active');
+        step.classList.remove('complete');
+    } else if (status === 'complete') {
+        step.classList.remove('active');
+        step.classList.add('complete');
+        
+        if (stepNum < 5) {
+            document.getElementById(`conn${stepNum}`).classList.add('complete');
+        }
+    }
+}
+
+function updateTimer() {
+    if (isRunning) {
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+        document.getElementById('execTime').textContent = elapsed + 's';
+        requestAnimationFrame(updateTimer);
+    }
 }
 
 async function runDemo() {
     if (isRunning) return;
     isRunning = true;
+    startTime = Date.now();
     
     const button = document.getElementById('runButton');
     button.disabled = true;
-    button.textContent = '⏳ Running...';
+    button.classList.add('running');
+    button.innerHTML = '<span class="btn-icon">⏳</span><span>Running...</span>';
     
+    // Show progress
+    document.getElementById('progressContainer').classList.add('visible');
+    
+    clearTerminal();
     clearState();
+    updateTimer();
     
-    // Header
-    log('═══════════════════════════════════════════════════════', 'dim');
+    // ===== INITIALIZATION =====
+    setWorkflowStep(1, 'active');
+    document.getElementById('metricTime').classList.add('active');
+    updateProgress(5, 'Initializing...');
+    
+    log('═══════════════════════════════════════════════════════════════', 'dim');
     log('  AWS IAM PROVISIONING AUTOMATION v2.1.0', 'header');
     log('  Student Data Infrastructure Project', 'dim');
-    log('═══════════════════════════════════════════════════════', 'dim');
-    await sleep(800);
+    log('  Execution Date: ' + new Date().toLocaleDateString(), 'dim');
+    log('═══════════════════════════════════════════════════════════════', 'dim');
+    await sleep(600);
     
-    // Initialization
     log('', 'dim');
     log('[INIT] Initializing IAM automation workflow...', 'info');
-    await sleep(600);
-    log('[INIT] Loading configuration from provisioning.yaml', 'dim');
-    await sleep(500);
-    log('[INIT] Validating AWS credentials... ✓', 'success');
     await sleep(400);
+    log('[INIT] Loading configuration from provisioning.yaml', 'dim');
+    await sleep(300);
+    log('[INIT] Validating AWS credentials... ✓', 'success');
+    await sleep(300);
     log('[INIT] Session established in us-east-1', 'dim');
-    await sleep(700);
+    await sleep(300);
+    log('[INIT] Demo mode active - no live AWS calls', 'warning');
+    await sleep(500);
     
-    // Groups
+    setWorkflowStep(1, 'complete');
+    updateProgress(15, 'Creating groups...');
+    
+    // ===== CREATE GROUPS =====
+    setWorkflowStep(2, 'active');
+    document.getElementById('metricGroups').classList.add('active');
+    
     log('', 'dim');
+    log('─────────────────────────────────────────────────────────────', 'divider');
     log('[GROUPS] Creating IAM groups...', 'info');
-    await sleep(600);
+    await sleep(400);
     
     const groups = [
-        'StudentDataReadOnly',
-        'StudentDataAdmin', 
-        'ReportsGeneration',
-        'AuditViewers'
+        { name: 'StudentDataReadOnly', desc: 'Read access' },
+        { name: 'StudentDataAdmin', desc: 'Admin access' },
+        { name: 'ReportsGeneration', desc: 'Report access' },
+        { name: 'AuditViewers', desc: 'Audit access' }
     ];
     
     for (const group of groups) {
-        log(`[GROUPS] Creating group: ${group}`, 'dim');
-        addStateItem('groupsList', group);
-        await sleep(400);
-        log(`[GROUPS] ✓ ${group} created successfully`, 'success');
-        await sleep(300);
+        log(`[GROUPS] Creating group: ${group.name}`, 'dim');
+        await sleep(250);
+        log(`[GROUPS] ✓ ${group.name} created successfully`, 'success');
+        
+        addStateItem('groupsList', '📁', group.name, group.desc);
+        groupsCreatedCount++;
+        document.getElementById('groupCount').textContent = groupsCreatedCount;
+        document.getElementById('groupsCreated').textContent = groupsCreatedCount;
+        
+        await sleep(200);
     }
     
-    // Policies
+    setWorkflowStep(2, 'complete');
+    updateProgress(35, 'Attaching policies...');
+    
+    // ===== ATTACH POLICIES =====
+    setWorkflowStep(3, 'active');
+    document.getElementById('metricPolicies').classList.add('active');
+    
     log('', 'dim');
+    log('─────────────────────────────────────────────────────────────', 'divider');
     log('[POLICY] Attaching managed policies to groups...', 'info');
-    await sleep(600);
+    await sleep(400);
     
     const policies = [
         { name: 'AmazonS3ReadOnlyAccess', group: 'StudentDataReadOnly' },
@@ -393,16 +993,28 @@ async function runDemo() {
     
     for (const policy of policies) {
         log(`[POLICY] Attaching: ${policy.name}`, 'dim');
-        addStateItem('policiesList', policy.name);
-        await sleep(400);
+        await sleep(250);
         log(`[POLICY] ✓ Attached to ${policy.group}`, 'success');
-        await sleep(300);
+        
+        addStateItem('policiesList', '📋', policy.name);
+        policiesCount++;
+        document.getElementById('policyCount').textContent = policiesCount;
+        document.getElementById('policiesAttached').textContent = policiesCount;
+        
+        await sleep(200);
     }
     
-    // Users
+    setWorkflowStep(3, 'complete');
+    updateProgress(55, 'Provisioning users...');
+    
+    // ===== CREATE USERS =====
+    setWorkflowStep(4, 'active');
+    document.getElementById('metricUsers').classList.add('active');
+    
     log('', 'dim');
+    log('─────────────────────────────────────────────────────────────', 'divider');
     log('[USERS] Provisioning IAM users...', 'info');
-    await sleep(600);
+    await sleep(400);
     
     const users = [
         { name: 'registrar_analyst', group: 'StudentDataReadOnly', dept: 'Registrar' },
@@ -411,35 +1023,35 @@ async function runDemo() {
         { name: 'compliance_auditor', group: 'AuditViewers', dept: 'Compliance' }
     ];
     
-    for (const user of users) {
+    for (let i = 0; i < users.length; i++) {
+        const user = users[i];
         log(`[USERS] Creating user: ${user.name}`, 'dim');
-        await sleep(300);
+        await sleep(200);
         log(`[USERS] Tagging: Department=${user.dept}, MFARequired=true`, 'dim');
-        await sleep(300);
+        await sleep(200);
         log(`[USERS] Adding ${user.name} to ${user.group}`, 'dim');
-        addStateItem('usersList', `${user.name} (${user.group})`);
-        await sleep(300);
+        await sleep(200);
         log(`[USERS] ✓ ${user.name} provisioned successfully`, 'success');
-        await sleep(400);
+        
+        addStateItem('usersList', '👤', `${user.name}`, user.dept);
+        usersCreatedCount++;
+        document.getElementById('userCount').textContent = usersCreatedCount;
+        document.getElementById('usersCreated').textContent = usersCreatedCount;
+        
+        updateProgress(55 + ((i + 1) / users.length * 25), 'Provisioning users...');
+        await sleep(300);
     }
     
-    // Tags
-    log('', 'dim');
-    log('[TAGS] Applying compliance tags...', 'info');
-    await sleep(500);
-    log('[TAGS] Environment: Production', 'dim');
-    await sleep(200);
-    log('[TAGS] Project: StudentDataInfrastructure', 'dim');
-    await sleep(200);
-    log('[TAGS] ManagedBy: Automation', 'dim');
-    await sleep(200);
-    log('[TAGS] ✓ Tags applied to all resources', 'success');
-    await sleep(700);
+    setWorkflowStep(4, 'complete');
+    updateProgress(85, 'Validating...');
     
-    // Validation
+    // ===== VALIDATION =====
+    setWorkflowStep(5, 'active');
+    
     log('', 'dim');
+    log('─────────────────────────────────────────────────────────────', 'divider');
     log('[VALIDATE] Running post-provisioning validation...', 'info');
-    await sleep(600);
+    await sleep(500);
     log('[VALIDATE] ✓ All users have MFA enforcement tag', 'success');
     await sleep(300);
     log('[VALIDATE] ✓ Password policy meets requirements', 'success');
@@ -447,38 +1059,49 @@ async function runDemo() {
     log('[VALIDATE] ✓ No overly permissive policies detected', 'success');
     await sleep(300);
     log('[VALIDATE] ✓ All actions logged to CloudTrail', 'success');
-    await sleep(700);
+    await sleep(300);
     
-    // Summary
+    setWorkflowStep(5, 'complete');
+    updateProgress(100, 'Complete!');
+    
+    // ===== SUMMARY =====
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+    isRunning = false;
+    
     log('', 'dim');
-    log('═══════════════════════════════════════════════════════', 'dim');
+    log('═══════════════════════════════════════════════════════════════', 'dim');
     log('  ✓ PROVISIONING COMPLETE', 'success');
-    log('═══════════════════════════════════════════════════════', 'dim');
+    log('═══════════════════════════════════════════════════════════════', 'dim');
     log('', 'dim');
-    log(`  Users created:     ${users.length}`, 'info');
-    log(`  Groups created:    ${groups.length}`, 'info');
-    log(`  Policies attached: ${policies.length}`, 'info');
-    log(`  Execution time:    2.4 seconds`, 'info');
+    log(`  Users created:     ${usersCreatedCount}`, 'info');
+    log(`  Groups created:    ${groupsCreatedCount}`, 'info');
+    log(`  Policies attached: ${policiesCount}`, 'info');
+    log(`  Execution time:    ${elapsed} seconds`, 'info');
     log(`  Error rate:        0%`, 'success');
     log('', 'dim');
-    log('═══════════════════════════════════════════════════════', 'dim');
+    log('═══════════════════════════════════════════════════════════════', 'dim');
+    
+    // Remove cursor from last line
+    const cursors = document.querySelectorAll('.cursor');
+    cursors.forEach(c => c.remove());
+    
+    await sleep(1000);
     
     button.disabled = false;
-    button.textContent = '▶ Run Again';
-    isRunning = false;
+    button.classList.remove('running');
+    button.innerHTML = '<span class="btn-icon">▶</span><span>Run Again</span>';
 }
 
-// Mobile menu toggle
+// Mobile menu
 document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
     document.querySelector('.nav-links').classList.toggle('mobile-open');
     this.classList.toggle('active');
 });
 
-// Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', function() {
+    link.addEventListener('click', () => {
         document.querySelector('.nav-links').classList.remove('mobile-open');
-        document.querySelector('.mobile-menu-toggle').classList.remove('active');
+        document.querySelector('.mobile-menu-toggle')?.classList.remove('active');
     });
 });
 </script>
