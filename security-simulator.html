@@ -5,465 +5,214 @@
     <title>Security Simulator | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Interactive security simulator demonstrating how AWS protects student data from cyber attacks.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     <style>
-        :root {
-            --aws-navy: #232f3e;
-            --aws-navy-light: #2a3f54;
-            --aws-orange: #ff9900;
-            --aws-orange-hover: #ec7211;
-            --bg-primary: #f8f9fa;
-            --bg-white: #ffffff;
-            --bg-dark: #1a1a2e;
-            --border-light: #e8eaed;
-            --border-medium: #d1d5db;
-            --text-primary: #16191f;
-            --text-secondary: #5f6b7a;
-            --text-muted: #8c939d;
-            --success-green: #067d68;
-            --success-bg: #d4edda;
-            --danger-red: #d13212;
-            --danger-bg: #f8d7da;
-            --warning-orange: #b45309;
-            --warning-bg: #fff3cd;
-            --info-blue: #0073bb;
-            --info-bg: #d1ecf1;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
-            --radius-sm: 4px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'IBM Plex Mono', monospace;
+        /* Page-level layout built on top of the AWS console theme */
+        .sim-header {
+            margin-bottom: 16px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-sans);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Header */
-        .header {
-            background: var(--aws-navy);
-            padding: 0 24px;
-            height: 56px;
+        .sim-title-row {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .logo-icon {
-            width: 28px;
-            height: 28px;
-            background: var(--aws-orange);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 4px;
-        }
-
-        .nav-links a {
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            padding: 8px 14px;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.15s;
-        }
-
-        .nav-links a:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-
-        .nav-links a.active {
-            background: rgba(255,255,255,0.15);
-            color: white;
-        }
-
-        /* Main Layout */
-        .main-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 24px;
-        }
-
-        /* Page Header */
-        .page-header {
-            margin-bottom: 24px;
-        }
-
-        .page-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text-primary);
+            align-items: flex-end;
+            gap: 16px;
             margin-bottom: 8px;
         }
 
-        .page-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            max-width: 700px;
+        .sim-title-row h1 {
+            border-bottom: none;
+            margin-bottom: 4px;
         }
 
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
+        .sim-subtitle {
+            color: var(--aws-text-secondary);
+            font-size: 13px;
+            max-width: 640px;
         }
 
-        .stat-card {
-            background: var(--bg-white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-md);
-            padding: 16px 20px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .stat-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text-primary);
-            font-family: var(--font-mono);
-        }
-
-        .stat-value.success { color: var(--success-green); }
-        .stat-value.danger { color: var(--danger-red); }
-
-        /* Main Grid */
         .simulator-grid {
             display: grid;
-            grid-template-columns: 300px 1fr 340px;
-            gap: 20px;
+            grid-template-columns: 300px minmax(0, 1.4fr) minmax(0, 1fr);
+            gap: 16px;
+            align-items: flex-start;
         }
 
-        /* Panel Styles */
-        .panel {
-            background: var(--bg-white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-        }
-
-        .panel-header {
-            padding: 14px 18px;
-            border-bottom: 1px solid var(--border-light);
-            background: var(--bg-primary);
-        }
-
-        .panel-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .panel-title .icon {
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-
-        .panel-body {
-            padding: 16px;
-        }
-
-        /* Attack Scenarios Panel */
-        .scenarios-panel {
-            position: sticky;
-            top: 80px;
-            height: fit-content;
-        }
-
-        .attack-btn {
-            width: 100%;
-            background: var(--bg-white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-md);
-            padding: 12px 14px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.15s;
-            position: relative;
-        }
-
-        .attack-btn:hover:not(:disabled) {
-            border-color: var(--aws-orange);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .attack-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .attack-btn.active {
-            border-color: var(--aws-orange);
-            background: #fff8f0;
-        }
-
-        .attack-btn::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: var(--danger-red);
-            border-radius: 3px 0 0 3px;
-        }
-
-        .attack-name {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 2px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .attack-desc {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .threat-level {
-            font-size: 9px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 3px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .threat-high { background: var(--danger-bg); color: var(--danger-red); }
-        .threat-medium { background: var(--warning-bg); color: var(--warning-orange); }
-        .threat-critical { background: #4a1942; color: #ff6b9d; }
-
-        /* Visualization Panel */
-        .viz-panel {
+        .sim-left,
+        .sim-center,
+        .sim-right {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
-        /* Architecture Diagram */
+        .sim-stats {
+            margin-bottom: 16px;
+        }
+
+        .sim-metrics {
+            margin-top: 8px;
+        }
+
+        /* Attack scenario buttons reuse AWS attack-button styles but tuned for panel */
+        .attack-list-header {
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+        }
+
+        .attack-button + .attack-button {
+            margin-top: 8px;
+        }
+
+        .attack-button .threat-badge {
+            font-size: 10px;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: var(--aws-radius);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .threat-high    { background: rgba(209, 50, 18, 0.12);  border-color: var(--aws-red);    color: var(--aws-red-light); }
+        .threat-medium { background: rgba(255, 153, 0, 0.08); border-color: var(--aws-yellow); color: var(--aws-yellow); }
+        .threat-critical { background: rgba(123, 97, 255, 0.12); border-color: #7b61ff; color: #e5deff; }
+
+        .attack-title-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .attack-sub {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+        }
+
+        /* Visualization area */
         .architecture-container {
-            background: var(--bg-white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            padding: 24px;
             position: relative;
-            min-height: 280px;
+            background: var(--aws-panel-bg);
+            border-radius: var(--aws-radius-lg);
+            border: 1px solid var(--aws-border);
+            padding: 20px 20px 16px 52px;
+            overflow: hidden;
         }
 
         .arch-label {
             position: absolute;
-            top: 12px;
+            top: 10px;
             left: 16px;
             font-size: 10px;
-            font-weight: 600;
-            color: var(--text-muted);
+            letter-spacing: 0.5px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            color: var(--aws-text-tertiary);
         }
 
         .architecture-diagram {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 30px 10px 10px;
-            position: relative;
+            gap: 24px;
+            margin-top: 12px;
         }
 
-        /* Connection Lines */
         .connections-svg {
             position: absolute;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
         }
 
         .connection {
-            stroke: var(--border-medium);
+            stroke: var(--aws-border-light);
             stroke-width: 2;
-            stroke-dasharray: 6, 4;
+            stroke-dasharray: 6 4;
             fill: none;
-            transition: all 0.3s;
         }
 
-        .connection.active {
-            stroke: var(--success-green);
-            stroke-dasharray: none;
-        }
-
-        .connection.attack {
-            stroke: var(--danger-red);
-            stroke-dasharray: 8, 4;
-            animation: flowAttack 0.5s linear infinite;
-        }
-
-        @keyframes flowAttack {
-            to { stroke-dashoffset: -12; }
-        }
-
-        /* Network Nodes */
         .node {
-            background: var(--bg-white);
-            border: 2px solid var(--border-medium);
-            border-radius: var(--radius-md);
-            padding: 14px 16px;
+            background: var(--aws-card-bg);
+            border-radius: var(--aws-radius);
+            border: 1px solid var(--aws-border);
+            padding: 12px 14px;
+            min-width: 120px;
             text-align: center;
-            min-width: 110px;
-            position: relative;
-            z-index: 10;
-            transition: all 0.3s;
+            box-shadow: var(--aws-shadow-sm);
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
         }
 
         .node-icon {
-            width: 40px;
-            height: 40px;
-            margin: 0 auto 8px;
-            background: var(--bg-primary);
-            border-radius: var(--radius-md);
+            width: 36px;
+            height: 36px;
+            margin: 0 auto 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            border-radius: var(--aws-radius);
+            background: var(--aws-panel-bg);
+            font-size: 18px;
         }
 
         .node-name {
             font-size: 12px;
-            font-weight: 600;
-            color: var(--text-primary);
+            font-weight: 700;
+            color: var(--aws-text-primary);
             margin-bottom: 2px;
         }
 
         .node-detail {
-            font-size: 10px;
-            color: var(--text-muted);
-            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
         }
 
         .node.highlight {
-            border-color: var(--warning-orange);
-            background: #fffbf5;
-            animation: pulse 1s ease infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
+            border-color: var(--aws-yellow);
+            background: #293541;
+            transform: translateY(-1px);
         }
 
         .node.blocked {
-            border-color: var(--success-green);
-            background: #f0fdf8;
+            border-color: var(--aws-green);
+            background: rgba(29, 129, 2, 0.15);
         }
 
-        .node.attacked {
-            border-color: var(--danger-red);
-            animation: shake 0.4s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-4px); }
-            75% { transform: translateX(4px); }
-        }
-
-        /* Attacker Icon */
         .attacker {
             position: absolute;
-            left: -50px;
+            left: 8px;
             top: 50%;
-            transform: translateY(-50%);
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--danger-red), #ff6b6b);
-            border-radius: 50%;
+            transform: translateY(-50%) translateX(-40px);
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--aws-red), var(--aws-red-light));
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
+            box-shadow: 0 0 12px rgba(209, 50, 18, 0.6);
             opacity: 0;
-            z-index: 20;
-            box-shadow: 0 4px 12px rgba(209, 50, 18, 0.3);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .attacker.active {
             opacity: 1;
-            left: 10px;
+            transform: translateY(-50%) translateX(0);
         }
 
-        /* Shield Effect */
         .shield {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            inset: 50% auto auto 50%;
+            transform: translate(-50%, -50%) scale(0.8);
             width: 80px;
             height: 80px;
-            border: 3px solid var(--success-green);
-            border-radius: 50%;
+            border-radius: 999px;
+            border: 2px solid var(--aws-green-light);
             opacity: 0;
             pointer-events: none;
-            z-index: 25;
         }
 
         .shield.active {
@@ -471,532 +220,437 @@
         }
 
         @keyframes shieldPulse {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
+            0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+            40%  { opacity: 1; transform: translate(-50%, -50%) scale(1.0); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.6); }
         }
 
-        /* Blocked Banner */
         .blocked-banner {
             position: absolute;
-            top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: var(--success-green);
-            color: white;
-            font-size: 14px;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: var(--aws-green);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: var(--aws-radius-lg);
+            font-size: 13px;
             font-weight: 700;
-            padding: 12px 24px;
-            border-radius: var(--radius-md);
             opacity: 0;
-            z-index: 30;
+            box-shadow: var(--aws-shadow-lg);
             white-space: nowrap;
-            box-shadow: var(--shadow-lg);
         }
 
         .blocked-banner.show {
-            animation: bannerPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: bannerIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        @keyframes bannerPop {
-            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        @keyframes bannerIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+            to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         }
 
-        /* Defense Layers */
         .defense-layers {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
             margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border-light);
         }
 
         .defense-layer {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 10px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-sm);
+            padding: 4px 8px;
+            border-radius: var(--aws-radius);
+            border: 1px solid var(--aws-border);
+            background: var(--aws-card-bg);
             font-size: 11px;
-            font-weight: 500;
-            color: var(--text-muted);
-            transition: all 0.2s;
+            color: var(--aws-text-tertiary);
         }
 
         .defense-layer .dot {
             width: 6px;
             height: 6px;
-            background: var(--border-medium);
-            border-radius: 50%;
+            border-radius: 999px;
+            background: var(--aws-border-light);
         }
 
         .defense-layer.active {
-            background: #f0fdf8;
-            border-color: var(--success-green);
-            color: var(--success-green);
+            border-color: var(--aws-green-light);
+            background: rgba(29, 129, 2, 0.18);
+            color: var(--aws-green-light);
         }
 
         .defense-layer.active .dot {
-            background: var(--success-green);
-            box-shadow: 0 0 6px var(--success-green);
+            background: var(--aws-green-light);
+            box-shadow: 0 0 8px rgba(46, 160, 67, 0.7);
         }
 
-        /* Event Log */
+        /* Event log uses console-output styles */
         .log-container {
-            max-height: 200px;
+            max-height: 220px;
             overflow-y: auto;
         }
 
         .log-entry {
             display: flex;
-            gap: 10px;
-            padding: 8px 12px;
-            margin-bottom: 4px;
-            border-radius: var(--radius-sm);
+            gap: 8px;
+            padding: 4px 0;
             font-size: 12px;
-            font-family: var(--font-mono);
-            opacity: 0;
-            transform: translateY(-5px);
-            animation: logAppear 0.2s ease forwards;
+            font-family: Monaco, Menlo, monospace;
+            animation: fadeInUp 0.15s ease-out;
         }
-
-        @keyframes logAppear {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .log-entry.info { background: var(--info-bg); color: var(--info-blue); }
-        .log-entry.warning { background: var(--warning-bg); color: var(--warning-orange); }
-        .log-entry.success { background: var(--success-bg); color: var(--success-green); }
-        .log-entry.error { background: var(--danger-bg); color: var(--danger-red); }
 
         .log-time {
-            color: inherit;
             opacity: 0.7;
             flex-shrink: 0;
+            width: 90px;
         }
 
-        /* Explanation Panel (Right Side) */
-        .explanation-panel {
-            position: sticky;
-            top: 80px;
-            height: fit-content;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+        .log-entry.info    { color: var(--aws-blue-light); }
+        .log-entry.warning { color: var(--aws-yellow); }
+        .log-entry.success { color: var(--aws-green-light); }
+        .log-entry.error   { color: var(--aws-red-light); }
 
-        /* What's Happening Card */
-        .whats-happening {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            color: white;
-        }
-
-        .wh-title {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.9;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .wh-content {
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .wh-content strong {
-            color: #ffd700;
-        }
-
-        /* Real World Analogy */
-        .analogy-card {
-            background: var(--bg-white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-        }
-
-        .analogy-header {
-            background: #fef3c7;
-            padding: 12px 16px;
-            border-bottom: 1px solid #fde68a;
-        }
-
-        .analogy-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--warning-orange);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .analogy-body {
-            padding: 16px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .analogy-body .emoji-icon {
-            font-size: 24px;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        /* Technical Details Tabs */
-        .tech-tabs {
-            background: var(--bg-white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-        }
-
+        /* Tabs */
         .tabs-nav {
             display: flex;
-            border-bottom: 1px solid var(--border-light);
-            background: var(--bg-primary);
+            border-bottom: 1px solid var(--aws-border);
+            background: var(--aws-panel-bg);
         }
 
         .tab-btn {
             flex: 1;
-            padding: 10px 12px;
-            background: none;
+            padding: 8px 10px;
             border: none;
-            font-family: var(--font-sans);
+            background: transparent;
+            color: var(--aws-text-tertiary);
             font-size: 12px;
-            font-weight: 500;
-            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             cursor: pointer;
-            transition: all 0.15s;
-            position: relative;
-        }
-
-        .tab-btn:hover {
-            color: var(--text-secondary);
-            background: rgba(0,0,0,0.02);
+            transition: background 0.15s ease, color 0.15s ease;
         }
 
         .tab-btn.active {
             color: var(--aws-orange);
-        }
-
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--aws-orange);
+            background: var(--aws-card-bg);
         }
 
         .tab-content {
             display: none;
-            padding: 16px;
-            max-height: 300px;
-            overflow-y: auto;
+            padding: 12px 14px;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        /* Code Block */
         .code-block {
-            background: #1e1e2e;
-            border-radius: var(--radius-md);
-            padding: 14px;
+            background: var(--aws-squid-ink-dark);
+            border-radius: var(--aws-radius);
+            padding: 12px;
+            font-family: Monaco, Menlo, monospace;
+            font-size: 12px;
+            color: var(--aws-text-secondary);
             overflow-x: auto;
-            font-family: var(--font-mono);
-            font-size: 11px;
-            line-height: 1.5;
-            color: #cdd6f4;
         }
 
-        .code-block .comment { color: #6c7086; }
+        .code-block .comment { color: #7f8c8d; }
         .code-block .keyword { color: #cba6f7; }
-        .code-block .string { color: #a6e3a1; }
+        .code-block .string  { color: #a6e3a1; }
         .code-block .function { color: #89b4fa; }
 
-        /* GuardDuty Finding */
         .finding-card {
-            border: 1px solid var(--danger-red);
-            border-radius: var(--radius-md);
+            border-radius: var(--aws-radius);
+            border: 1px solid var(--aws-red);
             overflow: hidden;
         }
 
         .finding-header {
-            background: var(--danger-bg);
-            padding: 12px 14px;
+            background: rgba(209, 50, 18, 0.12);
+            padding: 8px 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .finding-type {
-            font-family: var(--font-mono);
+            font-family: Monaco, Menlo, monospace;
             font-size: 11px;
-            font-weight: 600;
-            color: var(--danger-red);
+            color: var(--aws-red-light);
         }
 
         .finding-severity {
-            font-size: 9px;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: var(--aws-radius);
+            background: var(--aws-red);
+            color: #fff;
             font-weight: 700;
-            padding: 3px 8px;
-            background: var(--danger-red);
-            color: white;
-            border-radius: 3px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .finding-body {
-            padding: 14px;
+            padding: 10px 12px 12px;
         }
 
         .finding-title {
             font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 6px;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
 
         .finding-desc {
             font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
+            color: var(--aws-text-secondary);
+            margin-bottom: 8px;
         }
 
         .finding-json {
-            background: #1e1e2e;
-            border-radius: var(--radius-sm);
-            padding: 10px;
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: #6c7086;
-            max-height: 120px;
+            background: var(--aws-squid-ink-dark);
+            padding: 8px;
+            border-radius: var(--aws-radius);
+            font-size: 11px;
+            max-height: 140px;
             overflow: auto;
+            color: var(--aws-text-secondary);
         }
 
-        /* Runbook */
+        .placeholder {
+            text-align: center;
+            padding: 16px;
+            color: var(--aws-text-tertiary);
+            font-size: 12px;
+        }
+
         .runbook {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: var(--aws-text-secondary);
             line-height: 1.6;
         }
 
-        .runbook h4 {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 14px 0 8px 0;
-        }
-
-        .runbook h4:first-child { margin-top: 0; }
-
         .runbook pre {
-            background: #1e1e2e;
-            border-radius: var(--radius-sm);
-            padding: 10px;
+            background: var(--aws-squid-ink-dark);
+            padding: 8px;
+            border-radius: var(--aws-radius);
             overflow-x: auto;
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: #cdd6f4;
-            margin: 8px 0;
+            font-size: 11px;
+            margin: 6px 0 8px;
         }
 
-        .runbook ul {
-            margin-left: 16px;
+        .runbook h4 {
+            margin: 10px 0 4px;
+            font-size: 12px;
+            color: var(--aws-text-primary);
         }
 
-        .runbook li {
-            margin: 4px 0;
+        /* Right-side explanation */
+        .whats-happening {
+            background: linear-gradient(135deg, #244372, #16191f);
+            border-radius: var(--aws-radius-lg);
+            border: 1px solid var(--aws-border);
+            padding: 16px 18px;
         }
 
-        /* Placeholder */
-        .placeholder {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
+        .wh-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            color: var(--aws-text-tertiary);
         }
 
-        .placeholder-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-            opacity: 0.5;
-        }
-
-        .placeholder-text {
+        .wh-content {
             font-size: 13px;
+            color: var(--aws-text-secondary);
         }
 
-        /* Responsive */
+        .analogy-card {
+            border-radius: var(--aws-radius-lg);
+            border: 1px solid var(--aws-border);
+            background: var(--aws-panel-bg);
+        }
+
+        .analogy-header {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--aws-border);
+            font-size: 12px;
+            color: var(--aws-yellow);
+            font-weight: 600;
+        }
+
+        .analogy-body {
+            padding: 12px 14px 14px;
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+        }
+
+        .emoji-icon {
+            font-size: 18px;
+            margin-right: 6px;
+        }
+
         @media (max-width: 1200px) {
             .simulator-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr);
             }
 
-            .scenarios-panel,
-            .explanation-panel {
-                position: static;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .sim-left,
+            .sim-center,
+            .sim-right {
+                width: 100%;
             }
         }
 
         @media (max-width: 768px) {
-            .header {
+            .sim-title-row {
                 flex-direction: column;
-                height: auto;
-                padding: 12px;
-                gap: 12px;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .architecture-diagram {
-                flex-wrap: wrap;
-                gap: 16px;
-                justify-content: center;
-            }
-
-            .node {
-                min-width: 90px;
+                align-items: flex-start;
             }
         }
     </style>
 </head>
 <body>
 
-<header class="header">
-    <a href="index.html" class="logo">
-        <div class="logo-icon">☁</div>
-        AWS Student Data Infrastructure
-    </a>
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="automation.html">IAM Automation</a>
-        <a href="interactive-diagram.html">Diagram</a>
-        <a href="security-simulator.html" class="active">Security</a>
-    </nav>
+<header class="site-header">
+    <div>
+        <a href="index.html" class="logo">
+            <span class="logo-icon">☁</span>
+            AWS Student Data Infrastructure
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="architecture.html">Architecture</a>
+            <a href="automation.html">IAM Automation</a>
+            <a href="docs.html">Documentation</a>
+            <a href="review.html">Project Review</a>
+            <a href="live-demo.html">Live Demo</a>
+            <a href="interactive-diagram.html">Interactive Diagram</a>
+            <a href="cost-calculator.html">Cost Calculator</a>
+            <a href="security-simulator.html" class="active">Security Simulator</a>
+        </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
 </header>
 
-<main class="main-container">
-    <header class="page-header">
-        <h1 class="page-title">Security Attack Simulator</h1>
-        <p class="page-subtitle">
-            Watch real-time simulations of cyber attacks against our AWS infrastructure. 
-            See how multiple layers of security work together to protect sensitive student data.
-        </p>
-    </header>
-
-    <!-- Stats -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-label">Attacks Blocked</div>
-            <div class="stat-value success" id="attacksBlocked">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Security Alerts</div>
-            <div class="stat-value" id="alertsGenerated">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Detection Rate</div>
-            <div class="stat-value success">100%</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Data Breaches</div>
-            <div class="stat-value danger">0</div>
-        </div>
-    </div>
-
-    <div class="simulator-grid">
-        <!-- Left: Attack Scenarios -->
-        <aside class="scenarios-panel panel">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <span class="icon">⚠️</span>
-                    Attack Scenarios
-                </div>
+<main class="content">
+    <section class="sim-header">
+        <div class="sim-title-row">
+            <div>
+                <h1>Security Attack Simulator</h1>
+                <p class="sim-subtitle">
+                    Replay realistic attack paths against this student data environment and watch how each
+                    AWS control activates in sequence&mdash;from network isolation, to IAM, to GuardDuty alerts.
+                </p>
             </div>
-            <div class="panel-body">
-                <button class="attack-btn" data-attack="direct-db">
-                    <div class="attack-name">
-                        Direct Database Access
-                        <span class="threat-level threat-high">High</span>
+            <div class="info-badge">
+                <span class="icon icon-info"></span>
+                Fully simulated &mdash; no real AWS calls are made.
+            </div>
+        </div>
+    </section>
+
+    <section class="card sim-stats">
+        <h2>Live Security Posture</h2>
+        <div class="metrics-grid sim-metrics">
+            <div class="metric-card">
+                <div class="metric-value success" id="attacksBlocked">0</div>
+                <div class="metric-label">Attacks Blocked</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="alertsGenerated">0</div>
+                <div class="metric-label">Security Alerts Generated</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value success">100%</div>
+                <div class="metric-label">Detection Rate (Simulated)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">0</div>
+                <div class="metric-label">Data Breaches</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="simulator-grid">
+        <!-- Left: Attack Scenarios -->
+        <aside class="sim-left">
+            <div class="card">
+                <div class="breadcrumb mb-sm">
+                    <span>Security</span>
+                    <span class="breadcrumb-separator"></span>
+                    <span>Attack Scenarios</span>
+                </div>
+                <div class="attack-list-header">
+                    Select an attack to launch a guided simulation of how this architecture responds.
+                </div>
+
+                <button class="attack-button" data-attack="direct-db">
+                    <div class="attack-title-row">
+                        <span class="attack-title">Direct Database Access</span>
+                        <span class="threat-badge threat-high">High</span>
                     </div>
-                    <div class="attack-desc">Hacker tries to connect directly to database</div>
+                    <div class="attack-desc">Hacker attempts to connect straight to the RDS database from the internet.</div>
                 </button>
 
-                <button class="attack-btn" data-attack="privilege-escalation">
-                    <div class="attack-name">
-                        Privilege Escalation
-                        <span class="threat-level threat-medium">Medium</span>
+                <button class="attack-button" data-attack="privilege-escalation">
+                    <div class="attack-title-row">
+                        <span class="attack-title">Privilege Escalation</span>
+                        <span class="threat-badge threat-medium">Medium</span>
                     </div>
-                    <div class="attack-desc">User tries to gain admin access</div>
+                    <div class="attack-desc">User tries to grant themselves administrator-level permissions.</div>
                 </button>
 
-                <button class="attack-btn" data-attack="s3-public">
-                    <div class="attack-name">
-                        Data Exposure Attempt
-                        <span class="threat-level threat-critical">Critical</span>
+                <button class="attack-button" data-attack="s3-public">
+                    <div class="attack-title-row">
+                        <span class="attack-title">Data Exposure Attempt</span>
+                        <span class="threat-badge threat-critical">Critical</span>
                     </div>
-                    <div class="attack-desc">Making private files public</div>
+                    <div class="attack-desc">Misconfiguring S3 to make private student records publicly readable.</div>
                 </button>
 
-                <button class="attack-btn" data-attack="credential-theft">
-                    <div class="attack-name">
-                        Stolen Credentials
-                        <span class="threat-level threat-high">High</span>
+                <button class="attack-button" data-attack="credential-theft">
+                    <div class="attack-title-row">
+                        <span class="attack-title">Stolen Credentials</span>
+                        <span class="threat-badge threat-high">High</span>
                     </div>
-                    <div class="attack-desc">Using stolen login from unusual location</div>
+                    <div class="attack-desc">Compromised IAM credentials used from an unusual location.</div>
                 </button>
 
-                <button class="attack-btn" data-attack="port-scan">
-                    <div class="attack-name">
-                        Network Reconnaissance
-                        <span class="threat-level threat-medium">Medium</span>
+                <button class="attack-button" data-attack="port-scan">
+                    <div class="attack-title-row">
+                        <span class="attack-title">Network Reconnaissance</span>
+                        <span class="threat-badge threat-medium">Medium</span>
                     </div>
-                    <div class="attack-desc">Scanning for vulnerabilities</div>
+                    <div class="attack-desc">Aggressive port scanning against app and database tiers.</div>
                 </button>
 
-                <button class="attack-btn" data-attack="data-theft">
-                    <div class="attack-name">
-                        Mass Data Download
-                        <span class="threat-level threat-high">High</span>
+                <button class="attack-button" data-attack="data-theft">
+                    <div class="attack-title-row">
+                        <span class="attack-title">Mass Data Download</span>
+                        <span class="threat-badge threat-high">High</span>
                     </div>
-                    <div class="attack-desc">Attempting to steal large amounts of data</div>
+                    <div class="attack-desc">Unusual bulk export of transcripts from secure storage.</div>
                 </button>
             </div>
         </aside>
 
-        <!-- Center: Visualization -->
-        <div class="viz-panel">
-            <!-- Architecture Diagram -->
+        <!-- Center: Visualization + Log + Technical Detail -->
+        <div class="sim-center">
             <div class="architecture-container">
-                <div class="arch-label">Network Architecture</div>
-                
+                <div class="arch-label">Three-Tier VPC Path</div>
+
                 <svg class="connections-svg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
                     <path id="conn1" class="connection" d="M100,100 L200,100" />
-                    <path id="conn2" class="connection" d="M280,100 L380,100" />
-                    <path id="conn3" class="connection" d="M460,100 L560,100" />
+                    <path id="conn2" class="connection" d="M260,100 L360,100" />
+                    <path id="conn3" class="connection" d="M420,100 L520,100" />
                 </svg>
 
                 <div class="architecture-diagram">
@@ -1005,134 +659,129 @@
                     <div class="node" id="node-internet">
                         <div class="node-icon">🌐</div>
                         <div class="node-name">Internet</div>
-                        <div class="node-detail">Public</div>
+                        <div class="node-detail">Untrusted</div>
                     </div>
 
                     <div class="node" id="node-gateway">
                         <div class="node-icon">🚧</div>
-                        <div class="node-name">Gateway</div>
-                        <div class="node-detail">WAF + ALB</div>
+                        <div class="node-name">Entry Gateway</div>
+                        <div class="node-detail">ALB + (WAF-ready)</div>
                     </div>
 
                     <div class="node" id="node-app">
                         <div class="node-icon">⚙️</div>
-                        <div class="node-name">Application</div>
-                        <div class="node-detail">Private</div>
+                        <div class="node-name">App Tier</div>
+                        <div class="node-detail">Private Subnets</div>
                     </div>
 
                     <div class="node" id="node-db">
                         <div class="node-icon">🗄️</div>
-                        <div class="node-name">Database</div>
-                        <div class="node-detail">Isolated</div>
+                        <div class="node-name">RDS Tier</div>
+                        <div class="node-detail">Isolated Subnets</div>
                     </div>
 
                     <div class="shield" id="shield"></div>
-                    <div class="blocked-banner" id="blockedBanner">✓ Attack Blocked</div>
+                    <div class="blocked-banner" id="blockedBanner">✓ Attack blocked by defense-in-depth</div>
                 </div>
 
-                <div class="defense-layers">
-                    <div class="defense-layer" id="layer-sg"><span class="dot"></span> Security Groups</div>
-                    <div class="defense-layer" id="layer-nacl"><span class="dot"></span> Network ACLs</div>
-                    <div class="defense-layer" id="layer-iam"><span class="dot"></span> IAM Policies</div>
-                    <div class="defense-layer" id="layer-encryption"><span class="dot"></span> Encryption</div>
-                    <div class="defense-layer" id="layer-monitoring"><span class="dot"></span> GuardDuty</div>
-                </div>
-            </div>
-
-            <!-- Event Log -->
-            <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <span class="icon">📋</span>
-                        Security Event Log
+                <div class="defense-layers mt-sm">
+                    <div class="defense-layer" id="layer-sg">
+                        <span class="dot"></span>
+                        Security Groups (tier-to-tier)
                     </div>
-                </div>
-                <div class="panel-body">
-                    <div class="log-container" id="logContainer">
-                        <div class="log-entry info" style="animation: none; opacity: 1;">
-                            <span class="log-time">[--:--:--]</span>
-                            <span>Security monitoring active. Select an attack scenario to begin.</span>
-                        </div>
+                    <div class="defense-layer" id="layer-nacl">
+                        <span class="dot"></span>
+                        Network ACLs
+                    </div>
+                    <div class="defense-layer" id="layer-iam">
+                        <span class="dot"></span>
+                        IAM &amp; SCPs
+                    </div>
+                    <div class="defense-layer" id="layer-encryption">
+                        <span class="dot"></span>
+                        KMS Encryption
+                    </div>
+                    <div class="defense-layer" id="layer-monitoring">
+                        <span class="dot"></span>
+                        GuardDuty &amp; CloudTrail
                     </div>
                 </div>
             </div>
 
-            <!-- Technical Tabs -->
-            <div class="tech-tabs">
+            <div class="state-section mt-md">
+                <h3>Security Event Stream</h3>
+                <div class="console-output" id="logContainer">
+                    <div class="console-line info" style="margin-bottom: 4px;">
+                        [--:--:--] Security monitoring active. Select an attack scenario to begin.
+                    </div>
+                    <div class="console-line success">
+                        [--:--:--] ✓ All tiers isolated; IAM and logging are enabled.
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-tabs mt-md">
                 <div class="tabs-nav">
                     <button class="tab-btn active" data-tab="code">Attack Code</button>
                     <button class="tab-btn" data-tab="finding">Security Alert</button>
-                    <button class="tab-btn" data-tab="response">Response Steps</button>
+                    <button class="tab-btn" data-tab="response">Response Runbook</button>
                 </div>
                 <div class="tab-content active" id="tab-code">
                     <div class="placeholder" id="codePlaceholder">
-                        <div class="placeholder-icon">💻</div>
-                        <div class="placeholder-text">Select an attack to see the code hackers would use</div>
+                        💻 Select an attack on the left to see what the attacker would run.
                     </div>
                     <div class="code-block" id="codeDisplay" style="display: none;"></div>
                 </div>
                 <div class="tab-content" id="tab-finding">
                     <div class="placeholder" id="findingPlaceholder">
-                        <div class="placeholder-icon">🔍</div>
-                        <div class="placeholder-text">Security alerts will appear here</div>
+                        🔍 When an attack runs, a GuardDuty-style finding will be rendered here.
                     </div>
                     <div id="findingDisplay" style="display: none;"></div>
                 </div>
                 <div class="tab-content" id="tab-response">
                     <div class="placeholder" id="responsePlaceholder">
-                        <div class="placeholder-icon">🛠️</div>
-                        <div class="placeholder-text">Incident response procedures will appear here</div>
+                        🛠️ You’ll see incident response steps for each scenario here.
                     </div>
                     <div class="runbook" id="responseDisplay" style="display: none;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Right: Explanation Panel -->
-        <aside class="explanation-panel">
-            <!-- What's Happening -->
+        <!-- Right: Narrative & context -->
+        <aside class="sim-right">
             <div class="whats-happening" id="whatsHappening">
                 <div class="wh-title">
-                    <span>💡</span> What's Happening
+                    💡 What’s happening in this simulation
                 </div>
                 <div class="wh-content" id="whContent">
-                    <strong>Welcome!</strong> This simulator shows how our AWS security protects student data. 
-                    Click any attack on the left to see how multiple security layers work together to stop hackers.
+                    This simulator walks through realistic attack paths against a FERPA-aligned AWS environment.
+                    Each step shows which control fires (network, IAM, encryption, or monitoring) and why the
+                    attacker ultimately fails.
                 </div>
             </div>
 
-            <!-- Real World Analogy -->
             <div class="analogy-card" id="analogyCard">
                 <div class="analogy-header">
-                    <div class="analogy-title">
-                        <span>🏠</span> Think of it like...
-                    </div>
+                    Real-world analogy
                 </div>
                 <div class="analogy-body" id="analogyContent">
                     <span class="emoji-icon">🏢</span>
-                    Imagine a high-security office building. There's a reception desk (gateway), 
-                    locked doors between floors (network rules), ID badge scanners (authentication), 
-                    and security cameras (monitoring). Our AWS setup works the same way!
+                    Think of a secured university records office: a receptionist up front, badge-locked doors between
+                    zones, cameras everywhere, and strict rules on who can open the filing cabinets. This AWS design
+                    applies the same concept in the cloud.
                 </div>
             </div>
 
-            <!-- Why It Matters -->
-            <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <span class="icon">🎓</span>
-                        Why This Matters
-                    </div>
-                </div>
-                <div class="panel-body" id="whyMatters" style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                    Student data includes sensitive information like grades, addresses, and financial aid records. 
-                    A data breach could lead to identity theft, privacy violations, and legal consequences. 
-                    <br><br>
-                    Our security ensures <strong>FERPA compliance</strong> and protects over 8,000 students.
-                </div>
+            <div class="card">
+                <h2>Why this matters for student data</h2>
+                <p id="whyMatters">
+                    Student information systems hold grades, addresses, and financial aid details. A single misconfigured
+                    control can turn into a reportable breach. These simulations mirror the kind of attacks that actually
+                    hit universities and show how layered AWS controls help keep FERPA-regulated data safe.
+                </p>
             </div>
         </aside>
-    </div>
+    </section>
 </main>
 
 <script>
