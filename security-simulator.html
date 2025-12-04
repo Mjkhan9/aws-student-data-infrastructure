@@ -1237,7 +1237,7 @@ function timestamp() {
 
 function log(type, msg) {
     const entry = document.createElement('div');
-    entry.className = `log-entry ${type}`;
+    entry.className = `console-line ${type}`;
     entry.innerHTML = `<span class="log-time">[${timestamp()}]</span><span>${msg}</span>`;
     logContainer.appendChild(entry);
     logContainer.scrollTop = logContainer.scrollHeight;
