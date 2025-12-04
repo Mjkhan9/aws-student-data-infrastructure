@@ -10,6 +10,7 @@
     <style>
         /* Page-level layout built on top of the AWS console theme */
         .sim-header {
+            margin-top: 16px;
             margin-bottom: 16px;
         }
 
@@ -288,15 +289,10 @@
         }
 
         /* Event log uses console-output styles */
-        .log-container {
-            max-height: 220px;
-            overflow-y: auto;
-        }
-
         .log-entry {
             display: flex;
             gap: 8px;
-            padding: 4px 0;
+            padding: 2px 0;
             font-size: 12px;
             font-family: Monaco, Menlo, monospace;
             animation: fadeInUp 0.15s ease-out;
@@ -1217,7 +1213,7 @@ aws s3api put-bucket-policy --bucket student-records \\
 // ============================================
 // DOM ELEMENTS
 // ============================================
-const attackBtns = document.querySelectorAll('.attack-btn');
+const attackBtns = document.querySelectorAll('.attack-button');
 const tabBtns = document.querySelectorAll('.tab-btn');
 const logContainer = document.getElementById('logContainer');
 const attacker = document.getElementById('attacker');
