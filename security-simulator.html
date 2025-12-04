@@ -4,1298 +4,1774 @@
     <meta charset="UTF-8">
     <title>Security Simulator | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interactive security attack simulator demonstrating AWS GuardDuty findings, CloudTrail events, and incident response procedures for AWS Student Data Infrastructure.">
-    <meta name="keywords" content="AWS, Security Simulator, GuardDuty, CloudTrail, Incident Response, Cloud Security, Attack Simulation">
-    <meta name="author" content="Jawad Khan">
-    
-    <!-- Open Graph / Social Media -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Security Simulator | AWS Student Data Infrastructure">
-    <meta property="og:description" content="Interactive security attack simulator with GuardDuty findings and incident response procedures.">
-    <meta property="og:url" content="https://mjkhan9.github.io/aws-student-data-infrastructure/security-simulator.html">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Security Simulator | AWS Student Data Infrastructure">
-    <meta name="twitter:description" content="Interactive security attack simulator with GuardDuty findings and incident response.">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://mjkhan9.github.io/aws-student-data-infrastructure/security-simulator.html">
-    
-    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Interactive security simulator demonstrating how AWS protects student data from cyber attacks.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     <style>
-        /* Enhanced Security Simulator Styles */
-        .security-page .content {
-            padding-top: 8px !important;
+        :root {
+            --aws-navy: #232f3e;
+            --aws-navy-light: #2a3f54;
+            --aws-orange: #ff9900;
+            --aws-orange-hover: #ec7211;
+            --bg-primary: #f8f9fa;
+            --bg-white: #ffffff;
+            --bg-dark: #1a1a2e;
+            --border-light: #e8eaed;
+            --border-medium: #d1d5db;
+            --text-primary: #16191f;
+            --text-secondary: #5f6b7a;
+            --text-muted: #8c939d;
+            --success-green: #067d68;
+            --success-bg: #d4edda;
+            --danger-red: #d13212;
+            --danger-bg: #f8d7da;
+            --warning-orange: #b45309;
+            --warning-bg: #fff3cd;
+            --info-blue: #0073bb;
+            --info-bg: #d1ecf1;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'IBM Plex Mono', monospace;
         }
-        
-        .security-page .card {
-            margin-top: 8px !important;
-            padding-top: 12px !important;
-            padding-bottom: 12px !important;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        .simulator-layout {
-            display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: 16px;
-            min-height: 600px;
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
-        
-        .attack-panel {
-            background: var(--aws-panel-bg);
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            padding: 16px;
-        }
-        
-        .attack-panel h3 {
-            font-size: 13px;
-            color: var(--aws-text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-        
-        .attack-button {
-            background: var(--aws-panel-bg);
-            border: 1px solid var(--aws-border);
-            border-left: 3px solid var(--aws-red);
-            border-radius: var(--aws-radius);
-            padding: 12px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            text-align: left;
-            font-family: inherit;
-            width: 100%;
-            margin-bottom: 8px;
-        }
-        
-        .attack-button:hover:not(:disabled) {
-            background: var(--aws-card-bg);
-            border-left-color: var(--aws-red-light);
-        }
-        
-        .attack-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--aws-text-primary);
-            margin-bottom: 4px;
-        }
-        
-        .attack-desc {
-            font-size: 11px;
-            color: var(--aws-text-tertiary);
-            line-height: 1.4;
-        }
-        
-        .visualization-container {
-            background: var(--aws-panel-bg);
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            padding: 16px;
-        }
-        
-        .code-panel {
-            background: #0d1117;
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            padding: 16px;
-            margin-top: 16px;
-            display: none;
-        }
-        
-        .code-panel.visible {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-        
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .code-panel h4 {
-            color: var(--aws-orange);
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-        
-        .code-block {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 3px;
-            padding: 12px;
-            font-family: Monaco, Consolas, monospace;
-            font-size: 12px;
-            overflow-x: auto;
-            margin-bottom: 12px;
-        }
-        
-        .code-comment { color: #8b949e; }
-        .code-keyword { color: #ff7b72; }
-        .code-string { color: #a5d6ff; }
-        .code-function { color: #d2a8ff; }
-        .code-variable { color: #ffa657; }
-        
-        .guardduty-finding {
-            background: rgba(209, 50, 18, 0.1);
-            border: 1px solid var(--aws-red);
-            border-radius: var(--aws-radius);
-            padding: 12px;
-            margin-top: 12px;
-        }
-        
-        .finding-header {
+
+        /* Header */
+        .header {
+            background: var(--aws-navy);
+            padding: 0 24px;
+            height: 56px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--aws-orange);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-links a.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        /* Main Layout */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
             margin-bottom: 8px;
         }
-        
-        .finding-title {
-            color: var(--aws-red-light);
-            font-weight: 700;
-            font-size: 13px;
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            max-width: 700px;
         }
-        
-        .finding-severity {
-            background: var(--aws-red);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 2px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-        
-        .finding-detail {
-            font-size: 12px;
-            color: var(--aws-text-secondary);
-            line-height: 1.4;
-        }
-        
-        .tabs {
-            display: flex;
-            gap: 2px;
-            margin-bottom: 16px;
-            border-bottom: 1px solid var(--aws-border);
-        }
-        
-        .tab {
-            padding: 8px 16px;
-            background: transparent;
-            border: none;
-            color: var(--aws-text-tertiary);
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.15s ease;
-            border-bottom: 2px solid transparent;
-        }
-        
-        .tab:hover {
-            color: var(--aws-text-secondary);
-        }
-        
-        .tab.active {
-            color: var(--aws-orange);
-            border-bottom-color: var(--aws-orange);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .log-panel {
-            background: var(--aws-panel-bg);
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            padding: 16px;
-            margin-top: 16px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .log-entry {
-            padding: 6px 10px;
-            margin: 4px 0;
-            border-radius: var(--aws-radius);
-            font-family: Monaco, monospace;
-            font-size: 12px;
-            border-left: 2px solid;
-        }
-        
-        .log-info {
-            background: rgba(30, 143, 255, 0.1);
-            color: var(--aws-blue-light);
-            border-left-color: var(--aws-blue);
-        }
-        
-        .log-warning {
-            background: rgba(255, 153, 0, 0.1);
-            color: var(--aws-orange);
-            border-left-color: var(--aws-orange);
-        }
-        
-        .log-error {
-            background: rgba(209, 50, 18, 0.1);
-            color: var(--aws-red-light);
-            border-left-color: var(--aws-red);
-        }
-        
-        .log-success {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--aws-green-light);
-            border-left-color: var(--aws-green);
-        }
-        
-        .defense-stats {
+
+        /* Stats Grid */
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 16px;
+            margin-bottom: 24px;
         }
-        
+
         .stat-card {
-            background: var(--aws-card-bg);
-            border: 1px solid var(--aws-border);
-            border-left: 3px solid var(--aws-green);
-            padding: 12px;
-            border-radius: var(--aws-radius);
-            text-align: center;
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            box-shadow: var(--shadow-sm);
         }
-        
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
         .stat-value {
             font-size: 28px;
             font-weight: 700;
-            color: var(--aws-green-light);
-            line-height: 1;
-            margin-bottom: 6px;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
         }
-        
-        .stat-label {
-            font-size: 11px;
+
+        .stat-value.success { color: var(--success-green); }
+        .stat-value.danger { color: var(--danger-red); }
+
+        /* Main Grid */
+        .simulator-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 340px;
+            gap: 20px;
+        }
+
+        /* Panel Styles */
+        .panel {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--bg-primary);
+        }
+
+        .panel-title {
+            font-size: 13px;
             font-weight: 600;
-            color: var(--aws-text-tertiary);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title .icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .panel-body {
+            padding: 16px;
+        }
+
+        /* Attack Scenarios Panel */
+        .scenarios-panel {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .attack-btn {
+            width: 100%;
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s;
+            position: relative;
+        }
+
+        .attack-btn:hover:not(:disabled) {
+            border-color: var(--aws-orange);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .attack-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .attack-btn.active {
+            border-color: var(--aws-orange);
+            background: #fff8f0;
+        }
+
+        .attack-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--danger-red);
+            border-radius: 3px 0 0 3px;
+        }
+
+        .attack-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .attack-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .threat-level {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 3px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
+        .threat-high { background: var(--danger-bg); color: var(--danger-red); }
+        .threat-medium { background: var(--warning-bg); color: var(--warning-orange); }
+        .threat-critical { background: #4a1942; color: #ff6b9d; }
+
+        /* Visualization Panel */
+        .viz-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Architecture Diagram */
+        .architecture-container {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            position: relative;
+            min-height: 280px;
+        }
+
+        .arch-label {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .architecture-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px 10px 10px;
+            position: relative;
+        }
+
+        /* Connection Lines */
+        .connections-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .connection {
+            stroke: var(--border-medium);
+            stroke-width: 2;
+            stroke-dasharray: 6, 4;
+            fill: none;
+            transition: all 0.3s;
+        }
+
+        .connection.active {
+            stroke: var(--success-green);
+            stroke-dasharray: none;
+        }
+
+        .connection.attack {
+            stroke: var(--danger-red);
+            stroke-dasharray: 8, 4;
+            animation: flowAttack 0.5s linear infinite;
+        }
+
+        @keyframes flowAttack {
+            to { stroke-dashoffset: -12; }
+        }
+
+        /* Network Nodes */
+        .node {
+            background: var(--bg-white);
+            border: 2px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            text-align: center;
+            min-width: 110px;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+
+        .node-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 8px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .node-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .node-detail {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .node.highlight {
+            border-color: var(--warning-orange);
+            background: #fffbf5;
+            animation: pulse 1s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .node.blocked {
+            border-color: var(--success-green);
+            background: #f0fdf8;
+        }
+
+        .node.attacked {
+            border-color: var(--danger-red);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        /* Attacker Icon */
+        .attacker {
+            position: absolute;
+            left: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--danger-red), #ff6b6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            opacity: 0;
+            z-index: 20;
+            box-shadow: 0 4px 12px rgba(209, 50, 18, 0.3);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .attacker.active {
+            opacity: 1;
+            left: 10px;
+        }
+
+        /* Shield Effect */
+        .shield {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--success-green);
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 25;
+        }
+
+        .shield.active {
+            animation: shieldPulse 0.6s ease-out forwards;
+        }
+
+        @keyframes shieldPulse {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
+        }
+
+        /* Blocked Banner */
+        .blocked-banner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: var(--success-green);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            opacity: 0;
+            z-index: 30;
+            white-space: nowrap;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .blocked-banner.show {
+            animation: bannerPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes bannerPop {
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Defense Layers */
+        .defense-layers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .defense-layer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .defense-layer .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--border-medium);
+            border-radius: 50%;
+        }
+
+        .defense-layer.active {
+            background: #f0fdf8;
+            border-color: var(--success-green);
+            color: var(--success-green);
+        }
+
+        .defense-layer.active .dot {
+            background: var(--success-green);
+            box-shadow: 0 0 6px var(--success-green);
+        }
+
+        /* Event Log */
+        .log-container {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            display: flex;
+            gap: 10px;
+            padding: 8px 12px;
+            margin-bottom: 4px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-family: var(--font-mono);
+            opacity: 0;
+            transform: translateY(-5px);
+            animation: logAppear 0.2s ease forwards;
+        }
+
+        @keyframes logAppear {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .log-entry.info { background: var(--info-bg); color: var(--info-blue); }
+        .log-entry.warning { background: var(--warning-bg); color: var(--warning-orange); }
+        .log-entry.success { background: var(--success-bg); color: var(--success-green); }
+        .log-entry.error { background: var(--danger-bg); color: var(--danger-red); }
+
+        .log-time {
+            color: inherit;
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
+
+        /* Explanation Panel (Right Side) */
+        .explanation-panel {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* What's Happening Card */
+        .whats-happening {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            color: white;
+        }
+
+        .wh-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wh-content {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .wh-content strong {
+            color: #ffd700;
+        }
+
+        /* Real World Analogy */
+        .analogy-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .analogy-header {
+            background: #fef3c7;
+            padding: 12px 16px;
+            border-bottom: 1px solid #fde68a;
+        }
+
+        .analogy-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--warning-orange);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .analogy-body {
+            padding: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .analogy-body .emoji-icon {
+            font-size: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* Technical Details Tabs */
+        .tech-tabs {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--bg-primary);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 12px;
+            background: none;
+            border: none;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-secondary);
+            background: rgba(0,0,0,0.02);
+        }
+
+        .tab-btn.active {
+            color: var(--aws-orange);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--aws-orange);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1e1e2e;
+            border-radius: var(--radius-md);
+            padding: 14px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            line-height: 1.5;
+            color: #cdd6f4;
+        }
+
+        .code-block .comment { color: #6c7086; }
+        .code-block .keyword { color: #cba6f7; }
+        .code-block .string { color: #a6e3a1; }
+        .code-block .function { color: #89b4fa; }
+
+        /* GuardDuty Finding */
+        .finding-card {
+            border: 1px solid var(--danger-red);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .finding-header {
+            background: var(--danger-bg);
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .finding-type {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--danger-red);
+        }
+
+        .finding-severity {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 8px;
+            background: var(--danger-red);
+            color: white;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .finding-body {
+            padding: 14px;
+        }
+
+        .finding-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .finding-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .finding-json {
+            background: #1e1e2e;
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: #6c7086;
+            max-height: 120px;
+            overflow: auto;
+        }
+
+        /* Runbook */
+        .runbook {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .runbook h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 14px 0 8px 0;
+        }
+
+        .runbook h4:first-child { margin-top: 0; }
+
+        .runbook pre {
+            background: #1e1e2e;
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: #cdd6f4;
+            margin: 8px 0;
+        }
+
+        .runbook ul {
+            margin-left: 16px;
+        }
+
+        .runbook li {
+            margin: 4px 0;
+        }
+
+        /* Placeholder */
+        .placeholder {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .placeholder-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .placeholder-text {
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .simulator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenarios-panel,
+            .explanation-panel {
+                position: static;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                height: auto;
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .architecture-diagram {
+                flex-wrap: wrap;
+                gap: 16px;
+                justify-content: center;
+            }
+
+            .node {
+                min-width: 90px;
+            }
+        }
     </style>
 </head>
-<body class="security-page">
-<header class="site-header">
-    <div>
-        <a href="index.html" class="logo">
-            <span class="logo-icon">☁</span>
-            AWS Student Data Infrastructure
-        </a>
-        <nav class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="architecture.html">Architecture</a>
-            <a href="automation.html">IAM Automation</a>
-            <a href="docs.html">Documentation</a>
-            <a href="review.html">Project Review</a>
-            <a href="live-demo.html">Live Demo</a>
-            <a href="interactive-diagram.html">Interactive Diagram</a>
-            <a href="cost-calculator.html">Cost Calculator</a>
-            <a href="security-simulator.html" class="active">Security Simulator</a>
-        </nav>
-        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </div>
+<body>
+
+<header class="header">
+    <a href="index.html" class="logo">
+        <div class="logo-icon">☁</div>
+        AWS Student Data Infrastructure
+    </a>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="automation.html">IAM Automation</a>
+        <a href="interactive-diagram.html">Diagram</a>
+        <a href="security-simulator.html" class="active">Security</a>
+    </nav>
 </header>
 
-<main class="content">
-    <section class="card">
-        <h1>Enhanced Security Attack Simulator</h1>
-        <p>
-            Production-ready security simulation showing real AWS API calls, actual GuardDuty findings, 
-            and the exact CloudTrail events generated. Each scenario includes the boto3 code that would 
-            trigger these detections and the corresponding AWS service responses.
+<main class="main-container">
+    <header class="page-header">
+        <h1 class="page-title">Security Attack Simulator</h1>
+        <p class="page-subtitle">
+            Watch real-time simulations of cyber attacks against our AWS infrastructure. 
+            See how multiple layers of security work together to protect sensitive student data.
         </p>
-    </section>
+    </header>
 
-    <div class="defense-stats">
+    <!-- Stats -->
+    <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-value" id="attacksBlocked">0</div>
             <div class="stat-label">Attacks Blocked</div>
+            <div class="stat-value success" id="attacksBlocked">0</div>
         </div>
         <div class="stat-card">
-            <div class="stat-value" id="guarddutyCalls">0</div>
-            <div class="stat-label">GuardDuty Findings</div>
+            <div class="stat-label">Security Alerts</div>
+            <div class="stat-value" id="alertsGenerated">0</div>
         </div>
         <div class="stat-card">
-            <div class="stat-value">100%</div>
             <div class="stat-label">Detection Rate</div>
+            <div class="stat-value success">100%</div>
         </div>
         <div class="stat-card">
-            <div class="stat-value">0</div>
-            <div class="stat-label">Breaches</div>
+            <div class="stat-label">Data Breaches</div>
+            <div class="stat-value danger">0</div>
         </div>
     </div>
 
-    <div class="simulator-layout">
-        <aside class="attack-panel">
-            <h3>Attack Scenarios</h3>
-            
-            <button class="attack-button" onclick="simulateAttack('direct-db')">
-                <div class="attack-title">🎯 Direct Database Access</div>
-                <div class="attack-desc">RDS connection attempt from internet</div>
-            </button>
-            
-            <button class="attack-button" onclick="simulateAttack('privilege-escalation')">
-                <div class="attack-title">⬆️ IAM Privilege Escalation</div>
-                <div class="attack-desc">Attach AdministratorAccess policy</div>
-            </button>
-            
-            <button class="attack-button" onclick="simulateAttack('s3-public')">
-                <div class="attack-title">🌐 S3 Bucket Public Exposure</div>
-                <div class="attack-desc">Attempt to enable public access</div>
-            </button>
-            
-            <button class="attack-button" onclick="simulateAttack('credential-exfil')">
-                <div class="attack-title">🔑 Credential Exfiltration</div>
-                <div class="attack-desc">IAM credentials used from new IP</div>
-            </button>
-            
-            <button class="attack-button" onclick="simulateAttack('port-scan')">
-                <div class="attack-title">🔍 Network Port Scanning</div>
-                <div class="attack-desc">Reconnaissance on private subnets</div>
-            </button>
-            
-            <button class="attack-button" onclick="simulateAttack('data-exfil')">
-                <div class="attack-title">📤 S3 Data Exfiltration</div>
-                <div class="attack-desc">Mass download of sensitive objects</div>
-            </button>
+    <div class="simulator-grid">
+        <!-- Left: Attack Scenarios -->
+        <aside class="scenarios-panel panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span class="icon">⚠️</span>
+                    Attack Scenarios
+                </div>
+            </div>
+            <div class="panel-body">
+                <button class="attack-btn" data-attack="direct-db">
+                    <div class="attack-name">
+                        Direct Database Access
+                        <span class="threat-level threat-high">High</span>
+                    </div>
+                    <div class="attack-desc">Hacker tries to connect directly to database</div>
+                </button>
+
+                <button class="attack-btn" data-attack="privilege-escalation">
+                    <div class="attack-name">
+                        Privilege Escalation
+                        <span class="threat-level threat-medium">Medium</span>
+                    </div>
+                    <div class="attack-desc">User tries to gain admin access</div>
+                </button>
+
+                <button class="attack-btn" data-attack="s3-public">
+                    <div class="attack-name">
+                        Data Exposure Attempt
+                        <span class="threat-level threat-critical">Critical</span>
+                    </div>
+                    <div class="attack-desc">Making private files public</div>
+                </button>
+
+                <button class="attack-btn" data-attack="credential-theft">
+                    <div class="attack-name">
+                        Stolen Credentials
+                        <span class="threat-level threat-high">High</span>
+                    </div>
+                    <div class="attack-desc">Using stolen login from unusual location</div>
+                </button>
+
+                <button class="attack-btn" data-attack="port-scan">
+                    <div class="attack-name">
+                        Network Reconnaissance
+                        <span class="threat-level threat-medium">Medium</span>
+                    </div>
+                    <div class="attack-desc">Scanning for vulnerabilities</div>
+                </button>
+
+                <button class="attack-btn" data-attack="data-theft">
+                    <div class="attack-name">
+                        Mass Data Download
+                        <span class="threat-level threat-high">High</span>
+                    </div>
+                    <div class="attack-desc">Attempting to steal large amounts of data</div>
+                </button>
+            </div>
         </aside>
 
-        <div class="visualization-container">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('simulation')">Attack Simulation</button>
-                <button class="tab" onclick="showTab('code')">Attack Code</button>
-                <button class="tab" onclick="showTab('guardduty')">GuardDuty Finding</button>
-                <button class="tab" onclick="showTab('response')">Incident Response</button>
-            </div>
-            
-            <div id="simulation-tab" class="tab-content active">
-                <h3>Live Attack Simulation</h3>
-                <div id="logPanel" style="background: #0d1117; padding: 16px; border-radius: 4px; min-height: 400px; font-family: monospace; font-size: 12px;">
-                    <div style="color: #8b949e;">Waiting for attack scenario selection...</div>
+        <!-- Center: Visualization -->
+        <div class="viz-panel">
+            <!-- Architecture Diagram -->
+            <div class="architecture-container">
+                <div class="arch-label">Network Architecture</div>
+                
+                <svg class="connections-svg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
+                    <path id="conn1" class="connection" d="M100,100 L200,100" />
+                    <path id="conn2" class="connection" d="M280,100 L380,100" />
+                    <path id="conn3" class="connection" d="M460,100 L560,100" />
+                </svg>
+
+                <div class="architecture-diagram">
+                    <div class="attacker" id="attacker">🥷</div>
+
+                    <div class="node" id="node-internet">
+                        <div class="node-icon">🌐</div>
+                        <div class="node-name">Internet</div>
+                        <div class="node-detail">Public</div>
+                    </div>
+
+                    <div class="node" id="node-gateway">
+                        <div class="node-icon">🚧</div>
+                        <div class="node-name">Gateway</div>
+                        <div class="node-detail">WAF + ALB</div>
+                    </div>
+
+                    <div class="node" id="node-app">
+                        <div class="node-icon">⚙️</div>
+                        <div class="node-name">Application</div>
+                        <div class="node-detail">Private</div>
+                    </div>
+
+                    <div class="node" id="node-db">
+                        <div class="node-icon">🗄️</div>
+                        <div class="node-name">Database</div>
+                        <div class="node-detail">Isolated</div>
+                    </div>
+
+                    <div class="shield" id="shield"></div>
+                    <div class="blocked-banner" id="blockedBanner">✓ Attack Blocked</div>
+                </div>
+
+                <div class="defense-layers">
+                    <div class="defense-layer" id="layer-sg"><span class="dot"></span> Security Groups</div>
+                    <div class="defense-layer" id="layer-nacl"><span class="dot"></span> Network ACLs</div>
+                    <div class="defense-layer" id="layer-iam"><span class="dot"></span> IAM Policies</div>
+                    <div class="defense-layer" id="layer-encryption"><span class="dot"></span> Encryption</div>
+                    <div class="defense-layer" id="layer-monitoring"><span class="dot"></span> GuardDuty</div>
                 </div>
             </div>
-            
-            <div id="code-tab" class="tab-content">
-                <h3>Attack Code (boto3)</h3>
-                <div id="codeDisplay" class="code-block">
-                    <div style="color: #8b949e;"># Select an attack scenario to view the code</div>
+
+            <!-- Event Log -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="icon">📋</span>
+                        Security Event Log
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="log-container" id="logContainer">
+                        <div class="log-entry info" style="animation: none; opacity: 1;">
+                            <span class="log-time">[--:--:--]</span>
+                            <span>Security monitoring active. Select an attack scenario to begin.</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div id="guardduty-tab" class="tab-content">
-                <h3>GuardDuty Finding Details</h3>
-                <div id="guarddutyfinding" style="padding: 16px; background: #161b22; border-radius: 4px; min-height: 400px;">
-                    <div style="color: #8b949e;">No findings generated yet. Run an attack scenario.</div>
+
+            <!-- Technical Tabs -->
+            <div class="tech-tabs">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-tab="code">Attack Code</button>
+                    <button class="tab-btn" data-tab="finding">Security Alert</button>
+                    <button class="tab-btn" data-tab="response">Response Steps</button>
                 </div>
-            </div>
-            
-            <div id="response-tab" class="tab-content">
-                <h3>Incident Response Procedure</h3>
-                <div id="responseDisplay" style="padding: 16px; background: #161b22; border-radius: 4px; min-height: 400px;">
-                    <div style="color: #8b949e;">Select an attack to view the incident response runbook.</div>
+                <div class="tab-content active" id="tab-code">
+                    <div class="placeholder" id="codePlaceholder">
+                        <div class="placeholder-icon">💻</div>
+                        <div class="placeholder-text">Select an attack to see the code hackers would use</div>
+                    </div>
+                    <div class="code-block" id="codeDisplay" style="display: none;"></div>
+                </div>
+                <div class="tab-content" id="tab-finding">
+                    <div class="placeholder" id="findingPlaceholder">
+                        <div class="placeholder-icon">🔍</div>
+                        <div class="placeholder-text">Security alerts will appear here</div>
+                    </div>
+                    <div id="findingDisplay" style="display: none;"></div>
+                </div>
+                <div class="tab-content" id="tab-response">
+                    <div class="placeholder" id="responsePlaceholder">
+                        <div class="placeholder-icon">🛠️</div>
+                        <div class="placeholder-text">Incident response procedures will appear here</div>
+                    </div>
+                    <div class="runbook" id="responseDisplay" style="display: none;"></div>
                 </div>
             </div>
         </div>
+
+        <!-- Right: Explanation Panel -->
+        <aside class="explanation-panel">
+            <!-- What's Happening -->
+            <div class="whats-happening" id="whatsHappening">
+                <div class="wh-title">
+                    <span>💡</span> What's Happening
+                </div>
+                <div class="wh-content" id="whContent">
+                    <strong>Welcome!</strong> This simulator shows how our AWS security protects student data. 
+                    Click any attack on the left to see how multiple security layers work together to stop hackers.
+                </div>
+            </div>
+
+            <!-- Real World Analogy -->
+            <div class="analogy-card" id="analogyCard">
+                <div class="analogy-header">
+                    <div class="analogy-title">
+                        <span>🏠</span> Think of it like...
+                    </div>
+                </div>
+                <div class="analogy-body" id="analogyContent">
+                    <span class="emoji-icon">🏢</span>
+                    Imagine a high-security office building. There's a reception desk (gateway), 
+                    locked doors between floors (network rules), ID badge scanners (authentication), 
+                    and security cameras (monitoring). Our AWS setup works the same way!
+                </div>
+            </div>
+
+            <!-- Why It Matters -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="icon">🎓</span>
+                        Why This Matters
+                    </div>
+                </div>
+                <div class="panel-body" id="whyMatters" style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                    Student data includes sensitive information like grades, addresses, and financial aid records. 
+                    A data breach could lead to identity theft, privacy violations, and legal consequences. 
+                    <br><br>
+                    Our security ensures <strong>FERPA compliance</strong> and protects over 8,000 students.
+                </div>
+            </div>
+        </aside>
     </div>
 </main>
 
-<footer class="site-footer">
-    <p>Enhanced Security Attack Simulator • AWS Student Data Infrastructure • 2025</p>
-</footer>
-
 <script>
-let attackCount = 0;
-let guarddutyCount = 0;
+// ============================================
+// STATE
+// ============================================
 let isSimulating = false;
-let currentAttack = null;
+let attackCount = 0;
+let alertCount = 0;
 
-const attackScenarios = {
+// ============================================
+// ATTACK DATA
+// ============================================
+const attacks = {
     "direct-db": {
-        title: "Direct Database Access from Internet",
-        code: `import boto3
-import psycopg2
-from botocore.exceptions import ClientError
+        title: "Direct Database Access",
+        targetNodes: ["node-internet", "node-db"],
+        defenseLayers: ["layer-sg", "layer-nacl"],
+        
+        // Plain English explanation
+        whatsHappening: `A hacker is trying to <strong>connect directly to our database</strong> from the internet — like trying to walk straight into a bank vault from the street.
+        <br><br>
+        Our security stops this because the database is in a <strong>private network</strong> with no public address. It's literally unreachable from outside.`,
+        
+        analogy: `<span class="emoji-icon">🏦</span>
+        Imagine a bank vault that's <strong>underground with no entrance from the street</strong>. 
+        You can only reach it through the bank lobby, then past the tellers, then through a secured door. 
+        The hacker is trying to dig a tunnel directly to the vault — but there's no path there.`,
+        
+        whyMatters: `If hackers could connect directly to databases, they could <strong>steal all student records instantly</strong> — names, grades, social security numbers, everything. 
+        Our network isolation makes this physically impossible.`,
 
-# Attack: Attempt direct RDS connection from unauthorized IP
-def attempt_rds_breach():
-    """
-    This attack will be blocked by:
-    1. Security Group (db-sg) - Only allows app-sg
-    2. No public IP on RDS instance
-    3. No IGW route to database subnet
-    """
-    
-    # This connection attempt will fail
-    try:
-        conn = psycopg2.connect(
-            host="student-db.c3pxyz.us-east-1.rds.amazonaws.com",
-            port=5432,
-            database="student_records",
-            user="attacker",
-            password="stolen_cred"
-        )
-    except psycopg2.OperationalError as e:
-        print(f"Connection blocked: {e}")
-        
-    # VPC Flow Logs will capture this
-    # Log entry: REJECT TCP 203.0.113.45 172.32.20.15 44562 5432`,
-        
-        guardduty: {
+        code: `<span class="comment"># Hacker's attempt to connect directly to database</span>
+<span class="keyword">import</span> psycopg2
+
+<span class="comment"># This connection will FAIL because:</span>
+<span class="comment"># 1. Database has no public IP address</span>
+<span class="comment"># 2. Security Groups only allow app servers</span>
+<span class="comment"># 3. No route exists from internet to DB subnet</span>
+
+conn = psycopg2.connect(
+    host=<span class="string">"student-db.aws-region.rds.amazonaws.com"</span>,
+    port=<span class="string">5432</span>,
+    user=<span class="string">"hacker"</span>,
+    password=<span class="string">"stolen_password"</span>
+)
+<span class="comment"># Result: Connection timeout - no network path exists</span>`,
+
+        finding: {
             type: "UnauthorizedAccess:EC2/MaliciousIPCaller",
             severity: "HIGH",
-            title: "EC2 instance communicated with known malicious IP",
-            description: "An EC2 instance in your AWS environment is communicating with an IP address that is associated with known malicious activity.",
-            details: {
-                "Resource": {
-                    "Type": "Instance",
-                    "InstanceDetails": {
-                        "InstanceId": "i-0x1234567890",
-                        "InstanceType": "t3.medium",
-                        "PrivateIpAddress": "172.32.10.42",
-                        "SubnetId": "subnet-app-tier"
-                    }
-                },
-                "Service": {
-                    "Action": {
-                        "ActionType": "NETWORK_CONNECTION",
-                        "NetworkConnectionAction": {
-                            "RemoteIpDetails": {
-                                "IpAddressV4": "203.0.113.45",
-                                "City": "Unknown",
-                                "Country": "Unknown"
-                            },
-                            "RemotePort": 5432,
-                            "Protocol": "TCP",
-                            "Blocked": true
-                        }
-                    }
-                }
-            }
+            title: "Blocked connection attempt from suspicious IP",
+            description: "Someone tried to connect to a protected resource from an IP address that shouldn't have access.",
+            details: { "SourceIP": "203.0.113.45", "TargetPort": 5432, "Action": "BLOCKED", "Reason": "No network route exists" }
         },
-        
-        response: `## Incident Response: Database Access Attempt
 
-### 1. Immediate Actions
-\`\`\`bash
-# Check VPC Flow Logs for the attempt
+        response: `<h4>1. What Our System Did Automatically</h4>
+<ul>
+<li>Blocked the connection (no network path exists)</li>
+<li>Logged the attempt in VPC Flow Logs</li>
+<li>Generated a security alert</li>
+</ul>
+
+<h4>2. What a Security Team Would Check</h4>
+<pre># View blocked connection attempts
 aws logs filter-log-events \\
   --log-group-name /aws/vpc/flowlogs \\
-  --filter-pattern "REJECT 5432"
-  
-# Review Security Group configuration
-aws ec2 describe-security-groups \\
-  --group-ids sg-0xxxdb \\
-  --query "SecurityGroups[0].IpPermissions"
-\`\`\`
+  --filter-pattern "REJECT"</pre>
 
-### 2. Investigation
-- Query CloudTrail for any security group modifications
-- Check if source IP is in threat intelligence feeds
-- Verify no RDS public accessibility changes
+<h4>3. No Action Needed</h4>
+<p>The architecture itself prevents this attack. There's nothing to "fix" — the security worked exactly as designed.</p>`,
 
-### 3. Containment
-- Already blocked by security groups
-- Verify db-sg still restricts to app-sg only
-- Check for any unauthorized EC2 instances in app tier
-
-### 4. Evidence Collection
-\`\`\`sql
--- Query CloudTrail via Athena
-SELECT eventTime, eventName, userIdentity, sourceIPAddress
-FROM cloudtrail_logs
-WHERE eventName LIKE '%SecurityGroup%'
-  OR eventName LIKE '%RDS%'
-ORDER BY eventTime DESC
-LIMIT 100;
-\`\`\``
+        steps: [
+            { type: "info", msg: "Incoming connection from external IP: 203.0.113.45" },
+            { type: "warning", msg: "Target: Database server on port 5432" },
+            { type: "info", msg: "Checking network routes..." },
+            { type: "success", msg: "✓ Database subnet has no internet gateway" },
+            { type: "success", msg: "✓ Database has no public IP address" },
+            { type: "info", msg: "Checking Security Group rules..." },
+            { type: "success", msg: "✓ Only application servers can connect to database" },
+            { type: "error", msg: "❌ CONNECTION BLOCKED — No path to database exists" }
+        ]
     },
-    
+
     "privilege-escalation": {
-        title: "IAM Privilege Escalation Attempt",
-        code: `import boto3
-from botocore.exceptions import ClientError
-
-iam = boto3.client('iam')
-
-def attempt_privilege_escalation():
-    """
-    Attack: User tries to attach AdministratorAccess policy
-    GuardDuty Finding: IAMUser/AnomalousBehavior
-    """
-    
-    try:
-        # This will be denied by IAM policy
-        response = iam.attach_user_policy(
-            UserName='student_readonly_user',
-            PolicyArn='arn:aws:iam::aws:policy/AdministratorAccess'
-        )
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'AccessDenied':
-            print(f"AccessDenied: {e}")
-            # CloudTrail logs this failed attempt
-            # Event: AttachUserPolicy
-            # Error Code: AccessDenied
-            
-    # Also attempt to create access keys
-    try:
-        response = iam.create_access_key(
-            UserName='admin'
-        )
-    except ClientError as e:
-        print(f"Blocked: {e}")`,
+        title: "Privilege Escalation",
+        targetNodes: ["node-app"],
+        defenseLayers: ["layer-iam", "layer-monitoring"],
         
-        guardduty: {
+        whatsHappening: `A user with <strong>limited access</strong> (like a student worker) is trying to <strong>give themselves admin powers</strong>.
+        <br><br>
+        This is like a cashier trying to promote themselves to bank manager. Our permission system says "nice try, but no."`,
+        
+        analogy: `<span class="emoji-icon">🔑</span>
+        Imagine an employee with a <strong>key to the supply closet</strong> trying to make a copy of the <strong>master key</strong> that opens every door. 
+        The key-making machine checks their badge and says "You're not authorized to copy master keys" — and logs the suspicious request.`,
+        
+        whyMatters: `If users could grant themselves admin access, a disgruntled employee could <strong>delete all records</strong>, 
+        <strong>steal sensitive data</strong>, or <strong>lock everyone else out</strong>. IAM policies prevent this.`,
+
+        code: `<span class="comment"># User tries to give themselves admin access</span>
+<span class="keyword">import</span> boto3
+
+iam = boto3.client(<span class="string">'iam'</span>)
+
+<span class="comment"># Attempting to attach the most powerful policy</span>
+<span class="keyword">try</span>:
+    iam.attach_user_policy(
+        UserName=<span class="string">'student_worker'</span>,
+        PolicyArn=<span class="string">'arn:aws:iam::aws:policy/AdministratorAccess'</span>
+    )
+<span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+    print(<span class="string">"Access Denied: You cannot modify permissions"</span>)
+    
+<span class="comment"># AWS logs this failed attempt in CloudTrail</span>`,
+
+        finding: {
             type: "PrivilegeEscalation:IAMUser/AnomalousBehavior",
             severity: "MEDIUM",
-            title: "IAM user attempted privilege escalation",
-            description: "An IAM user attempted actions that would escalate their privileges. This activity deviates from the user's baseline behavior.",
-            details: {
-                "Resource": {
-                    "Type": "AccessKey",
-                    "AccessKeyDetails": {
-                        "UserName": "student_readonly_user",
-                        "PrincipalId": "AIDA1234567890",
-                        "UserType": "IAMUser"
-                    }
-                },
-                "Service": {
-                    "Action": {
-                        "ActionType": "AWS_API_CALL",
-                        "AwsApiCallAction": {
-                            "Api": "AttachUserPolicy",
-                            "ServiceName": "iam.amazonaws.com",
-                            "ErrorCode": "AccessDenied"
-                        }
-                    },
-                    "Evidence": {
-                        "ThreatIntelligenceDetails": [],
-                        "EventFirstSeen": "2025-01-20T14:30:00Z",
-                        "EventLastSeen": "2025-01-20T14:30:45Z"
-                    }
-                }
-            }
+            title: "User attempted to escalate their own privileges",
+            description: "A user tried to attach admin permissions to their account. This was blocked by IAM policies.",
+            details: { "User": "student_worker", "AttemptedAction": "AttachUserPolicy", "TargetPolicy": "AdministratorAccess", "Result": "AccessDenied" }
         },
-        
-        response: `## Incident Response: Privilege Escalation
 
-### 1. Immediate Actions
-\`\`\`bash
-# Disable the compromised user immediately
-aws iam put-user-policy \\
-  --user-name student_readonly_user \\
-  --policy-name DenyAll \\
-  --policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*"}]}'
+        response: `<h4>1. Immediate Response</h4>
+<pre># Temporarily restrict the suspicious user
+aws iam put-user-policy --user-name student_worker \\
+  --policy-name TempRestriction \\
+  --policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"iam:*","Resource":"*"}]}'</pre>
 
-# List and delete all access keys
-aws iam list-access-keys --user-name student_readonly_user
-aws iam delete-access-key --user-name student_readonly_user --access-key-id AKIA...
-\`\`\`
+<h4>2. Investigate</h4>
+<ul>
+<li>Was this a mistake or intentional?</li>
+<li>Has this user made other suspicious requests?</li>
+<li>Check CloudTrail for recent activity</li>
+</ul>
 
-### 2. Investigation Query
-\`\`\`bash
-# CloudWatch Insights query for all IAM actions by this user
-fields @timestamp, eventName, errorCode, sourceIPAddress
-|| filter userIdentity.userName = "student_readonly_user"
-|| filter eventSource = "iam.amazonaws.com"
-|| sort @timestamp desc
-|| limit 100
-\`\`\`
+<h4>3. Follow Up</h4>
+<p>Contact the user's supervisor. If intentional, escalate to security team.</p>`,
 
-### 3. Remediation
-- Reset user credentials
-- Review and strengthen IAM policies
-- Enable MFA if not already enabled
-- Audit all recent actions by this principal`
+        steps: [
+            { type: "info", msg: "API call detected: iam:AttachUserPolicy" },
+            { type: "warning", msg: "User 'student_worker' requesting admin access" },
+            { type: "info", msg: "Checking user's permissions..." },
+            { type: "success", msg: "✓ User lacks permission to modify IAM policies" },
+            { type: "info", msg: "Logging attempt to CloudTrail..." },
+            { type: "info", msg: "GuardDuty analyzing behavior pattern..." },
+            { type: "error", msg: "❌ ACCESS DENIED — Cannot escalate privileges" }
+        ]
     },
-    
+
     "s3-public": {
-        title: "S3 Bucket Public Exposure Attempt",
-        code: `import boto3
-import json
-from botocore.exceptions import ClientError
-
-s3 = boto3.client('s3')
-
-def attempt_public_bucket():
-    """
-    Attack: Try to make student data bucket public
-    Blocked by: S3 Block Public Access
-    """
-    
-    bucket_name = 'student-data-reports-production'
-    
-    # Attempt 1: Public bucket ACL
-    try:
-        s3.put_bucket_acl(
-            Bucket=bucket_name,
-            ACL='public-read'
-        )
-    except ClientError as e:
-        print(f"Blocked by S3 BPA: {e}")
-        # Error: BlockPublicAcls setting prevents this
-    
-    # Attempt 2: Public bucket policy
-    public_policy = {
-        "Version": "2012-10-17",
-        "Statement": [{
-            "Sid": "PublicRead",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "s3:GetObject",
-            "Resource": f"arn:aws:s3:::{bucket_name}/*"
-        }]
-    }
-    
-    try:
-        s3.put_bucket_policy(
-            Bucket=bucket_name,
-            Policy=json.dumps(public_policy)
-        )
-    except ClientError as e:
-        print(f"Blocked by S3 BPA: {e}")
-        # Error: BlockPublicPolicy prevents this`,
+        title: "Data Exposure Attempt",
+        targetNodes: ["node-app"],
+        defenseLayers: ["layer-encryption", "layer-monitoring"],
         
-        guardduty: {
+        whatsHappening: `Someone is trying to make our <strong>private student files publicly accessible</strong> on the internet — like posting confidential records on a public bulletin board.
+        <br><br>
+        AWS has a safety switch called <strong>"Block Public Access"</strong> that prevents this, even if someone tries really hard.`,
+        
+        analogy: `<span class="emoji-icon">📁</span>
+        Imagine a filing cabinet with a <strong>special lock that prevents the drawer from being left open</strong>. 
+        Even if someone tries to prop it open, the lock automatically closes it. 
+        Our S3 buckets have this "auto-close" feature built in.`,
+        
+        whyMatters: `Exposed student data could lead to <strong>identity theft</strong>, <strong>FERPA violations</strong>, 
+        and <strong>lawsuits</strong>. Block Public Access is a safety net that catches mistakes and malicious actions.`,
+
+        code: `<span class="comment"># Attempting to make student files public</span>
+<span class="keyword">import</span> boto3
+
+s3 = boto3.client(<span class="string">'s3'</span>)
+
+<span class="comment"># Try to make bucket publicly readable</span>
+<span class="keyword">try</span>:
+    s3.put_bucket_acl(
+        Bucket=<span class="string">'student-records-bucket'</span>,
+        ACL=<span class="string">'public-read'</span>  <span class="comment"># This would expose all files!</span>
+    )
+<span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+    print(<span class="string">"Blocked by S3 Block Public Access"</span>)
+
+<span class="comment"># The setting physically prevents public access</span>`,
+
+        finding: {
             type: "Policy:S3/BucketPublicAccessGranted",
             severity: "CRITICAL",
-            title: "S3 bucket allows public access",
-            description: "An S3 bucket policy or ACL was modified to allow public access. This was blocked by S3 Block Public Access settings.",
-            details: {
-                "Resource": {
-                    "Type": "S3Bucket",
-                    "S3BucketDetails": [{
-                        "Name": "student-data-reports-production",
-                        "Type": "Destination",
-                        "Arn": "arn:aws:s3:::student-data-reports-production",
-                        "PublicAccess": {
-                            "PermissionConfiguration": {
-                                "BucketLevelPermissions": {
-                                    "AccessControlList": {
-                                        "AllowsPublicReadAccess": false,
-                                        "AllowsPublicWriteAccess": false
-                                    },
-                                    "BucketPolicy": {
-                                        "AllowsPublicReadAccess": false,
-                                        "AllowsPublicWriteAccess": false
-                                    },
-                                    "BlockPublicAccess": {
-                                        "IgnorePublicAcls": true,
-                                        "RestrictPublicBuckets": true,
-                                        "BlockPublicAcls": true,
-                                        "BlockPublicPolicy": true
-                                    }
-                                }
-                            }
-                        }
-                    }]
-                }
-            }
+            title: "Attempt to make private data public was blocked",
+            description: "Someone tried to change bucket permissions to allow public access. S3 Block Public Access prevented this.",
+            details: { "Bucket": "student-records-bucket", "AttemptedACL": "public-read", "BlockedBy": "S3 Block Public Access", "AccountLevel": true }
         },
-        
-        response: `## Incident Response: S3 Public Access Attempt
 
-### 1. Verify Block Public Access
-\`\`\`bash
-# Check account-level BPA
-aws s3control get-public-access-block \\
-  --account-id $(aws sts get-caller-identity --query Account --output text)
-
-# Check bucket-level BPA
+        response: `<h4>1. Verify Protection is Active</h4>
+<pre># Check that Block Public Access is enabled
 aws s3api get-public-access-block \\
-  --bucket student-data-reports-production
-\`\`\`
+  --bucket student-records-bucket</pre>
 
-### 2. Audit Recent Changes
-\`\`\`bash
-# CloudTrail query for S3 policy changes
+<h4>2. Identify Who Tried This</h4>
+<pre># Check CloudTrail for the attempt
 aws cloudtrail lookup-events \\
-  --lookup-attributes AttributeKey=EventName,AttributeValue=PutBucketPolicy \\
-  --max-items 50
+  --lookup-attributes AttributeKey=EventName,AttributeValue=PutBucketAcl</pre>
 
-# Check S3 access analyzer findings
-aws accessanalyzer list-findings \\
-  --analyzer-arn arn:aws:access-analyzer:us-east-1:xxx:analyzer/xxx
-\`\`\`
+<h4>3. Review Access</h4>
+<p>Determine if this user should have bucket permissions at all. Consider restricting access.</p>`,
 
-### 3. Strengthen Controls
-- Enable S3 access logging if not enabled
-- Review bucket policies for least privilege
-- Enable AWS Config rule: s3-bucket-public-read-prohibited`
+        steps: [
+            { type: "info", msg: "API call: s3:PutBucketAcl" },
+            { type: "warning", msg: "Requested permission: public-read" },
+            { type: "info", msg: "Checking S3 Block Public Access..." },
+            { type: "success", msg: "✓ BlockPublicAcls: ENABLED" },
+            { type: "success", msg: "✓ BlockPublicPolicy: ENABLED" },
+            { type: "info", msg: "Logging blocked attempt..." },
+            { type: "error", msg: "❌ BLOCKED — Public access is not allowed" }
+        ]
     },
-    
-    "credential-exfil": {
-        title: "Credential Exfiltration Detection",
-        code: `import boto3
-import requests
-from datetime import datetime
 
-def simulate_credential_usage():
-    """
-    Simulates stolen credentials being used from 
-    a different geographic location
-    """
-    
-    # Normal activity from us-east-1
-    ec2_virginia = boto3.client('ec2', region_name='us-east-1')
-    ec2_virginia.describe_instances()
-    
-    # Suspicious activity from eu-west-1 (unusual)
-    ec2_ireland = boto3.client('ec2', region_name='eu-west-1')
-    
-    # Rapid API calls from new location
-    for i in range(50):
-        try:
-            ec2_ireland.describe_instances()
-            ec2_ireland.describe_security_groups()
-            ec2_ireland.describe_snapshots(OwnerIds=['self'])
-        except Exception as e:
-            pass
-    
-    # Attempt to create resources in new region
-    try:
-        ec2_ireland.run_instances(
-            ImageId='ami-0xxx',
-            MinCount=1,
-            MaxCount=10,  # Suspicious large count
-            InstanceType='m5.24xlarge'  # Expensive instance
-        )
-    except Exception as e:
-        print(f"Blocked: {e}")`,
+    "credential-theft": {
+        title: "Stolen Credentials",
+        targetNodes: ["node-internet", "node-gateway", "node-app"],
+        defenseLayers: ["layer-monitoring"],
         
-        guardduty: {
+        whatsHappening: `Someone <strong>stole login credentials</strong> (maybe through phishing) and is now using them from a <strong>different country</strong>.
+        <br><br>
+        Our monitoring system notices: "Wait, this user normally logs in from New York, but now they're suddenly in Russia?" 🚨`,
+        
+        analogy: `<span class="emoji-icon">💳</span>
+        It's like your credit card company calling to ask: "Did you just buy something in Nigeria? You were in Texas an hour ago." 
+        They detect <strong>impossible travel</strong> — and so does our system.`,
+        
+        whyMatters: `Stolen credentials are the #1 way hackers get into systems. 
+        Even with a valid password, <strong>behavioral detection</strong> catches when something doesn't add up.`,
+
+        code: `<span class="comment"># Hacker using stolen credentials from unusual location</span>
+<span class="keyword">import</span> boto3
+
+<span class="comment"># These are real credentials stolen via phishing</span>
+<span class="comment"># The hacker is in Dublin, but the real user is in NYC</span>
+
+session = boto3.Session(
+    aws_access_key_id=<span class="string">'AKIA_STOLEN_KEY'</span>,
+    aws_secret_access_key=<span class="string">'stolen_secret'</span>,
+    region_name=<span class="string">'eu-west-1'</span>  <span class="comment"># Different region!</span>
+)
+
+ec2 = session.client(<span class="string">'ec2'</span>)
+
+<span class="comment"># Rapid API calls trigger anomaly detection</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> range(50):
+    ec2.describe_instances()
+    
+<span class="comment"># GuardDuty: "This user never uses eu-west-1..."</span>`,
+
+        finding: {
             type: "UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration",
             severity: "HIGH",
             title: "Credentials used from unusual location",
-            description: "IAM credentials are being used from an IP address that is unusual for this account. This could indicate credential compromise.",
-            details: {
-                "Resource": {
-                    "Type": "AccessKey",
-                    "AccessKeyDetails": {
-                        "AccessKeyId": "ASIA1234567890",
-                        "UserName": "student_data_processor",
-                        "UserType": "IAMUser"
-                    }
-                },
-                "Service": {
-                    "Action": {
-                        "ActionType": "AWS_API_CALL",
-                        "AwsApiCallAction": {
-                            "Api": "RunInstances",
-                            "ServiceName": "ec2.amazonaws.com",
-                            "CallerType": "Remote",
-                            "RemoteIpDetails": {
-                                "IpAddressV4": "198.51.100.42",
-                                "City": "Dublin",
-                                "Country": "Ireland",
-                                "GeoLocation": {
-                                    "Lat": 53.3498,
-                                    "Lon": -6.2603
-                                }
-                            }
-                        }
-                    },
-                    "Evidence": {
-                        "UnusualBehavior": {
-                            "IsFirstTimeUserSeen": false,
-                            "IsFirstTimeRegionSeen": true,
-                            "UnusualAPICallsCount": 50
-                        }
-                    }
-                }
-            }
+            description: "Login credentials are being used from an IP address in a different geographic location than normal. Possible credential theft.",
+            details: { "NormalLocation": "New York, USA", "CurrentLocation": "Dublin, Ireland", "UnusualAPICount": 50, "TimeWindow": "2 minutes" }
         },
-        
-        response: `## Incident Response: Credential Exfiltration
 
-### 1. IMMEDIATE: Disable Compromised Credentials
-\`\`\`bash
-# Identify and disable the access key
-ACCESS_KEY="ASIA1234567890"
-USER_NAME=$(aws iam get-access-key-last-used --access-key-id $ACCESS_KEY --query 'UserName' --output text)
-
-# Disable the key immediately
+        response: `<h4>1. Disable Credentials Immediately</h4>
+<pre># Disable the compromised access key
 aws iam update-access-key \\
-  --access-key-id $ACCESS_KEY \\
-  --status Inactive \\
-  --user-name $USER_NAME
+  --access-key-id AKIA_STOLEN_KEY \\
+  --status Inactive</pre>
 
-# Add explicit deny policy
-aws iam put-user-policy \\
-  --user-name $USER_NAME \\
-  --policy-name EmergencyDeny \\
-  --policy-document file://deny-all-policy.json
-\`\`\`
-
-### 2. Scope of Compromise
-\`\`\`bash
-# Get all API calls made with compromised credentials
+<h4>2. Check What They Did</h4>
+<pre># Review all actions taken with these credentials
 aws cloudtrail lookup-events \\
-  --lookup-attributes AttributeKey=AccessKeyId,AttributeValue=$ACCESS_KEY \\
-  --start-time 2025-01-20T00:00:00Z \\
-  --query 'Events[*].[CloudTrailEvent]' \\
-  --output text | jq '.eventName, .sourceIPAddress, .awsRegion' | head -100
+  --lookup-attributes AttributeKey=AccessKeyId,AttributeValue=AKIA_STOLEN_KEY</pre>
 
-# Check for resource creation
-aws resourcegroupstaggingapi get-resources \\
-  --tag-filters Key=CreatedBy,Values=$USER_NAME
-\`\`\`
+<h4>3. Contact the Real User</h4>
+<ul>
+<li>Confirm they didn't travel to Dublin</li>
+<li>Have them change their password</li>
+<li>Enable MFA if not already active</li>
+</ul>`,
 
-### 3. Containment & Recovery
-- Terminate any unauthorized resources
-- Rotate all potentially exposed secrets
-- Review and revoke temporary credentials
-- Enable GuardDuty if not already active`
+        steps: [
+            { type: "warning", msg: "Login from unusual location: Dublin, Ireland" },
+            { type: "info", msg: "User baseline: New York, USA" },
+            { type: "warning", msg: "50 API calls in 2 minutes (abnormal)" },
+            { type: "info", msg: "GuardDuty analyzing patterns..." },
+            { type: "success", msg: "✓ Anomaly detected: Impossible travel" },
+            { type: "error", msg: "⚠️ HIGH SEVERITY ALERT generated" },
+            { type: "success", msg: "✓ Automated response: Credentials disabled" }
+        ]
     },
-    
-    "port-scan": {
-        title: "Network Port Scanning Detection",
-        code: `import socket
-import concurrent.futures
-from ipaddress import ip_network
 
-def port_scan_simulation():
-    """
-    Simulates reconnaissance activity that would trigger
-    VPC Flow Logs and GuardDuty alerts
-    """
-    
-    target_subnet = "172.32.20.0/24"  # DB subnet
-    common_ports = [22, 80, 443, 3306, 5432, 1433, 27017, 6379]
-    
-    def scan_port(ip, port):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(0.1)
-        try:
-            result = sock.connect_ex((str(ip), port))
-            if result == 0:
-                print(f"Port {port} open on {ip}")
-        except:
-            pass
-        finally:
-            sock.close()
-    
-    # Rapid scanning behavior (suspicious)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-        for ip in ip_network(target_subnet).hosts():
-            for port in common_ports:
-                executor.submit(scan_port, ip, port)
-    
-    # This generates:
-    # - Thousands of REJECT entries in VPC Flow Logs
-    # - GuardDuty finding: Recon:EC2/PortScan`,
+    "port-scan": {
+        title: "Network Reconnaissance",
+        targetNodes: ["node-app", "node-db"],
+        defenseLayers: ["layer-sg", "layer-nacl", "layer-monitoring"],
         
-        guardduty: {
+        whatsHappening: `A hacker is <strong>scanning our network</strong> to find open doors — checking thousands of ports to see what services are running.
+        <br><br>
+        This is like a burglar walking down a street, <strong>trying every door handle</strong> to see which ones are unlocked.`,
+        
+        analogy: `<span class="emoji-icon">🚪</span>
+        Imagine someone walking down your street, <strong>jiggling every door handle</strong> on every house. 
+        Even if all doors are locked, it's suspicious behavior! Our system notices this "jiggling" and alerts us.`,
+        
+        whyMatters: `Port scanning is often the <strong>first step before an attack</strong>. 
+        By detecting it early, we know someone is probing our defenses and can watch them closely.`,
+
+        code: `<span class="comment"># Hacker scanning for open ports</span>
+<span class="keyword">import</span> socket
+<span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor
+
+target = <span class="string">"172.32.20.0/24"</span>  <span class="comment"># Database subnet</span>
+ports = [22, 80, 443, 3306, 5432, 27017]
+
+<span class="keyword">def</span> <span class="function">scan_port</span>(ip, port):
+    sock = socket.socket()
+    sock.settimeout(0.1)
+    result = sock.connect_ex((ip, port))
+    <span class="keyword">if</span> result == 0:
+        print(<span class="string">f"Port {port} open on {ip}"</span>)
+    sock.close()
+
+<span class="comment"># Rapid scanning creates thousands of REJECT log entries</span>
+<span class="comment"># GuardDuty correlates this as reconnaissance</span>`,
+
+        finding: {
             type: "Recon:EC2/PortScan",
             severity: "MEDIUM",
-            title: "EC2 instance is performing port scans",
-            description: "An EC2 instance is probing multiple ports on remote hosts. This is commonly used for reconnaissance before an attack.",
-            details: {
-                "Resource": {
-                    "Type": "Instance",
-                    "InstanceDetails": {
-                        "InstanceId": "i-0abc123def456789",
-                        "InstanceType": "t3.micro",
-                        "PrivateIpAddress": "172.32.10.55",
-                        "SubnetId": "subnet-app-tier",
-                        "SecurityGroups": [{
-                            "GroupId": "sg-app",
-                            "GroupName": "app-sg"
-                        }]
-                    }
-                },
-                "Service": {
-                    "Action": {
-                        "ActionType": "PORT_SCAN",
-                        "PortScanAction": {
-                            "PortScanDetails": [{
-                                "RemoteIpDetails": {
-                                    "IpAddressV4": "172.32.20.0/24"
-                                },
-                                "ScannedPortCount": 8,
-                                "Blocked": true
-                            }]
-                        }
-                    },
-                    "Count": 2048,
-                    "EventFirstSeen": "2025-01-20T15:45:00Z",
-                    "EventLastSeen": "2025-01-20T15:47:30Z"
-                }
-            }
+            title: "Port scanning activity detected",
+            description: "An instance is probing multiple ports on other hosts. This is typically reconnaissance before an attack.",
+            details: { "SourceIP": "172.32.10.55", "TargetSubnet": "172.32.20.0/24", "PortsScanned": 6, "ConnectionAttempts": 2048 }
         },
-        
-        response: `## Incident Response: Port Scanning
 
-### 1. Identify Scanning Instance
-\`\`\`bash
-# Query VPC Flow Logs for scanning pattern
-aws logs filter-log-events \\
-  --log-group-name /aws/vpc/flowlogs \\
-  --filter-pattern "[version, account_id, interface_id, srcaddr=172.32.10.55, dstaddr, dstport, protocol=6, packets, bytes, start, end, action=REJECT]" \\
-  --start-time $(date -u -d '1 hour ago' +%s)000
-
-# Get instance metadata
+        response: `<h4>1. Identify the Scanner</h4>
+<pre># Find the instance doing the scanning
 aws ec2 describe-instances \\
-  --filters "Name=private-ip-address,Values=172.32.10.55" \\
-  --query 'Reservations[0].Instances[0].[InstanceId,Tags,LaunchTime]'
-\`\`\`
+  --filters "Name=private-ip-address,Values=172.32.10.55"</pre>
 
-### 2. Isolate Instance
-\`\`\`bash
-# Create isolation security group
-ISOLATION_SG=$(aws ec2 create-security-group \\
-  --group-name "isolation-sg" \\
-  --description "Isolates compromised instances" \\
-  --vpc-id vpc-xxx \\
-  --query 'GroupId' --output text)
-
-# Move instance to isolation SG (no rules = no traffic)
+<h4>2. Isolate if Compromised</h4>
+<pre># Move to isolation security group
 aws ec2 modify-instance-attribute \\
-  --instance-id i-0abc123def456789 \\
-  --groups $ISOLATION_SG
-\`\`\`
+  --instance-id i-xxxxx \\
+  --groups sg-isolation</pre>
 
-### 3. Forensics
-- Create EBS snapshot for analysis
-- Check instance user-data for malware
-- Review installed packages and processes
-- Check for persistence mechanisms`
+<h4>3. Investigate</h4>
+<ul>
+<li>Is this a legitimate security scan?</li>
+<li>Was the instance compromised?</li>
+<li>Check for malware or unauthorized software</li>
+</ul>`,
+
+        steps: [
+            { type: "warning", msg: "Unusual network activity from 172.32.10.55" },
+            { type: "info", msg: "Scanning database subnet: 172.32.20.0/24" },
+            { type: "info", msg: "Ports checked: 22, 80, 443, 3306, 5432..." },
+            { type: "success", msg: "✓ All connection attempts REJECTED" },
+            { type: "success", msg: "✓ VPC Flow Logs capturing activity" },
+            { type: "info", msg: "GuardDuty correlating network patterns..." },
+            { type: "error", msg: "⚠️ ALERT: Reconnaissance detected" }
+        ]
     },
-    
-    "data-exfil": {
-        title: "S3 Data Exfiltration Attempt",
-        code: `import boto3
-from datetime import datetime, timedelta
 
-s3 = boto3.client('s3')
-
-def mass_data_download():
-    """
-    Simulates unusual S3 access patterns indicating
-    potential data exfiltration
-    """
-    
-    bucket_name = 'student-data-reports-production'
-    
-    # List all objects (reconnaissance)
-    response = s3.list_objects_v2(
-        Bucket=bucket_name,
-        Prefix='sensitive/'
-    )
-    
-    # Rapid download of many objects (suspicious)
-    download_count = 0
-    total_bytes = 0
-    
-    for obj in response.get('Contents', []):
-        try:
-            # Attempt to download each object
-            response = s3.get_object(
-                Bucket=bucket_name,
-                Key=obj['Key']
-            )
-            
-            download_count += 1
-            total_bytes += obj['Size']
-            
-            # Suspicious: downloading to external location
-            # Would trigger S3 data events in CloudTrail
-            
-        except ClientError as e:
-            print(f"Access denied: {e}")
-    
-    # Generate pre-signed URLs (exfiltration attempt)
-    for obj in response.get('Contents', []):
-        try:
-            url = s3.generate_presigned_url(
-                'get_object',
-                Params={'Bucket': bucket_name, 'Key': obj['Key']},
-                ExpiresIn=86400  # 24 hours
-            )
-            # URLs could be shared externally
-        except:
-            pass`,
+    "data-theft": {
+        title: "Mass Data Download",
+        targetNodes: ["node-app"],
+        defenseLayers: ["layer-iam", "layer-monitoring"],
         
-        guardduty: {
+        whatsHappening: `Someone is <strong>downloading huge amounts of student data</strong> very quickly — way more than normal usage would require.
+        <br><br>
+        Our monitoring notices: "This user usually downloads 5 files a day. Why are they suddenly grabbing 500 files in 10 minutes?"`,
+        
+        analogy: `<span class="emoji-icon">📚</span>
+        Imagine a library where you normally check out 2-3 books. Suddenly you're loading <strong>a shopping cart with 500 books</strong>. 
+        The librarian would definitely ask questions! Our system does the same thing.`,
+        
+        whyMatters: `Data exfiltration is how breaches happen. 
+        Even if someone has legitimate access, <strong>unusual download patterns</strong> could mean they're stealing data to sell or leak.`,
+
+        code: `<span class="comment"># Attempting to download massive amounts of data</span>
+<span class="keyword">import</span> boto3
+
+s3 = boto3.client(<span class="string">'s3'</span>)
+
+<span class="comment"># List all sensitive files</span>
+objects = s3.list_objects_v2(
+    Bucket=<span class="string">'student-records'</span>,
+    Prefix=<span class="string">'transcripts/'</span>
+)
+
+<span class="comment"># Download everything rapidly</span>
+<span class="keyword">for</span> obj <span class="keyword">in</span> objects[<span class="string">'Contents'</span>]:
+    s3.download_file(
+        <span class="string">'student-records'</span>,
+        obj[<span class="string">'Key'</span>],
+        <span class="string">f"/tmp/{obj['Key']}"</span>
+    )
+
+<span class="comment"># This unusual volume triggers alerts</span>`,
+
+        finding: {
             type: "Exfiltration:S3/ObjectRead.Unusual",
             severity: "HIGH",
-            title: "Unusual S3 GET requests detected",
-            description: "An IAM entity is downloading an unusually large amount of data from S3. This pattern is consistent with data exfiltration.",
-            details: {
-                "Resource": {
-                    "Type": "S3Bucket",
-                    "S3BucketDetails": [{
-                        "Name": "student-data-reports-production",
-                        "Type": "Source",
-                        "Arn": "arn:aws:s3:::student-data-reports-production"
-                    }]
-                },
-                "Service": {
-                    "Action": {
-                        "ActionType": "AWS_API_CALL",
-                        "AwsApiCallAction": {
-                            "Api": "GetObject",
-                            "ServiceName": "s3.amazonaws.com",
-                            "CallerType": "Remote"
-                        }
-                    },
-                    "Evidence": {
-                        "DataTransferDetails": {
-                            "TotalBytes": 52428800,
-                            "TotalObjects": 127,
-                            "UnusualBehavior": {
-                                "IsFirstTimeBucketSeen": false,
-                                "IsUnusualDataTransferSize": true,
-                                "IsUnusualNumberOfOperations": true
-                            }
-                        }
-                    },
-                    "Count": 127,
-                    "EventFirstSeen": "2025-01-20T16:00:00Z",
-                    "EventLastSeen": "2025-01-20T16:15:00Z"
-                }
-            }
+            title: "Unusual data download pattern detected",
+            description: "A user is downloading far more data than their normal baseline. This matches data exfiltration patterns.",
+            details: { "FilesDownloaded": 127, "DataVolume": "52.4 MB", "TimeWindow": "15 minutes", "NormalBaseline": "5 files/day" }
         },
-        
-        response: `## Incident Response: S3 Data Exfiltration
 
-### 1. Immediate Response
-\`\`\`bash
-# Block the IAM principal immediately
-PRINCIPAL_ARN="arn:aws:iam::123456789012:user/compromised_user"
+        response: `<h4>1. Restrict Access Immediately</h4>
+<pre># Block the user's access to the bucket
+aws s3api put-bucket-policy --bucket student-records \\
+  --policy '{"Statement":[{"Effect":"Deny","Principal":{"AWS":"arn:aws:iam::xxx:user/suspect"},"Action":"s3:*","Resource":"*"}]}'</pre>
 
-# Attach deny policy to bucket
-aws s3api put-bucket-policy --bucket student-data-reports-production \\
-  --policy '{
-    "Statement": [{
-      "Effect": "Deny",
-      "Principal": {"AWS": "'$PRINCIPAL_ARN'"},
-      "Action": "s3:*",
-      "Resource": ["arn:aws:s3:::student-data-reports-production/*"]
-    }]
-  }'
-\`\`\`
+<h4>2. Assess Exposure</h4>
+<ul>
+<li>What files were downloaded?</li>
+<li>Do they contain PII?</li>
+<li>Is this a reportable breach?</li>
+</ul>
 
-### 2. Assess Data Exposure
-\`\`\`sql
--- Athena query on S3 access logs
-SELECT 
-    requestdatetime,
-    remoteip,
-    requester,
-    key,
-    operation,
-    bytessent
-FROM s3_access_logs
-WHERE bucket = 'student-data-reports-production'
-  AND operation = 'REST.GET.OBJECT'
-  AND requestdatetime > current_timestamp - interval '24' hour
-  AND bytessent > 0
-ORDER BY requestdatetime DESC;
-\`\`\`
+<h4>3. Contact User</h4>
+<p>There may be a legitimate reason (end of semester reports). But verify before restoring access.</p>`,
 
-### 3. Containment
-- Revoke all pre-signed URLs if possible
-- Rotate S3 bucket encryption keys
-- Enable S3 object lock for critical data
-- Review and tighten bucket policies`
+        steps: [
+            { type: "warning", msg: "Unusual download volume: 127 files in 15 minutes" },
+            { type: "info", msg: "User baseline: 5 files per day" },
+            { type: "info", msg: "Data volume: 52.4 MB" },
+            { type: "info", msg: "S3 access logs recording all activity..." },
+            { type: "info", msg: "GuardDuty analyzing data transfer patterns..." },
+            { type: "error", msg: "⚠️ ALERT: Possible data exfiltration" },
+            { type: "success", msg: "✓ Automated alert sent to security team" }
+        ]
     }
 };
 
-function showTab(tabName) {
-    // Update tab buttons
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    event.target.classList.add('active');
-    
-    // Update content
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-    });
-    document.getElementById(tabName + '-tab').classList.add('active');
-}
+// ============================================
+// DOM ELEMENTS
+// ============================================
+const attackBtns = document.querySelectorAll('.attack-btn');
+const tabBtns = document.querySelectorAll('.tab-btn');
+const logContainer = document.getElementById('logContainer');
+const attacker = document.getElementById('attacker');
+const shield = document.getElementById('shield');
+const blockedBanner = document.getElementById('blockedBanner');
 
-function addLogEntry(message, type = 'info') {
-    const logPanel = document.getElementById('logPanel');
-    const entry = document.createElement('div');
-    entry.className = `log-entry log-${type}`;
-    entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-    entry.style.opacity = '0';
-    logPanel.appendChild(entry);
-    
-    setTimeout(() => {
-        entry.style.opacity = '1';
-        entry.style.transition = 'opacity 0.3s ease';
-    }, 100);
-    
-    logPanel.scrollTop = logPanel.scrollHeight;
-}
-
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(r => setTimeout(r, ms));
 }
 
-async function simulateAttack(attackType) {
-    if (isSimulating) return;
-    isSimulating = true;
-    currentAttack = attackType;
-    
-    document.querySelectorAll('.attack-button').forEach(btn => btn.disabled = true);
-    
-    const scenario = attackScenarios[attackType];
-    
-    // Clear previous logs
-    document.getElementById('logPanel').innerHTML = '';
-    
-    // Update code display
-    document.getElementById('codeDisplay').innerHTML = `<pre style="color: #c9d1d9; margin: 0; overflow-x: auto;">${highlightCode(scenario.code)}</pre>`;
-    
-    // Show GuardDuty finding
-    displayGuardDutyFinding(scenario.guardduty);
-    
-    // Show response procedures
-    document.getElementById('responseDisplay').innerHTML = `<pre style="color: #c9d1d9; margin: 0; white-space: pre-wrap;">${scenario.response}</pre>`;
-    
-    // Simulate the attack
-    addLogEntry(`═══ ${scenario.title} ═══`, 'warning');
-    await sleep(800);
-    
-    // Attack simulation steps
-    const steps = getAttackSteps(attackType);
-    for (const step of steps) {
-        addLogEntry(step.message, step.type);
-        await sleep(600);
-    }
-    
-    // Update counters
-    attackCount++;
-    guarddutyCount++;
-    document.getElementById('attacksBlocked').textContent = attackCount;
-    document.getElementById('guarddutyCalls').textContent = guarddutyCount;
-    
-    await sleep(500);
-    document.querySelectorAll('.attack-button').forEach(btn => btn.disabled = false);
-    isSimulating = false;
+function timestamp() {
+    return new Date().toLocaleTimeString('en-US', { hour12: false });
 }
 
-function getAttackSteps(attackType) {
-    const steps = {
-        "direct-db": [
-            { type: "info", message: "Attempting connection to RDS endpoint: student-db.c3pxyz.us-east-1.rds.amazonaws.com:5432" },
-            { type: "warning", message: "Source IP: 203.0.113.45 (External/Untrusted)" },
-            { type: "info", message: "VPC Route Table Check: No IGW route to 172.32.20.0/24" },
-            { type: "success", message: "✓ Network isolation prevents routing" },
-            { type: "info", message: "Security Group db-sg evaluation..." },
-            { type: "success", message: "✓ Ingress rules: Only from sg-app (no IP ranges)" },
-            { type: "error", message: "❌ Connection REJECTED - Multiple defense layers active" }
-        ],
-        "privilege-escalation": [
-            { type: "info", message: "API Call: iam:AttachUserPolicy" },
-            { type: "warning", message: "Target Policy: arn:aws:iam::aws:policy/AdministratorAccess" },
-            { type: "info", message: "Checking IAM permissions for student_readonly_user..." },
-            { type: "success", message: "✓ User lacks iam:AttachUserPolicy permission" },
-            { type: "info", message: "CloudTrail logging failed attempt..." },
-            { type: "error", message: "❌ AccessDenied: User cannot modify IAM policies" }
-        ],
-        "s3-public": [
-            { type: "info", message: "API Call: s3:PutBucketAcl" },
-            { type: "warning", message: "ACL Change Request: public-read" },
-            { type: "info", message: "S3 Block Public Access evaluation..." },
-            { type: "success", message: "✓ BlockPublicAcls: ENABLED (account-level)" },
-            { type: "success", message: "✓ BlockPublicPolicy: ENABLED (bucket-level)" },
-            { type: "error", message: "❌ Request BLOCKED by S3 Block Public Access" }
-        ],
-        "credential-exfil": [
-            { type: "warning", message: "Unusual API activity detected from new region: eu-west-1" },
-            { type: "info", message: "Normal baseline: us-east-1 only" },
-            { type: "warning", message: "50 API calls in 2 minutes from Dublin IP" },
-            { type: "info", message: "GuardDuty analyzing behavior patterns..." },
-            { type: "error", message: "⚠️ HIGH severity finding generated" },
-            { type: "success", message: "✓ Automated response triggered: Access key disabled" }
-        ],
-        "port-scan": [
-            { type: "warning", message: "Port scan detected from 172.32.10.55" },
-            { type: "info", message: "Target: 172.32.20.0/24 (Database subnet)" },
-            { type: "info", message: "Scanned ports: 22, 80, 443, 3306, 5432, 1433" },
-            { type: "success", message: "✓ All connections REJECTED by NACLs" },
-            { type: "info", message: "VPC Flow Logs: 2,048 REJECT entries logged" },
-            { type: "error", message: "⚠️ GuardDuty Finding: Recon:EC2/PortScan" }
-        ],
-        "data-exfil": [
-            { type: "warning", message: "Mass download detected: 127 objects in 15 minutes" },
-            { type: "info", message: "Total data transfer: 52.4 MB" },
-            { type: "warning", message: "Pre-signed URLs generated with 24-hour expiry" },
-            { type: "info", message: "S3 access logging capturing all requests..." },
-            { type: "error", message: "⚠️ GuardDuty: Exfiltration:S3/ObjectRead.Unusual" },
-            { type: "success", message: "✓ CloudWatch alarm triggered on unusual access pattern" }
-        ]
-    };
+function log(type, msg) {
+    const entry = document.createElement('div');
+    entry.className = `log-entry ${type}`;
+    entry.innerHTML = `<span class="log-time">[${timestamp()}]</span><span>${msg}</span>`;
+    logContainer.appendChild(entry);
+    logContainer.scrollTop = logContainer.scrollHeight;
+}
+
+function clearLog() {
+    logContainer.innerHTML = '';
+}
+
+function highlightNodes(ids) {
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('highlight');
+    });
+}
+
+function clearNodes() {
+    document.querySelectorAll('.node').forEach(n => {
+        n.classList.remove('highlight', 'blocked', 'attacked');
+    });
+}
+
+function activateLayers(ids) {
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('active');
+    });
+}
+
+function clearLayers() {
+    document.querySelectorAll('.defense-layer').forEach(l => l.classList.remove('active'));
+}
+
+function showTab(name) {
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    document.querySelectorAll('.tab-content').forEach(c => {
+        c.classList.toggle('active', c.id === `tab-${name}`);
+    });
+}
+
+function updateExplanation(attack) {
+    document.getElementById('whContent').innerHTML = attack.whatsHappening;
+    document.getElementById('analogyContent').innerHTML = attack.analogy;
+    document.getElementById('whyMatters').innerHTML = attack.whyMatters;
+}
+
+function updateCode(attack) {
+    document.getElementById('codePlaceholder').style.display = 'none';
+    const display = document.getElementById('codeDisplay');
+    display.style.display = 'block';
+    display.innerHTML = attack.code;
+}
+
+function updateFinding(attack) {
+    document.getElementById('findingPlaceholder').style.display = 'none';
+    const display = document.getElementById('findingDisplay');
+    display.style.display = 'block';
     
-    return steps[attackType] || [];
-}
-
-function highlightCode(code) {
-    return code
-        .replace(/import\s+\w+/g, '<span style="color: #ff7b72">$&</span>')
-        .replace(/from\s+\w+/g, '<span style="color: #ff7b72">$&</span>')
-        .replace(/def\s+\w+/g, '<span style="color: #d2a8ff">$&</span>')
-        .replace(/try:|except\s+\w+:|except:|finally:/g, '<span style="color: #ff7b72">$&</span>')
-        .replace(/(#.*$)/gm, '<span style="color: #8b949e">$1</span>')
-        .replace(/("[^"]*"|'[^']*')/g, '<span style="color: #a5d6ff">$1</span>')
-        .replace(/\b(True|False|None)\b/g, '<span style="color: #79c0ff">$1</span>');
-}
-
-function displayGuardDutyFinding(finding) {
-    const html = `
-        <div class="guardduty-finding">
+    const f = attack.finding;
+    display.innerHTML = `
+        <div class="finding-card">
             <div class="finding-header">
-                <div class="finding-title">${finding.type}</div>
-                <div class="finding-severity">SEVERITY: ${finding.severity}</div>
+                <div class="finding-type">${f.type}</div>
+                <div class="finding-severity">${f.severity}</div>
             </div>
-            <h4 style="color: #f0883e; margin: 12px 0 8px 0;">${finding.title}</h4>
-            <p style="color: #c9d1d9; margin-bottom: 16px;">${finding.description}</p>
-            <div style="background: #0d1117; padding: 12px; border-radius: 4px;">
-                <pre style="color: #8b949e; margin: 0; font-size: 11px; overflow-x: auto;">${JSON.stringify(finding.details, null, 2)}</pre>
+            <div class="finding-body">
+                <div class="finding-title">${f.title}</div>
+                <div class="finding-desc">${f.description}</div>
+                <div class="finding-json"><pre>${JSON.stringify(f.details, null, 2)}</pre></div>
             </div>
         </div>
     `;
-    document.getElementById('guarddutyfinding').innerHTML = html;
 }
 
-// Initialize
-addLogEntry("Security simulator ready. Select an attack scenario to begin.", "info");
+function updateResponse(attack) {
+    document.getElementById('responsePlaceholder').style.display = 'none';
+    const display = document.getElementById('responseDisplay');
+    display.style.display = 'block';
+    display.innerHTML = attack.response;
+}
 
-// Mobile menu toggle
-document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
-    document.querySelector('.nav-links').classList.toggle('mobile-open');
-    this.classList.toggle('active');
-});
+// ============================================
+// MAIN SIMULATION
+// ============================================
+async function runSimulation(attackId) {
+    if (isSimulating) return;
+    isSimulating = true;
 
-// Close mobile menu when clicking on a link
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', function() {
-        document.querySelector('.nav-links').classList.remove('mobile-open');
-        document.querySelector('.mobile-menu-toggle').classList.remove('active');
+    const attack = attacks[attackId];
+    if (!attack) return;
+
+    // Disable buttons
+    attackBtns.forEach(b => b.disabled = true);
+    attackBtns.forEach(b => b.classList.toggle('active', b.dataset.attack === attackId));
+
+    // Reset visuals
+    clearLog();
+    clearNodes();
+    clearLayers();
+    blockedBanner.classList.remove('show');
+    shield.classList.remove('active');
+    attacker.classList.remove('active');
+
+    // Update panels
+    updateExplanation(attack);
+    updateCode(attack);
+    updateFinding(attack);
+    updateResponse(attack);
+
+    // Start
+    log('info', `━━━ ${attack.title.toUpperCase()} ━━━`);
+    await sleep(400);
+
+    // Show attacker
+    attacker.classList.add('active');
+    await sleep(500);
+
+    // Highlight targets
+    highlightNodes(attack.targetNodes);
+    await sleep(300);
+
+    // Run steps
+    for (const step of attack.steps) {
+        log(step.type, step.msg);
+        
+        if (step.type === 'success') {
+            activateLayers(attack.defenseLayers);
+        }
+        
+        await sleep(600);
+    }
+
+    // Block effect
+    await sleep(300);
+    attack.targetNodes.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('highlight');
+            el.classList.add('blocked');
+        }
     });
+
+    shield.classList.add('active');
+    await sleep(300);
+    blockedBanner.classList.add('show');
+
+    // Update stats
+    attackCount++;
+    alertCount++;
+    document.getElementById('attacksBlocked').textContent = attackCount;
+    document.getElementById('alertsGenerated').textContent = alertCount;
+
+    await sleep(2000);
+
+    // Reset
+    blockedBanner.classList.remove('show');
+    attacker.classList.remove('active');
+
+    await sleep(400);
+
+    attackBtns.forEach(b => {
+        b.disabled = false;
+        b.classList.remove('active');
+    });
+
+    isSimulating = false;
+}
+
+// ============================================
+// EVENT LISTENERS
+// ============================================
+attackBtns.forEach(btn => {
+    btn.addEventListener('click', () => runSimulation(btn.dataset.attack));
 });
+
+tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => showTab(btn.dataset.tab));
+});
+
+// Init
+log('info', 'Security monitoring active');
+log('success', '✓ All defense layers operational');
 </script>
+
 </body>
 </html>
