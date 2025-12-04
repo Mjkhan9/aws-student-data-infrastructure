@@ -5,33 +5,659 @@
     <title>AWS Student Data Infrastructure | Cloud Security Portfolio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Production-grade AWS cloud architecture for student data systems featuring three-tier VPC, IAM automation, KMS encryption, and comprehensive security controls.">
-    <meta name="keywords" content="AWS, Cloud Architecture, VPC, IAM, Security, Student Data, Portfolio, DevOps, Cloud Engineering">
-    <meta name="author" content="Jawad Khan">
-    
-    <!-- Open Graph / Social Media -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="AWS Student Data Infrastructure">
-    <meta property="og:description" content="Secure three-tier AWS architecture for academic data with IAM automation and defense-in-depth security.">
-    <meta property="og:url" content="https://mjkhan9.github.io/aws-student-data-infrastructure/">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AWS Student Data Infrastructure">
-    <meta name="twitter:description" content="Production-grade AWS cloud architecture portfolio project.">
-    
-    <link rel="canonical" href="https://mjkhan9.github.io/aws-student-data-infrastructure/">
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
+    <style>
+        /* ============================================
+           STUNNING HOME PAGE
+           ============================================ */
+        
+        /* Hero with animated background */
+        .hero-spectacular {
+            position: relative;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0e14 0%, #16191f 50%, #0d1117 100%);
+            border-radius: 16px;
+            margin-bottom: 32px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 153, 0, 0.2);
+        }
+        
+        /* Animated grid */
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255, 153, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 153, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridFloat 20s linear infinite;
+        }
+        
+        @keyframes gridFloat {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Glowing orbs */
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        
+        .hero-orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 153, 0, 0.4), transparent 70%);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+        
+        .hero-orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(30, 143, 255, 0.3), transparent 70%);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: -4s;
+        }
+        
+        .hero-orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.3), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -2s;
+        }
+        
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -20px) scale(1.05); }
+            50% { transform: translate(-10px, 10px) scale(0.95); }
+            75% { transform: translate(15px, 15px) scale(1.02); }
+        }
+        
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--aws-orange);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 10s linear infinite;
+        }
+        
+        @keyframes particleFloat {
+            0% { 
+                opacity: 0;
+                transform: translateY(100%) scale(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                opacity: 0;
+                transform: translateY(-100vh) scale(1);
+            }
+        }
+        
+        /* Hero content */
+        .hero-content-wrap {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px 40px;
+            max-width: 900px;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 153, 0, 0.1);
+            border: 1px solid rgba(255, 153, 0, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--aws-orange);
+            font-weight: 600;
+            margin-bottom: 24px;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0.2); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 153, 0, 0); }
+        }
+        
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--aws-green-light);
+            border-radius: 50%;
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes dotPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        
+        .hero-spectacular h1 {
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 20px;
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+        
+        .hero-spectacular h1 .highlight {
+            background: linear-gradient(135deg, var(--aws-orange), var(--aws-orange-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-typing {
+            height: 32px;
+            margin-bottom: 32px;
+        }
+        
+        .typing-text {
+            font-size: 20px;
+            color: var(--aws-text-secondary);
+            border-right: 2px solid var(--aws-orange);
+            padding-right: 4px;
+            animation: cursorBlink 0.8s infinite;
+        }
+        
+        @keyframes cursorBlink {
+            0%, 50% { border-color: var(--aws-orange); }
+            51%, 100% { border-color: transparent; }
+        }
+        
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        
+        .hero-tag {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--aws-border);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+            transition: all 0.2s ease;
+        }
+        
+        .hero-tag:hover {
+            border-color: var(--aws-orange);
+            color: var(--aws-orange);
+            transform: translateY(-2px);
+        }
+        
+        .hero-tag .tag-icon {
+            margin-right: 6px;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-hero-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--aws-orange), var(--aws-orange-dark));
+            color: var(--aws-squid-ink);
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 8px 32px rgba(255, 153, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hero-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 153, 0, 0.4);
+        }
+        
+        .btn-hero-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: transparent;
+            color: var(--aws-text-primary);
+            font-size: 16px;
+            font-weight: 600;
+            border: 1px solid var(--aws-border);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hero-secondary:hover {
+            border-color: var(--aws-orange);
+            color: var(--aws-orange);
+            transform: translateY(-2px);
+        }
+        
+        /* Stats with animations */
+        .stats-spectacular {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--aws-card-bg), var(--aws-panel-bg));
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 28px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--aws-orange), transparent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--aws-orange);
+        }
+        
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        
+        .stat-number {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--aws-orange);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        
+        .stat-number.green { color: var(--aws-green-light); }
+        .stat-number.blue { color: var(--aws-blue-light); }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+            font-weight: 600;
+        }
+        
+        /* Feature showcase */
+        .features-showcase {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin: 40px 0;
+        }
+        
+        .feature-showcase-card {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+            display: flex;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-showcase-card:hover {
+            border-color: var(--aws-orange);
+            transform: translateX(8px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-icon-large {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+        
+        .feature-icon-large.orange { background: rgba(255, 153, 0, 0.15); }
+        .feature-icon-large.blue { background: rgba(30, 143, 255, 0.15); }
+        .feature-icon-large.green { background: rgba(46, 160, 67, 0.15); }
+        .feature-icon-large.purple { background: rgba(123, 97, 255, 0.15); }
+        
+        .feature-content h3 {
+            font-size: 18px;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
+            border: none;
+            padding: 0;
+        }
+        
+        .feature-content p {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        /* Interactive tools grid */
+        .tools-spectacular {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 32px 0;
+        }
+        
+        .tool-spectacular {
+            position: relative;
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 28px;
+            text-decoration: none;
+            color: inherit;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-spectacular::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 153, 0, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .tool-spectacular:hover::before {
+            opacity: 1;
+        }
+        
+        .tool-spectacular:hover {
+            border-color: var(--aws-orange);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .tool-icon-wrap {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+        }
+        
+        .tool-title-wrap h3 {
+            font-size: 18px;
+            color: var(--aws-text-primary);
+            margin: 0 0 4px 0;
+            border: none;
+            padding: 0;
+        }
+        
+        .tool-badge {
+            font-size: 10px;
+            color: var(--aws-orange);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        
+        .tool-desc {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .tool-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--aws-orange);
+            font-weight: 600;
+            position: relative;
+            transition: gap 0.2s ease;
+        }
+        
+        .tool-spectacular:hover .tool-cta {
+            gap: 12px;
+        }
+        
+        /* Author section */
+        .author-spectacular {
+            background: linear-gradient(135deg, var(--aws-card-bg), var(--aws-panel-bg));
+            border: 1px solid var(--aws-border);
+            border-radius: 16px;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .author-info h3 {
+            font-size: 14px;
+            color: var(--aws-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            border: none;
+            padding: 0;
+        }
+        
+        .author-name-large {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .author-role {
+            font-size: 16px;
+            color: var(--aws-orange);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        .author-bio {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            line-height: 1.7;
+            margin-bottom: 24px;
+            max-width: 500px;
+        }
+        
+        .author-links-row {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .author-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .author-link-btn:hover {
+            border-color: var(--aws-orange);
+            color: var(--aws-orange);
+        }
+        
+        .certifications {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .cert-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        .cert-card:hover {
+            border-color: var(--aws-orange);
+            transform: translateX(4px);
+        }
+        
+        .cert-icon {
+            font-size: 32px;
+        }
+        
+        .cert-info {
+            flex: 1;
+        }
+        
+        .cert-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--aws-text-primary);
+        }
+        
+        .cert-issuer {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-spectacular {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-showcase,
+            .tools-spectacular {
+                grid-template-columns: 1fr;
+            }
+            
+            .author-spectacular {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-spectacular h1 {
+                font-size: 36px;
+            }
+            
+            .hero-content-wrap {
+                padding: 40px 24px;
+            }
+            
+            .stats-spectacular {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            
+            .stat-card {
+                padding: 20px;
+            }
+            
+            .stat-number {
+                font-size: 32px;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+            }
+            
+            .btn-hero-primary,
+            .btn-hero-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
 <header class="site-header">
     <div>
-        <div class="logo">
+        <a href="index.html" class="logo">
             <span class="logo-icon">☁</span>
             AWS Student Data Infrastructure
-        </div>
+        </a>
         <nav class="nav-links">
             <a href="index.html" class="active">Home</a>
             <a href="architecture.html">Architecture</a>
@@ -52,118 +678,172 @@
 </header>
 
 <main class="content">
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1>AWS Student Data Infrastructure</h1>
-            <p class="hero-subtitle">
-                A secure, automated cloud environment for academic data processing featuring 
-                IAM automation, multi-tier VPC security, encryption, and network segmentation.
-            </p>
-            <div class="hero-badges">
-                <span class="badge badge-ec2">AWS Certified</span>
-                <span class="badge badge-vpc">Three-Tier VPC</span>
-                <span class="badge badge-iam">IAM Automation</span>
-                <span class="badge badge-s3">KMS Encryption</span>
+    <!-- Spectacular Hero -->
+    <section class="hero-spectacular">
+        <div class="hero-grid"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        
+        <div class="particles" id="particles"></div>
+        
+        <div class="hero-content-wrap">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                AWS Certified • Production Ready
             </div>
-            <div class="hero-actions">
-                <a href="live-demo.html" class="btn-primary">
-                    <span class="btn-icon">▶</span> Launch Live Demo
+            
+            <h1>
+                AWS Student Data<br>
+                <span class="highlight">Infrastructure</span>
+            </h1>
+            
+            <div class="hero-typing">
+                <span class="typing-text" id="typingText"></span>
+            </div>
+            
+            <div class="hero-tags">
+                <span class="hero-tag"><span class="tag-icon">🏗️</span>Three-Tier VPC</span>
+                <span class="hero-tag"><span class="tag-icon">🔐</span>KMS Encryption</span>
+                <span class="hero-tag"><span class="tag-icon">⚙️</span>IAM Automation</span>
+                <span class="hero-tag"><span class="tag-icon">🛡️</span>GuardDuty</span>
+                <span class="hero-tag"><span class="tag-icon">📊</span>CloudTrail</span>
+            </div>
+            
+            <div class="hero-cta">
+                <a href="live-demo.html" class="btn-hero-primary">
+                    <span>▶</span>
+                    <span>Launch Live Demo</span>
                 </a>
-                <a href="architecture.html" class="btn-secondary">
-                    View Architecture
+                <a href="architecture.html" class="btn-hero-secondary">
+                    <span>View Architecture</span>
+                    <span>→</span>
                 </a>
             </div>
         </div>
     </section>
-
-    <!-- Quick Stats -->
-    <section class="stats-section">
-        <div class="stat-item">
-            <div class="stat-value">67%</div>
-            <div class="stat-label">Faster Provisioning</div>
+    
+    <!-- Stats -->
+    <section class="stats-spectacular">
+        <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-number green" data-target="67">0</div>
+            <div class="stat-label">% Faster Provisioning</div>
         </div>
-        <div class="stat-item">
-            <div class="stat-value">0%</div>
-            <div class="stat-label">Error Rate</div>
+        <div class="stat-card">
+            <div class="stat-icon">✓</div>
+            <div class="stat-number green" data-target="0">0</div>
+            <div class="stat-label">% Error Rate</div>
         </div>
-        <div class="stat-item">
-            <div class="stat-value">100%</div>
-            <div class="stat-label">Encryption Coverage</div>
+        <div class="stat-card">
+            <div class="stat-icon">🔒</div>
+            <div class="stat-number" data-target="100">0</div>
+            <div class="stat-label">% Encryption Coverage</div>
         </div>
-        <div class="stat-item">
-            <div class="stat-value">3</div>
+        <div class="stat-card">
+            <div class="stat-icon">🛡️</div>
+            <div class="stat-number blue" data-target="3">0</div>
             <div class="stat-label">Security Tiers</div>
         </div>
     </section>
-
-    <!-- Project Overview -->
+    
+    <!-- Overview Card -->
     <section class="card">
         <h2>Project Overview</h2>
         <p>
             This portfolio project demonstrates production-grade AWS deployment patterns for 
-            securing sensitive data systems. The implementation showcases three-tier VPC architecture, 
+            securing sensitive student data systems. The implementation showcases three-tier VPC architecture, 
             automated IAM provisioning, comprehensive encryption, and defense-in-depth security controls.
         </p>
         
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🏗️</div>
-                <div class="feature-title">Network Architecture</div>
-                <div class="feature-desc">Three-tier VPC with complete database isolation and zero public attack surface</div>
+        <div class="features-showcase">
+            <div class="feature-showcase-card">
+                <div class="feature-icon-large orange">🏗️</div>
+                <div class="feature-content">
+                    <h3>Network Architecture</h3>
+                    <p>Three-tier VPC with complete database isolation, NAT gateways for secure outbound access, and zero public attack surface for sensitive resources.</p>
+                </div>
             </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">🔐</div>
-                <div class="feature-title">Security Controls</div>
-                <div class="feature-desc">Defense-in-depth with encryption, audit trails, and least-privilege access</div>
+            <div class="feature-showcase-card">
+                <div class="feature-icon-large blue">🔐</div>
+                <div class="feature-content">
+                    <h3>Security Controls</h3>
+                    <p>Defense-in-depth with customer-managed KMS encryption, comprehensive audit trails via CloudTrail, and GuardDuty threat detection.</p>
+                </div>
             </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">⚙️</div>
-                <div class="feature-title">Automation</div>
-                <div class="feature-desc">Python-based IAM provisioning with zero configuration errors</div>
+            <div class="feature-showcase-card">
+                <div class="feature-icon-large green">⚙️</div>
+                <div class="feature-content">
+                    <h3>IAM Automation</h3>
+                    <p>Python-based provisioning pipeline reducing user setup time by 67% with zero configuration errors and full audit logging.</p>
+                </div>
             </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <div class="feature-title">Monitoring</div>
-                <div class="feature-desc">CloudTrail, VPC Flow Logs, and GuardDuty for complete visibility</div>
+            <div class="feature-showcase-card">
+                <div class="feature-icon-large purple">📊</div>
+                <div class="feature-content">
+                    <h3>Monitoring & Logging</h3>
+                    <p>Complete visibility through VPC Flow Logs, CloudWatch metrics, and centralized log aggregation for security analysis.</p>
+                </div>
             </div>
         </div>
     </section>
-
-    <!-- Core Features -->
+    
+    <!-- Interactive Tools -->
     <section class="card">
-        <h2>Core Features</h2>
-        <ul class="feature-list">
-            <li>
-                <strong>Multi-tier VPC Architecture:</strong> 
-                Public admin tier, private application tier, and isolated database tier with proper network segmentation
-            </li>
-            <li>
-                <strong>Zero-Trust Security Model:</strong> 
-                Security groups with SG-to-SG references, no 0.0.0.0/0 rules, explicit allow lists only
-            </li>
-            <li>
-                <strong>IAM Automation:</strong> 
-                Python script reducing provisioning time by 67% with zero configuration errors
-            </li>
-            <li>
-                <strong>Comprehensive Encryption:</strong> 
-                Customer-managed KMS keys with automatic rotation for all data at rest and in transit
-            </li>
-            <li>
-                <strong>Complete Audit Trail:</strong> 
-                CloudTrail, VPC Flow Logs, and GuardDuty providing full visibility
-            </li>
-            <li>
-                <strong>High Availability:</strong> 
-                Multi-AZ deployment with automated failover and backup strategies
-            </li>
-        </ul>
+        <h2>Interactive Demonstrations</h2>
+        <p>Explore the infrastructure through hands-on simulations and visualizations.</p>
+        
+        <div class="tools-spectacular">
+            <a href="live-demo.html" class="tool-spectacular">
+                <div class="tool-header">
+                    <div class="tool-icon-wrap">▶️</div>
+                    <div class="tool-title-wrap">
+                        <h3>IAM Automation Demo</h3>
+                        <span class="tool-badge">Watch Live</span>
+                    </div>
+                </div>
+                <p class="tool-desc">Watch the complete IAM provisioning pipeline execute in real-time with visual progress tracking and audit logging.</p>
+                <span class="tool-cta">Launch Demo <span>→</span></span>
+            </a>
+            
+            <a href="security-simulator.html" class="tool-spectacular">
+                <div class="tool-header">
+                    <div class="tool-icon-wrap">🛡️</div>
+                    <div class="tool-title-wrap">
+                        <h3>Security Attack Simulator</h3>
+                        <span class="tool-badge">Interactive</span>
+                    </div>
+                </div>
+                <p class="tool-desc">Simulate real attack scenarios and watch how each security control activates to protect student data.</p>
+                <span class="tool-cta">Launch Simulator <span>→</span></span>
+            </a>
+            
+            <a href="interactive-diagram.html" class="tool-spectacular">
+                <div class="tool-header">
+                    <div class="tool-icon-wrap">🗺️</div>
+                    <div class="tool-title-wrap">
+                        <h3>Network Architecture</h3>
+                        <span class="tool-badge">Explorable</span>
+                    </div>
+                </div>
+                <p class="tool-desc">Interactive VPC diagram with clickable components showing security configurations and data flow.</p>
+                <span class="tool-cta">Explore Diagram <span>→</span></span>
+            </a>
+            
+            <a href="cost-calculator.html" class="tool-spectacular">
+                <div class="tool-header">
+                    <div class="tool-icon-wrap">💰</div>
+                    <div class="tool-title-wrap">
+                        <h3>Cost Calculator</h3>
+                        <span class="tool-badge">Real Pricing</span>
+                    </div>
+                </div>
+                <p class="tool-desc">Calculate monthly infrastructure costs with animated visualizations and ROI analysis.</p>
+                <span class="tool-cta">Open Calculator <span>→</span></span>
+            </a>
+        </div>
     </section>
-
+    
     <!-- Technology Stack -->
     <section class="card">
         <h2>Technology Stack</h2>
@@ -172,109 +852,54 @@
                 <div class="tech-label">Networking</div>
                 <div class="tech-value">AWS VPC, Security Groups, NACLs, NAT Gateway, VPC Endpoints</div>
             </div>
-            
             <div class="tech-card">
                 <div class="tech-label">Compute & Storage</div>
                 <div class="tech-value">EC2, ECS Fargate, Lambda, RDS PostgreSQL, S3</div>
             </div>
-            
             <div class="tech-card">
                 <div class="tech-label">Security</div>
                 <div class="tech-value">IAM, KMS, CloudTrail, GuardDuty, VPC Flow Logs</div>
             </div>
-            
             <div class="tech-card">
                 <div class="tech-label">Automation</div>
                 <div class="tech-value">Python 3.11, Boto3, AWS CLI</div>
             </div>
         </div>
     </section>
-
-    <!-- Interactive Tools Section -->
-    <section class="card">
-        <h2>Interactive Tools</h2>
-        <p>Explore the infrastructure through interactive demonstrations and simulations.</p>
-        
-        <div class="tools-grid">
-            <a href="interactive-diagram.html" class="tool-card tool-diagram">
-                <div class="tool-icon">🗺️</div>
-                <div class="tool-title">Interactive VPC Diagram</div>
-                <div class="tool-desc">Click network tiers to see detailed configuration and security rules</div>
-                <span class="tool-cta">Open Diagram →</span>
-            </a>
-            
-            <a href="live-demo.html" class="tool-card tool-demo">
-                <div class="tool-icon">▶️</div>
-                <div class="tool-title">IAM Automation Demo</div>
-                <div class="tool-desc">Watch automated provisioning execute in real-time in your browser</div>
-                <span class="tool-cta">Launch Demo →</span>
-            </a>
-            
-            <a href="security-simulator.html" class="tool-card tool-security">
-                <div class="tool-icon">🛡️</div>
-                <div class="tool-title">Security Attack Simulator</div>
-                <div class="tool-desc">Test defense mechanisms against common attack vectors</div>
-                <span class="tool-cta">Launch Simulator →</span>
-            </a>
-            
-            <a href="cost-calculator.html" class="tool-card tool-cost">
-                <div class="tool-icon">💰</div>
-                <div class="tool-title">AWS Cost Calculator</div>
-                <div class="tool-desc">Calculate infrastructure costs and automation ROI</div>
-                <span class="tool-cta">Open Calculator →</span>
-            </a>
+    
+    <!-- Author -->
+    <section class="author-spectacular">
+        <div class="author-info">
+            <h3>About the Author</h3>
+            <div class="author-name-large">Jawad Khan</div>
+            <div class="author-role">IT Operations Specialist | AWS Certified</div>
+            <p class="author-bio">
+                IT professional with expertise in IAM lifecycle management, Active Directory, 
+                and cloud platforms. Experience supporting enterprise infrastructure for 8,000+ users 
+                with a focus on security, automation, and operational excellence.
+            </p>
+            <div class="author-links-row">
+                <a href="https://github.com/mjkhan9" target="_blank" rel="noopener noreferrer" class="author-link-btn">
+                    <span>GitHub</span>
+                </a>
+                <a href="https://linkedin.com/in/mohammad-jkhan/" target="_blank" rel="noopener noreferrer" class="author-link-btn">
+                    <span>LinkedIn</span>
+                </a>
+            </div>
         </div>
-    </section>
-
-    <!-- Project Context -->
-    <section class="card">
-        <h2>Project Context</h2>
-        <p>
-            This project was developed to demonstrate cloud infrastructure skills for IT operations 
-            and cloud engineering roles. It showcases understanding of AWS networking, security best 
-            practices, and infrastructure automation gained through hands-on practice and AWS Academy coursework.
-        </p>
-        <p>
-            The architecture follows enterprise security patterns used in production student information 
-            systems, implementing FERPA-aligned data protection principles including encryption, access 
-            controls, and comprehensive audit trails.
-        </p>
-        
-        <div class="cta-section">
-            <a href="review.html" class="btn-secondary">View Project Review →</a>
-            <a href="docs.html" class="btn-secondary">Read Documentation →</a>
-        </div>
-    </section>
-
-    <!-- Author Section -->
-    <section class="author-section">
-        <div class="author-card">
-            <div class="author-info">
-                <h3>About the Author</h3>
-                <p class="author-name">Jawad Khan</p>
-                <p class="author-title">IT Operations Specialist | AWS Certified</p>
-                <p class="author-bio">
-                    IT professional with expertise in IAM lifecycle management, Active Directory, 
-                    and cloud platforms. AWS Solutions Architect Associate certified with experience 
-                    supporting enterprise infrastructure for 8,000+ users.
-                </p>
-                <div class="author-links">
-                    <a href="https://github.com/mjkhan9" target="_blank" rel="noopener noreferrer" class="author-link">
-                        GitHub
-                    </a>
-                    <a href="https://linkedin.com/in/mohammad-jkhan/" target="_blank" rel="noopener noreferrer" class="author-link">
-                        LinkedIn
-                    </a>
+        <div class="certifications">
+            <div class="cert-card">
+                <div class="cert-icon">🏆</div>
+                <div class="cert-info">
+                    <div class="cert-name">AWS Solutions Architect Associate</div>
+                    <div class="cert-issuer">Amazon Web Services</div>
                 </div>
             </div>
-            <div class="author-certs">
-                <div class="cert-badge">
-                    <span class="cert-icon">🏆</span>
-                    <span class="cert-name">AWS Solutions Architect Associate</span>
-                </div>
-                <div class="cert-badge">
-                    <span class="cert-icon">☁️</span>
-                    <span class="cert-name">AWS Cloud Practitioner</span>
+            <div class="cert-card">
+                <div class="cert-icon">☁️</div>
+                <div class="cert-info">
+                    <div class="cert-name">AWS Cloud Practitioner</div>
+                    <div class="cert-issuer">Amazon Web Services</div>
                 </div>
             </div>
         </div>
@@ -293,13 +918,111 @@
 </footer>
 
 <script>
-// Mobile menu toggle
+// ============================================
+// SPECTACULAR HOME PAGE ANIMATIONS
+// ============================================
+
+// Typing effect
+const typingTexts = [
+    "Secure three-tier AWS architecture",
+    "Zero-trust security model",
+    "Automated IAM provisioning",
+    "FERPA-compliant data protection",
+    "Defense-in-depth security controls"
+];
+
+let textIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+const typingElement = document.getElementById('typingText');
+
+function type() {
+    const currentText = typingTexts[textIndex];
+    
+    if (isDeleting) {
+        typingElement.textContent = currentText.substring(0, charIndex - 1);
+        charIndex--;
+    } else {
+        typingElement.textContent = currentText.substring(0, charIndex + 1);
+        charIndex++;
+    }
+    
+    let delay = isDeleting ? 30 : 50;
+    
+    if (!isDeleting && charIndex === currentText.length) {
+        delay = 2000;
+        isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        textIndex = (textIndex + 1) % typingTexts.length;
+        delay = 500;
+    }
+    
+    setTimeout(type, delay);
+}
+
+// Start typing
+type();
+
+// Animate stats on scroll
+const statNumbers = document.querySelectorAll('.stat-number');
+
+function animateStats() {
+    statNumbers.forEach(stat => {
+        const target = parseInt(stat.dataset.target);
+        const duration = 2000;
+        const step = target / (duration / 16);
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                stat.textContent = target;
+                clearInterval(timer);
+            } else {
+                stat.textContent = Math.floor(current);
+            }
+        }, 16);
+    });
+}
+
+// Intersection observer for stats
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            animateStats();
+            statsObserver.disconnect();
+        }
+    });
+}, { threshold: 0.5 });
+
+const statsSection = document.querySelector('.stats-spectacular');
+if (statsSection) {
+    statsObserver.observe(statsSection);
+}
+
+// Fallback: animate stats immediately
+setTimeout(animateStats, 500);
+
+// Floating particles
+const particlesContainer = document.getElementById('particles');
+const particleCount = 20;
+
+for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.animationDelay = `${Math.random() * 10}s`;
+    particle.style.animationDuration = `${8 + Math.random() * 4}s`;
+    particlesContainer.appendChild(particle);
+}
+
+// Mobile menu
 document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
     document.querySelector('.nav-links').classList.toggle('mobile-open');
     this.classList.toggle('active');
 });
 
-// Close mobile menu when clicking a link
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         document.querySelector('.nav-links').classList.remove('mobile-open');
