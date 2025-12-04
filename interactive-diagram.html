@@ -4,264 +4,577 @@
     <meta charset="UTF-8">
     <title>Interactive Architecture | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interactive VPC architecture diagram showing network tiers, security groups, and data flow for AWS Student Data Infrastructure.">
-    <meta name="keywords" content="AWS, VPC Architecture, Interactive Diagram, Network Security, Cloud Architecture">
-    <meta name="author" content="Jawad Khan">
-    
-    <!-- Open Graph / Social Media -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Interactive Architecture | AWS Student Data Infrastructure">
-    <meta property="og:description" content="Interactive VPC architecture diagram with network tiers and security controls.">
-    <meta property="og:url" content="https://mjkhan9.github.io/aws-student-data-infrastructure/interactive-diagram.html">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Interactive Architecture | AWS Student Data Infrastructure">
-    <meta name="twitter:description" content="Interactive VPC architecture diagram with network tiers and security controls.">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://mjkhan9.github.io/aws-student-data-infrastructure/interactive-diagram.html">
-    
+    <meta name="description" content="Interactive VPC architecture diagram with animated network traffic, real-time security visualization, and attack simulation.">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     <style>
-        .diagram-page-layout {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 16px;
-            min-height: 600px;
-        }
+        /* ============================================
+           INTERACTIVE DIAGRAM - CINEMATIC EXPERIENCE
+           ============================================ */
         
-        .tier-sidebar {
-            background: var(--aws-panel-bg);
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            padding: 16px;
-        }
-        
-        .tier-sidebar h3 {
-            font-size: 13px;
-            color: var(--aws-text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-        
-        .vpc-tier {
-            background: var(--aws-card-bg);
-            border: 2px solid;
-            border-radius: var(--aws-radius);
-            padding: 12px;
-            margin-bottom: 10px;
-            transition: all 0.15s ease;
-            cursor: pointer;
-        }
-        
-        .vpc-tier:hover {
-            transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .vpc-tier.selected {
-            box-shadow: 0 0 0 2px var(--aws-orange);
-        }
-        
-        .tier-internet { border-color: #b8860b; background: rgba(184, 134, 11, 0.1); }
-        .tier-admin { border-color: #4a7cb8; background: rgba(74, 124, 184, 0.1); }
-        .tier-app { border-color: #6b5ba3; background: rgba(107, 91, 163, 0.1); }
-        .tier-db { border-color: #b84a7c; background: rgba(184, 74, 124, 0.1); }
-        .tier-s3 { border-color: #2d8659; background: rgba(45, 134, 89, 0.1); }
-        .tier-security { border-color: var(--aws-orange); background: rgba(255, 153, 0, 0.1); }
-        
-        .vpc-tier-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--aws-text-primary);
-            margin-bottom: 4px;
-        }
-        
-        .vpc-tier-cidr {
-            font-size: 12px;
-            color: var(--aws-text-tertiary);
-            font-family: Monaco, monospace;
-        }
-        
-        .diagram-canvas {
-            background: var(--aws-panel-bg);
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            padding: 16px;
-        }
-        
-        .diagram-header {
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--aws-border);
-        }
-        
-        .diagram-header h2 {
-            font-size: 18px;
-            color: var(--aws-text-primary);
-            margin: 0 0 4px 0;
-            font-weight: 700;
-            border: none;
-            padding: 0;
-        }
-        
-        .diagram-subtitle {
-            font-size: 12px;
-            color: var(--aws-text-tertiary);
-        }
-        
-        .diagram-viewport {
+        .diagram-container {
             position: relative;
-            min-height: 450px;
-            background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            border-radius: var(--aws-radius);
+            background: linear-gradient(180deg, #0a0e14 0%, #111820 50%, #0d1117 100%);
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+            min-height: 700px;
+            border: 1px solid rgba(255, 153, 0, 0.2);
         }
         
-        .info-panel {
-            background: var(--aws-card-bg);
+        /* Animated grid background */
+        .diagram-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(30, 143, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 143, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        /* Control bar */
+        .diagram-controls {
+            position: relative;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: rgba(22, 25, 31, 0.95);
+            border-bottom: 1px solid var(--aws-border);
+            backdrop-filter: blur(10px);
+        }
+        
+        .view-modes {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .view-btn {
+            padding: 10px 20px;
+            background: transparent;
             border: 1px solid var(--aws-border);
-            border-left: 3px solid var(--aws-blue);
-            border-radius: var(--aws-radius);
-            padding: 16px;
-            margin-top: 16px;
-            display: none;
-            animation: slideDown 0.3s ease;
+            border-radius: 6px;
+            color: var(--aws-text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        
+        .view-btn:hover {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--aws-orange);
+            color: var(--aws-orange);
+        }
+        
+        .view-btn.active {
+            background: var(--aws-orange);
+            border-color: var(--aws-orange);
+            color: #000;
+        }
+        
+        .traffic-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .toggle-label {
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--aws-border);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background: var(--aws-green);
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+        
+        /* Main SVG canvas */
+        .network-canvas {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 550px;
+        }
+        
+        .network-canvas svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Node styling */
+        .node-group {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .node-group:hover {
+            transform: scale(1.05);
+        }
+        
+        .node-bg {
+            transition: all 0.3s ease;
+        }
+        
+        .node-group:hover .node-bg {
+            filter: brightness(1.2);
+        }
+        
+        .node-group.selected .node-bg {
+            stroke: var(--aws-orange);
+            stroke-width: 3;
+            filter: drop-shadow(0 0 20px rgba(255, 153, 0, 0.5));
+        }
+        
+        .node-icon {
+            font-size: 28px;
+            pointer-events: none;
+        }
+        
+        .node-label {
+            font-size: 13px;
+            font-weight: 700;
+            fill: var(--aws-text-primary);
+            pointer-events: none;
+        }
+        
+        .node-sublabel {
+            font-size: 10px;
+            fill: var(--aws-text-tertiary);
+            pointer-events: none;
+        }
+        
+        /* Animated connection lines */
+        .connection-line {
+            stroke: rgba(100, 116, 139, 0.4);
+            stroke-width: 2;
+            fill: none;
+        }
+        
+        .connection-line.active {
+            stroke: rgba(46, 160, 67, 0.6);
+            stroke-width: 3;
+        }
+        
+        /* Animated traffic particles */
+        .traffic-particle {
+            fill: var(--aws-green-light);
+            filter: drop-shadow(0 0 6px rgba(46, 160, 67, 0.8));
+        }
+        
+        .traffic-particle.request {
+            fill: var(--aws-blue-light);
+            filter: drop-shadow(0 0 6px rgba(30, 143, 255, 0.8));
+        }
+        
+        .traffic-particle.attack {
+            fill: var(--aws-red-light);
+            filter: drop-shadow(0 0 8px rgba(255, 89, 71, 0.9));
+        }
+        
+        .traffic-particle.blocked {
+            fill: var(--aws-red);
+            animation: particleBlock 0.3s ease-out forwards;
+        }
+        
+        @keyframes particleBlock {
+            0% { r: 6; opacity: 1; }
+            100% { r: 20; opacity: 0; }
+        }
+        
+        /* Security shield effect */
+        .shield-ring {
+            fill: none;
+            stroke: var(--aws-green-light);
+            stroke-width: 2;
+            opacity: 0;
+        }
+        
+        .shield-ring.active {
+            animation: shieldPulse 0.6s ease-out;
+        }
+        
+        @keyframes shieldPulse {
+            0% { r: 30; opacity: 0.8; stroke-width: 4; }
+            100% { r: 60; opacity: 0; stroke-width: 1; }
+        }
+        
+        /* Node glow effects */
+        .node-glow {
+            fill: none;
+            stroke: var(--aws-green-light);
+            stroke-width: 2;
+            opacity: 0;
+            animation: nodeGlow 2s ease-in-out infinite;
+        }
+        
+        .node-glow.pulse {
+            animation: nodeGlow 1s ease-in-out infinite;
+        }
+        
+        @keyframes nodeGlow {
+            0%, 100% { opacity: 0; r: 45; }
+            50% { opacity: 0.5; r: 50; }
+        }
+        
+        /* Info panel */
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(22, 25, 31, 0.95);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
         }
         
         .info-panel.visible {
-            display: block;
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
         }
         
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .info-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
         }
         
-        .info-panel h3 {
-            color: var(--aws-blue);
-            font-size: 16px;
-            margin-bottom: 8px;
-            border: none;
-            padding: 0;
+        .info-panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin: 0;
         }
         
-        .info-panel p {
+        .info-panel-badge {
+            padding: 6px 12px;
+            background: rgba(255, 153, 0, 0.15);
+            border: 1px solid var(--aws-orange);
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--aws-orange);
+            text-transform: uppercase;
+        }
+        
+        .info-panel-desc {
             color: var(--aws-text-secondary);
-            font-size: 13px;
-            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
         
-        .info-grid {
+        .info-panel-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
         }
         
         .info-item {
-            background: var(--aws-panel-bg);
-            padding: 10px;
-            border-radius: var(--aws-radius);
-            border: 1px solid var(--aws-border);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 14px;
+            border-radius: 8px;
+            border-left: 3px solid var(--aws-orange);
         }
         
-        .info-label {
+        .info-item-label {
             font-size: 11px;
             color: var(--aws-text-tertiary);
-            font-weight: 700;
-            margin-bottom: 4px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            margin-bottom: 6px;
         }
         
-        .info-value {
+        .info-item-value {
+            font-size: 14px;
             color: var(--aws-text-primary);
-            font-weight: 500;
-            font-size: 13px;
+            font-weight: 600;
         }
         
-        .sg-rules {
-            background: var(--aws-panel-bg);
-            padding: 12px;
-            border-radius: var(--aws-radius);
-            margin-top: 12px;
+        .close-panel {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            background: transparent;
             border: 1px solid var(--aws-border);
+            border-radius: 50%;
+            color: var(--aws-text-secondary);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .sg-rules-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--aws-text-primary);
-            margin-bottom: 8px;
+        .close-panel:hover {
+            background: var(--aws-red);
+            border-color: var(--aws-red);
+            color: white;
         }
         
-        .sg-rule {
-            padding: 6px 8px;
-            background: var(--aws-card-bg);
-            margin: 4px 0;
-            border-left: 2px solid var(--aws-green);
-            font-family: Monaco, monospace;
+        /* Live stats overlay */
+        .live-stats {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            background: rgba(22, 25, 31, 0.9);
+            border: 1px solid var(--aws-border);
+            border-radius: 8px;
+            padding: 16px;
+            z-index: 20;
+            min-width: 180px;
+        }
+        
+        .live-stats-title {
             font-size: 11px;
+            color: var(--aws-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--aws-green-light);
+            border-radius: 50%;
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            font-size: 12px;
             color: var(--aws-text-secondary);
         }
         
-        .legend {
-            display: flex;
-            gap: 16px;
-            justify-content: flex-start;
-            margin-top: 12px;
-            flex-wrap: wrap;
-            padding: 12px;
-            background: var(--aws-card-bg);
+        .stat-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--aws-green-light);
+            font-family: Monaco, monospace;
+        }
+        
+        .stat-value.warning {
+            color: var(--aws-yellow);
+        }
+        
+        .stat-value.danger {
+            color: var(--aws-red-light);
+        }
+        
+        /* Security layers indicator */
+        .security-layers {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            background: rgba(22, 25, 31, 0.9);
             border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
+            border-radius: 8px;
+            padding: 16px;
+            z-index: 20;
+        }
+        
+        .security-layers-title {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        
+        .layer-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 12px;
+            color: var(--aws-text-secondary);
+        }
+        
+        .layer-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--aws-border);
+            transition: all 0.3s ease;
+        }
+        
+        .layer-dot.active {
+            background: var(--aws-green-light);
+            box-shadow: 0 0 10px rgba(46, 160, 67, 0.6);
+        }
+        
+        /* Attack mode overlay */
+        .attack-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(209, 50, 18, 0.05);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 5;
+        }
+        
+        .attack-overlay.active {
+            opacity: 1;
+            animation: attackPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes attackPulse {
+            0%, 100% { background: rgba(209, 50, 18, 0.03); }
+            50% { background: rgba(209, 50, 18, 0.08); }
+        }
+        
+        /* Legend */
+        .diagram-legend {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            padding: 16px;
+            background: rgba(22, 25, 31, 0.8);
+            border-top: 1px solid var(--aws-border);
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-size: 12px;
             color: var(--aws-text-secondary);
         }
         
         .legend-color {
-            width: 14px;
-            height: 14px;
-            border-radius: 2px;
-            border: 2px solid currentColor;
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
         }
         
+        .legend-color.public { background: #4a7cb8; }
+        .legend-color.private { background: #6b5ba3; }
+        .legend-color.isolated { background: #b84a7c; }
+        .legend-color.storage { background: #2d8659; }
+        .legend-color.security { background: var(--aws-orange); }
+        
+        /* Attack blocked notification */
+        .attack-notification {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: linear-gradient(135deg, rgba(29, 129, 2, 0.95), rgba(46, 160, 67, 0.95));
+            padding: 24px 48px;
+            border-radius: 12px;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(46, 160, 67, 0.4);
+        }
+        
+        .attack-notification.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .attack-notification-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .attack-notification-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .attack-notification-sub {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 8px;
+        }
+        
+        /* Responsive */
         @media (max-width: 1024px) {
-            .diagram-page-layout {
+            .diagram-controls {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .live-stats, .security-layers {
+                position: relative;
+                top: auto;
+                left: auto;
+                right: auto;
+                margin: 16px;
+            }
+            
+            .info-panel-grid {
                 grid-template-columns: 1fr;
-            }
-            
-            .tier-sidebar {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
-            }
-            
-            .tier-sidebar h3 {
-                grid-column: 1 / -1;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .tier-sidebar {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -291,142 +604,254 @@
         </button>
     </div>
 </header>
+
 <main class="content">
-    <section class="card">
-        <h1>Interactive VPC Architecture</h1>
+    <section class="card" style="margin-bottom: 24px;">
+        <h1>Interactive Network Architecture</h1>
         <p>
-            Click on any network tier to see detailed configuration, security rules, and role in the 
-            three-tier architecture. This visualization demonstrates defense-in-depth security design 
-            for student data protection.
+            Experience the three-tier VPC architecture in real-time. Watch encrypted traffic flow between tiers, 
+            see security controls activate, and simulate attack scenarios to understand defense-in-depth protection.
         </p>
     </section>
-<div class="diagram-page-layout">
-    <aside class="tier-sidebar">
-        <h3>Network Tiers</h3>
-        
-        <div class="vpc-tier tier-internet" data-component="internet">
-            <div class="vpc-tier-title">🌐 Internet Gateway</div>
-            <div class="vpc-tier-cidr">Public Entry Point</div>
-        </div>
-        
-        <div class="vpc-tier tier-admin" data-component="admin-tier">
-            <div class="vpc-tier-title">🔧 Admin Tier</div>
-            <div class="vpc-tier-cidr">172.32.1.0/24</div>
-        </div>
-        
-        <div class="vpc-tier tier-app" data-component="app-tier">
-            <div class="vpc-tier-title">⚙️ Application Tier</div>
-            <div class="vpc-tier-cidr">172.32.10.0/24</div>
-        </div>
-        
-        <div class="vpc-tier tier-db" data-component="db-tier">
-            <div class="vpc-tier-title">🗄️ Database Tier</div>
-            <div class="vpc-tier-cidr">172.32.20.0/24</div>
-        </div>
-        
-        <div class="vpc-tier tier-s3" data-component="s3-bucket">
-            <div class="vpc-tier-title">📦 S3 Storage</div>
-            <div class="vpc-tier-cidr">Encrypted Buckets</div>
-        </div>
-        
-        <div class="vpc-tier tier-security" data-component="security">
-            <div class="vpc-tier-title">🛡️ Security & Logging</div>
-            <div class="vpc-tier-cidr">CloudTrail + Flow Logs</div>
-        </div>
-    </aside>
 
-    <div class="diagram-canvas">
-        <div class="diagram-header">
-            <h2>VPC Architecture: 172.32.0.0/16</h2>
-            <div class="diagram-subtitle">Multi-tier network isolation with zero-trust security model</div>
+    <div class="diagram-container">
+        <div class="diagram-controls">
+            <div class="view-modes">
+                <button class="view-btn active" data-view="architecture">🏗️ Architecture</button>
+                <button class="view-btn" data-view="traffic">📡 Data Flow</button>
+                <button class="view-btn" data-view="attack">🛡️ Attack Simulation</button>
+            </div>
+            <div class="traffic-toggle">
+                <span class="toggle-label">Live Traffic</span>
+                <div class="toggle-switch" id="trafficToggle"></div>
+            </div>
         </div>
         
-        <div class="diagram-viewport">
-            <svg width="100%" height="450" viewBox="0 0 800 450" style="display: block;">
-                <!-- VPC Container -->
-                <rect x="20" y="20" width="760" height="410" fill="none" stroke="#3b82f6" stroke-width="2" rx="4"/>
-                <text x="400" y="45" text-anchor="middle" font-size="14" fill="#d5dbdb" font-weight="700">VPC: 172.32.0.0/16</text>
-                
-                <!-- Admin Tier -->
-                <rect x="40" y="70" width="220" height="90" fill="rgba(74, 124, 184, 0.15)" stroke="#4a7cb8" stroke-width="2" rx="3"/>
-                <text x="150" y="95" text-anchor="middle" font-size="12" fill="#d5dbdb" font-weight="700">Admin Tier (Public)</text>
-                <text x="150" y="115" text-anchor="middle" font-size="10" fill="#aab7b8">172.32.1.0/24</text>
-                <text x="150" y="135" text-anchor="middle" font-size="10" fill="#aab7b8">Bastion • NAT Gateway</text>
-                <text x="150" y="150" text-anchor="middle" font-size="9" fill="#6b7280">Corporate IP Only</text>
-                
-                <!-- App Tier -->
-                <rect x="40" y="180" width="220" height="90" fill="rgba(107, 91, 163, 0.15)" stroke="#6b5ba3" stroke-width="2" rx="3"/>
-                <text x="150" y="205" text-anchor="middle" font-size="12" fill="#d5dbdb" font-weight="700">Application Tier</text>
-                <text x="150" y="225" text-anchor="middle" font-size="10" fill="#aab7b8">172.32.10.0/24</text>
-                <text x="150" y="245" text-anchor="middle" font-size="10" fill="#aab7b8">ECS Fargate • ALB</text>
-                <text x="150" y="260" text-anchor="middle" font-size="9" fill="#6b7280">NAT Outbound Only</text>
-                
-                <!-- DB Tier -->
-                <rect x="40" y="290" width="220" height="90" fill="rgba(184, 74, 124, 0.15)" stroke="#b84a7c" stroke-width="2" rx="3"/>
-                <text x="150" y="315" text-anchor="middle" font-size="12" fill="#d5dbdb" font-weight="700">Database Tier (Isolated)</text>
-                <text x="150" y="335" text-anchor="middle" font-size="10" fill="#aab7b8">172.32.20.0/24</text>
-                <text x="150" y="355" text-anchor="middle" font-size="10" fill="#aab7b8">RDS PostgreSQL Multi-AZ</text>
-                <text x="150" y="370" text-anchor="middle" font-size="9" fill="#6b7280">No Internet Access</text>
-                
-                <!-- S3 Storage -->
-                <rect x="300" y="180" width="220" height="90" fill="rgba(45, 134, 89, 0.15)" stroke="#2d8659" stroke-width="2" rx="3"/>
-                <text x="410" y="205" text-anchor="middle" font-size="12" fill="#d5dbdb" font-weight="700">S3 Storage</text>
-                <text x="410" y="225" text-anchor="middle" font-size="10" fill="#aab7b8">student-data-reports</text>
-                <text x="410" y="245" text-anchor="middle" font-size="10" fill="#aab7b8">SSE-KMS Encrypted</text>
-                <text x="410" y="260" text-anchor="middle" font-size="9" fill="#6b7280">VPC Endpoint Access</text>
-                
-                <!-- Security & Logging -->
-                <rect x="560" y="70" width="200" height="200" fill="rgba(255, 153, 0, 0.08)" stroke="#ff9900" stroke-width="2" rx="3"/>
-                <text x="660" y="95" text-anchor="middle" font-size="12" fill="#ff9900" font-weight="700">Security & Audit</text>
-                <text x="660" y="125" text-anchor="middle" font-size="10" fill="#aab7b8">CloudTrail All Regions</text>
-                <text x="660" y="150" text-anchor="middle" font-size="10" fill="#aab7b8">VPC Flow Logs</text>
-                <text x="660" y="175" text-anchor="middle" font-size="10" fill="#aab7b8">GuardDuty Active</text>
-                <text x="660" y="200" text-anchor="middle" font-size="10" fill="#aab7b8">KMS Encryption</text>
-                <text x="660" y="225" text-anchor="middle" font-size="10" fill="#aab7b8">CloudWatch Alarms</text>
-                <text x="660" y="250" text-anchor="middle" font-size="9" fill="#6b7280">Full Audit Trail</text>
-                
-                <!-- Traffic Flow Arrows -->
+        <div class="attack-overlay" id="attackOverlay"></div>
+        
+        <div class="security-layers" id="securityLayers">
+            <div class="security-layers-title">Defense Layers</div>
+            <div class="layer-item">
+                <span class="layer-dot" id="layer-nacl"></span>
+                <span>Network ACLs</span>
+            </div>
+            <div class="layer-item">
+                <span class="layer-dot" id="layer-sg"></span>
+                <span>Security Groups</span>
+            </div>
+            <div class="layer-item">
+                <span class="layer-dot" id="layer-iam"></span>
+                <span>IAM Policies</span>
+            </div>
+            <div class="layer-item">
+                <span class="layer-dot" id="layer-kms"></span>
+                <span>KMS Encryption</span>
+            </div>
+            <div class="layer-item">
+                <span class="layer-dot" id="layer-guardduty"></span>
+                <span>GuardDuty</span>
+            </div>
+        </div>
+        
+        <div class="live-stats" id="liveStats">
+            <div class="live-stats-title">
+                <span class="live-dot"></span>
+                Live Metrics
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Requests/sec</span>
+                <span class="stat-value" id="statRequests">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Latency</span>
+                <span class="stat-value" id="statLatency">0ms</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Blocked</span>
+                <span class="stat-value danger" id="statBlocked">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Encrypted</span>
+                <span class="stat-value" id="statEncrypted">100%</span>
+            </div>
+        </div>
+        
+        <div class="network-canvas" id="networkCanvas">
+            <svg viewBox="0 0 1200 550" preserveAspectRatio="xMidYMid meet">
                 <defs>
-                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                        <polygon points="0 0, 10 3, 0 6" fill="#64748b"/>
+                    <!-- Gradients for nodes -->
+                    <linearGradient id="gradInternet" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#b8860b;stop-opacity:0.3" />
+                        <stop offset="100%" style="stop-color:#8b6914;stop-opacity:0.1" />
+                    </linearGradient>
+                    <linearGradient id="gradAdmin" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#4a7cb8;stop-opacity:0.3" />
+                        <stop offset="100%" style="stop-color:#3a5d8a;stop-opacity:0.1" />
+                    </linearGradient>
+                    <linearGradient id="gradApp" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#6b5ba3;stop-opacity:0.3" />
+                        <stop offset="100%" style="stop-color:#524680;stop-opacity:0.1" />
+                    </linearGradient>
+                    <linearGradient id="gradDb" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#b84a7c;stop-opacity:0.3" />
+                        <stop offset="100%" style="stop-color:#8a3860;stop-opacity:0.1" />
+                    </linearGradient>
+                    <linearGradient id="gradS3" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#2d8659;stop-opacity:0.3" />
+                        <stop offset="100%" style="stop-color:#1f5c3d;stop-opacity:0.1" />
+                    </linearGradient>
+                    <linearGradient id="gradSecurity" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ff9900;stop-opacity:0.3" />
+                        <stop offset="100%" style="stop-color:#cc7a00;stop-opacity:0.1" />
+                    </linearGradient>
+                    
+                    <!-- Arrow marker -->
+                    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#2ea043"/>
                     </marker>
+                    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#1e8fff"/>
+                    </marker>
+                    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#ff5947"/>
+                    </marker>
+                    
+                    <!-- Glow filter -->
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
                 </defs>
                 
-                <!-- Admin to App -->
-                <line x1="150" y1="160" x2="150" y2="180" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
-                <!-- App to DB -->
-                <line x1="150" y1="270" x2="150" y2="290" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
-                <!-- App to S3 -->
-                <line x1="260" y1="225" x2="300" y2="225" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+                <!-- VPC Border -->
+                <rect x="80" y="30" width="1040" height="480" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="8 4" rx="8" opacity="0.5"/>
+                <text x="600" y="55" text-anchor="middle" font-size="14" fill="#3b82f6" font-weight="600">VPC: 172.32.0.0/16 (us-east-1)</text>
+                
+                <!-- Connection lines (drawn first, behind nodes) -->
+                <g id="connections">
+                    <!-- Internet to Gateway -->
+                    <path id="conn-inet-gateway" class="connection-line" d="M 200 275 Q 270 275, 340 275"/>
+                    <!-- Gateway to App -->
+                    <path id="conn-gateway-app" class="connection-line" d="M 440 275 Q 510 275, 580 275"/>
+                    <!-- App to DB -->
+                    <path id="conn-app-db" class="connection-line" d="M 680 275 Q 750 275, 820 275"/>
+                    <!-- App to S3 -->
+                    <path id="conn-app-s3" class="connection-line" d="M 630 320 Q 630 400, 630 430"/>
+                    <!-- Security monitoring lines -->
+                    <path id="conn-security-1" class="connection-line" d="M 1020 150 Q 950 200, 870 230" stroke-dasharray="4 4" opacity="0.3"/>
+                    <path id="conn-security-2" class="connection-line" d="M 1020 150 Q 900 180, 630 230" stroke-dasharray="4 4" opacity="0.3"/>
+                    <path id="conn-security-3" class="connection-line" d="M 1020 150 Q 800 150, 390 230" stroke-dasharray="4 4" opacity="0.3"/>
+                </g>
+                
+                <!-- Traffic particles container -->
+                <g id="trafficParticles"></g>
+                
+                <!-- Shield effects container -->
+                <g id="shieldEffects"></g>
+                
+                <!-- Nodes -->
+                <g class="node-group" id="node-internet" data-node="internet">
+                    <circle class="node-glow" cx="150" cy="275" r="45"/>
+                    <circle class="node-bg" cx="150" cy="275" r="45" fill="url(#gradInternet)" stroke="#b8860b" stroke-width="2"/>
+                    <text class="node-icon" x="150" y="268" text-anchor="middle" dominant-baseline="middle">🌐</text>
+                    <text class="node-label" x="150" y="340" text-anchor="middle">Internet</text>
+                    <text class="node-sublabel" x="150" y="356" text-anchor="middle">Untrusted Zone</text>
+                </g>
+                
+                <g class="node-group" id="node-gateway" data-node="gateway">
+                    <circle class="node-glow" cx="390" cy="275" r="45"/>
+                    <circle class="node-bg" cx="390" cy="275" r="45" fill="url(#gradAdmin)" stroke="#4a7cb8" stroke-width="2"/>
+                    <text class="node-icon" x="390" y="268" text-anchor="middle" dominant-baseline="middle">🚧</text>
+                    <text class="node-label" x="390" y="340" text-anchor="middle">Gateway</text>
+                    <text class="node-sublabel" x="390" y="356" text-anchor="middle">ALB + WAF</text>
+                </g>
+                
+                <g class="node-group" id="node-app" data-node="app">
+                    <circle class="node-glow" cx="630" cy="275" r="45"/>
+                    <circle class="node-bg" cx="630" cy="275" r="45" fill="url(#gradApp)" stroke="#6b5ba3" stroke-width="2"/>
+                    <text class="node-icon" x="630" y="268" text-anchor="middle" dominant-baseline="middle">⚙️</text>
+                    <text class="node-label" x="630" y="340" text-anchor="middle">App Tier</text>
+                    <text class="node-sublabel" x="630" y="356" text-anchor="middle">Private Subnet</text>
+                </g>
+                
+                <g class="node-group" id="node-db" data-node="database">
+                    <circle class="node-glow" cx="870" cy="275" r="45"/>
+                    <circle class="node-bg" cx="870" cy="275" r="45" fill="url(#gradDb)" stroke="#b84a7c" stroke-width="2"/>
+                    <text class="node-icon" x="870" y="268" text-anchor="middle" dominant-baseline="middle">🗄️</text>
+                    <text class="node-label" x="870" y="340" text-anchor="middle">Database</text>
+                    <text class="node-sublabel" x="870" y="356" text-anchor="middle">Isolated Subnet</text>
+                </g>
+                
+                <g class="node-group" id="node-s3" data-node="s3">
+                    <circle class="node-glow" cx="630" cy="470" r="40"/>
+                    <circle class="node-bg" cx="630" cy="470" r="40" fill="url(#gradS3)" stroke="#2d8659" stroke-width="2"/>
+                    <text class="node-icon" x="630" y="463" text-anchor="middle" dominant-baseline="middle">📦</text>
+                    <text class="node-label" x="630" y="525" text-anchor="middle">S3 Storage</text>
+                </g>
+                
+                <g class="node-group" id="node-security" data-node="security">
+                    <circle class="node-glow" cx="1020" cy="150" r="50"/>
+                    <circle class="node-bg" cx="1020" cy="150" r="50" fill="url(#gradSecurity)" stroke="#ff9900" stroke-width="2"/>
+                    <text class="node-icon" x="1020" y="143" text-anchor="middle" dominant-baseline="middle">🛡️</text>
+                    <text class="node-label" x="1020" y="220" text-anchor="middle">Security</text>
+                    <text class="node-sublabel" x="1020" y="236" text-anchor="middle">CloudTrail + GuardDuty</text>
+                </g>
+                
+                <!-- Attacker (hidden by default) -->
+                <g id="attacker" style="opacity: 0; transform: translateX(-100px);">
+                    <circle cx="50" cy="275" r="30" fill="#d13212" filter="url(#glow)"/>
+                    <text x="50" y="275" text-anchor="middle" dominant-baseline="middle" font-size="24">🥷</text>
+                </g>
             </svg>
         </div>
         
-        <div class="legend">
+        <div class="attack-notification" id="attackNotification">
+            <div class="attack-notification-icon">🛡️</div>
+            <div class="attack-notification-text">Attack Blocked!</div>
+            <div class="attack-notification-sub">Defense-in-depth protection activated</div>
+        </div>
+        
+        <div class="info-panel" id="infoPanel">
+            <button class="close-panel" onclick="closeInfoPanel()">×</button>
+            <div class="info-panel-header">
+                <h3 class="info-panel-title" id="panelTitle">Component Details</h3>
+                <span class="info-panel-badge" id="panelBadge">Active</span>
+            </div>
+            <p class="info-panel-desc" id="panelDesc">Select a component to view details.</p>
+            <div class="info-panel-grid" id="panelGrid"></div>
+        </div>
+        
+        <div class="diagram-legend">
             <div class="legend-item">
-                <div class="legend-color" style="color: #4a7cb8;"></div>
-                <span>Public Tier (IGW)</span>
+                <div class="legend-color public"></div>
+                <span>Public Tier</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="color: #6b5ba3;"></div>
-                <span>Private Tier (NAT)</span>
+                <div class="legend-color private"></div>
+                <span>Private Tier</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="color: #b84a7c;"></div>
+                <div class="legend-color isolated"></div>
                 <span>Isolated Tier</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="color: #2d8659;"></div>
+                <div class="legend-color storage"></div>
                 <span>Storage</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color security"></div>
+                <span>Security & Audit</span>
             </div>
         </div>
     </div>
-</div>
-
-<div id="infoPanel" class="info-panel"></div>
 </main>
+
 <footer class="site-footer">
     <div class="footer-content">
-        <p>Interactive VPC Architecture • AWS Student Data Infrastructure • 2025</p>
+        <p>Interactive Network Architecture • AWS Student Data Infrastructure • 2025</p>
         <p class="footer-links">
             <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
                 View on GitHub
@@ -434,184 +859,391 @@
         </p>
     </div>
 </footer>
+
 <script>
-const componentInfo = {
-    "internet": {
+// ============================================
+// INTERACTIVE DIAGRAM - FULL EXPERIENCE
+// ============================================
+
+// State
+let currentView = 'architecture';
+let trafficEnabled = false;
+let trafficInterval = null;
+let attackMode = false;
+let statsInterval = null;
+let selectedNode = null;
+
+// Node data
+const nodeData = {
+    internet: {
         title: "Internet Gateway",
-        description: "Public entry point allowing controlled access to admin tier resources through corporate IP restrictions.",
-        details: {
-            "Type": "Internet Gateway",
-            "Attached To": "VPC 172.32.0.0/16",
-            "Route Target": "Admin subnet only",
-            "Access Control": "Corporate IP whitelist"
-        },
-        securityRules: [
-            "Only admin subnet has IGW route",
-            "All other subnets use NAT for outbound",
-            "No direct internet access to workloads",
-            "Network ACLs restrict inbound traffic"
+        badge: "Entry Point",
+        desc: "The public entry point for all external traffic. All requests are filtered through WAF rules before reaching internal resources. Only HTTPS traffic (port 443) is allowed.",
+        details: [
+            { label: "Type", value: "Internet Gateway" },
+            { label: "Attached VPC", value: "172.32.0.0/16" },
+            { label: "Route Target", value: "Public subnets only" },
+            { label: "Security", value: "WAF + Rate limiting" }
         ]
     },
-    "admin-tier": {
-        title: "Admin Tier (Public Subnets)",
-        description: "Public-facing administrative layer providing secure access to internal resources through hardened bastion hosts.",
-        details: {
-            "Subnets": "admin-az1a, admin-az1b",
-            "CIDR": "172.32.1.0/24, 172.32.2.0/24",
-            "Availability Zones": "us-east-1a, us-east-1b",
-            "Internet Access": "Internet Gateway attached",
-            "Components": "Bastion hosts, NAT Gateways"
-        },
-        securityRules: [
-            "Ingress: TCP 22 from corporate IP ranges only",
-            "Egress: TCP 22/443 to application tier",
-            "NACL: Deny all by default, explicit allows only"
+    gateway: {
+        title: "Application Load Balancer",
+        badge: "Public Tier",
+        desc: "The ALB distributes traffic across application instances in multiple availability zones. It terminates SSL/TLS connections and performs health checks on backend targets.",
+        details: [
+            { label: "Subnet CIDR", value: "172.32.1.0/24" },
+            { label: "Availability Zones", value: "us-east-1a, 1b" },
+            { label: "Protocol", value: "HTTPS (TLS 1.2+)" },
+            { label: "Health Check", value: "/health (30s interval)" }
         ]
     },
-    "app-tier": {
-        title: "Application Tier (Private Subnets)",
-        description: "Private application layer hosting containerized workloads with no direct internet access.",
-        details: {
-            "Subnets": "app-az1a, app-az1b",
-            "CIDR": "172.32.10.0/24, 172.32.11.0/24",
-            "Internet Access": "Outbound only via NAT Gateway",
-            "Compute": "ECS Fargate, Lambda functions",
-            "Load Balancer": "Application Load Balancer (HTTPS)"
-        },
-        securityRules: [
-            "Ingress: TCP 22 from bastion-sg only",
-            "Ingress: TCP 8443 from alb-sg only",
-            "Egress: TCP 5432 to db-sg only",
-            "Egress: TCP 443 to 0.0.0.0/0 (via NAT)"
+    app: {
+        title: "Application Tier",
+        badge: "Private Tier",
+        desc: "ECS Fargate containers running the application workload. No direct internet access - all outbound traffic goes through NAT Gateway. Can only be accessed from the ALB.",
+        details: [
+            { label: "Subnet CIDR", value: "172.32.10.0/24" },
+            { label: "Compute", value: "ECS Fargate" },
+            { label: "Internet Access", value: "NAT Gateway (outbound only)" },
+            { label: "Security Group", value: "app-sg (ALB inbound only)" }
         ]
     },
-    "db-tier": {
-        title: "Database Tier (Isolated Subnets)",
-        description: "Fully isolated database layer with no internet routing. RDS instances accept connections only from application tier.",
-        details: {
-            "Subnets": "db-az1a, db-az1b",
-            "CIDR": "172.32.20.0/24, 172.32.21.0/24",
-            "Internet Access": "None (no route to internet)",
-            "Database": "RDS PostgreSQL 15.3 Multi-AZ",
-            "Encryption": "KMS customer-managed key",
-            "Backups": "Automated daily + 30-day retention"
-        },
-        securityRules: [
-            "Ingress: TCP 5432 from app-sg ONLY",
-            "Egress: None (stateful response only)",
-            "NACL: Deny all except app subnet CIDR",
-            "No public IP addresses assigned",
-            "SSL/TLS required for all connections"
+    database: {
+        title: "Database Tier",
+        badge: "Isolated",
+        desc: "RDS PostgreSQL Multi-AZ deployment in completely isolated subnets. No internet gateway route exists - only application tier security groups can connect on port 5432.",
+        details: [
+            { label: "Subnet CIDR", value: "172.32.20.0/24" },
+            { label: "Engine", value: "PostgreSQL 15.3 Multi-AZ" },
+            { label: "Encryption", value: "KMS (CMK with rotation)" },
+            { label: "Security Group", value: "db-sg (app-sg only)" }
         ]
     },
-    "s3-bucket": {
-        title: "S3 Storage (Encrypted)",
-        description: "Encrypted object storage for student data exports with versioning and access logging.",
-        details: {
-            "Bucket Name": "student-data-reports-production",
-            "Encryption": "SSE-KMS (customer-managed key)",
-            "Versioning": "Enabled",
-            "Public Access": "Blocked at all levels",
-            "Access Logging": "All requests logged",
-            "Lifecycle": "Transition to Glacier after 90 days"
-        },
-        securityRules: [
-            "Bucket policy: Deny all public access",
-            "IAM policy: Tag-based access control",
-            "VPC Endpoint: Private S3 access only",
-            "Object Lock: WORM mode for compliance"
+    s3: {
+        title: "S3 Storage",
+        badge: "Encrypted",
+        desc: "Student data storage bucket with SSE-KMS encryption, versioning enabled, and Block Public Access enforced at account level. Accessed via VPC Endpoint (no internet).",
+        details: [
+            { label: "Bucket", value: "student-data-reports" },
+            { label: "Encryption", value: "SSE-KMS (CMK)" },
+            { label: "Access", value: "VPC Endpoint only" },
+            { label: "Features", value: "Versioning + Lifecycle" }
         ]
     },
-    "security": {
-        title: "Security & Audit Logging",
-        description: "Comprehensive logging capturing all API calls, network traffic, and security events.",
-        details: {
-            "CloudTrail": "Management + data events logged",
-            "VPC Flow Logs": "1-minute intervals to S3",
-            "GuardDuty": "Threat detection enabled",
-            "Log Retention": "CloudTrail 90d, VPC 30d",
-            "Integrity": "Log file validation enabled",
-            "Encryption": "Dedicated KMS key for logs"
-        },
-        securityRules: [
-            "CloudTrail: All IAM, RDS, S3, VPC events",
-            "VPC Flow Logs: Accepted and rejected traffic",
-            "GuardDuty: Threat intelligence feeds",
-            "SNS Alerts: Critical findings trigger alerts",
-            "S3 Bucket Policy: Prevents log deletion"
+    security: {
+        title: "Security & Audit",
+        badge: "Monitoring",
+        desc: "Comprehensive logging and threat detection. CloudTrail captures all API calls, VPC Flow Logs record network traffic, and GuardDuty provides intelligent threat detection.",
+        details: [
+            { label: "CloudTrail", value: "All regions, all events" },
+            { label: "VPC Flow Logs", value: "Accept + Reject" },
+            { label: "GuardDuty", value: "Threat detection active" },
+            { label: "Log Retention", value: "90 days (S3 archive)" }
         ]
     }
 };
 
-document.querySelectorAll(".vpc-tier").forEach(tier => {
-    tier.addEventListener("click", function(e) {
-        e.stopPropagation();
-        
-        // Update selection state
-        document.querySelectorAll(".vpc-tier").forEach(t => t.classList.remove('selected'));
-        this.classList.add('selected');
-        
-        const componentType = this.dataset.component;
-        const info = componentInfo[componentType];
-        
-        if (info) {
-            displayInfo(info);
-        }
-    });
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    setupViewModes();
+    setupTrafficToggle();
+    setupNodeClicks();
+    startStatsUpdate();
 });
 
-function displayInfo(info) {
-    const panel = document.getElementById("infoPanel");
-    
-    let detailsHTML = '<div class="info-grid">';
-    for (const [label, value] of Object.entries(info.details)) {
-        detailsHTML += `
-            <div class="info-item">
-                <div class="info-label">${label}</div>
-                <div class="info-value">${value}</div>
-            </div>
-        `;
-    }
-    detailsHTML += "</div>";
-    
-    let rulesHTML = "";
-    if (info.securityRules && info.securityRules.length > 0) {
-        rulesHTML = '<div class="sg-rules"><div class="sg-rules-title">Security Controls</div>';
-        info.securityRules.forEach(rule => {
-            rulesHTML += `<div class="sg-rule">✓ ${rule}</div>`;
+// View mode switching
+function setupViewModes() {
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentView = btn.dataset.view;
+            handleViewChange();
         });
-        rulesHTML += "</div>";
-    }
-    
-    panel.innerHTML = `
-        <h3>${info.title}</h3>
-        <p>${info.description}</p>
-        ${detailsHTML}
-        ${rulesHTML}
-    `;
-    
-    panel.classList.add("visible");
-    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
 }
 
-// Close panel when clicking outside
-document.addEventListener("click", function(e) {
-    if (!e.target.closest(".vpc-tier") && !e.target.closest(".info-panel")) {
-        document.querySelectorAll(".vpc-tier").forEach(t => t.classList.remove('selected'));
+function handleViewChange() {
+    const overlay = document.getElementById('attackOverlay');
+    const attacker = document.getElementById('attacker');
+    
+    if (currentView === 'attack') {
+        attackMode = true;
+        overlay.classList.add('active');
+        // Start attack simulation
+        setTimeout(simulateAttack, 1000);
+    } else {
+        attackMode = false;
+        overlay.classList.remove('active');
+        attacker.style.opacity = '0';
+        attacker.style.transform = 'translateX(-100px)';
     }
-});
+    
+    if (currentView === 'traffic' && !trafficEnabled) {
+        document.getElementById('trafficToggle').click();
+    }
+}
 
-// Mobile menu toggle
+// Traffic toggle
+function setupTrafficToggle() {
+    const toggle = document.getElementById('trafficToggle');
+    toggle.addEventListener('click', () => {
+        trafficEnabled = !trafficEnabled;
+        toggle.classList.toggle('active', trafficEnabled);
+        
+        if (trafficEnabled) {
+            startTrafficAnimation();
+            activateSecurityLayers();
+        } else {
+            stopTrafficAnimation();
+            deactivateSecurityLayers();
+        }
+    });
+}
+
+// Traffic animation
+function startTrafficAnimation() {
+    if (trafficInterval) return;
+    
+    trafficInterval = setInterval(() => {
+        if (!attackMode) {
+            createTrafficParticle('conn-inet-gateway', 'request', 0);
+            setTimeout(() => createTrafficParticle('conn-gateway-app', 'request', 0), 500);
+            setTimeout(() => createTrafficParticle('conn-app-db', 'request', 0), 1000);
+            setTimeout(() => createTrafficParticle('conn-app-s3', 'request', 0), 800);
+        }
+    }, 2000);
+    
+    // Immediate first particle
+    createTrafficParticle('conn-inet-gateway', 'request', 0);
+}
+
+function stopTrafficAnimation() {
+    if (trafficInterval) {
+        clearInterval(trafficInterval);
+        trafficInterval = null;
+    }
+    document.getElementById('trafficParticles').innerHTML = '';
+}
+
+function createTrafficParticle(pathId, type, delay) {
+    const path = document.getElementById(pathId);
+    if (!path) return;
+    
+    const container = document.getElementById('trafficParticles');
+    const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    particle.setAttribute('r', '6');
+    particle.classList.add('traffic-particle', type);
+    
+    const pathLength = path.getTotalLength();
+    
+    setTimeout(() => {
+        container.appendChild(particle);
+        
+        let progress = 0;
+        const speed = type === 'attack' ? 15 : 8;
+        
+        function animate() {
+            progress += speed;
+            if (progress >= pathLength) {
+                particle.remove();
+                return;
+            }
+            
+            const point = path.getPointAtLength(progress);
+            particle.setAttribute('cx', point.x);
+            particle.setAttribute('cy', point.y);
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    }, delay);
+}
+
+// Security layers
+function activateSecurityLayers() {
+    const layers = ['layer-nacl', 'layer-sg', 'layer-iam', 'layer-kms', 'layer-guardduty'];
+    layers.forEach((id, i) => {
+        setTimeout(() => {
+            document.getElementById(id)?.classList.add('active');
+        }, i * 200);
+    });
+}
+
+function deactivateSecurityLayers() {
+    document.querySelectorAll('.layer-dot').forEach(dot => dot.classList.remove('active'));
+}
+
+// Attack simulation
+function simulateAttack() {
+    if (!attackMode) return;
+    
+    const attacker = document.getElementById('attacker');
+    attacker.style.transition = 'all 0.5s ease';
+    attacker.style.opacity = '1';
+    attacker.style.transform = 'translateX(0)';
+    
+    // Send attack particles
+    setTimeout(() => {
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                createAttackParticle();
+            }, i * 300);
+        }
+    }, 600);
+    
+    // Show blocked notification
+    setTimeout(() => {
+        showBlockedNotification();
+        pulseSecurityLayers();
+    }, 2500);
+    
+    // Reset and repeat
+    setTimeout(() => {
+        if (attackMode) {
+            attacker.style.opacity = '0';
+            attacker.style.transform = 'translateX(-100px)';
+            setTimeout(() => {
+                if (attackMode) simulateAttack();
+            }, 2000);
+        }
+    }, 4000);
+}
+
+function createAttackParticle() {
+    const container = document.getElementById('trafficParticles');
+    const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    particle.setAttribute('r', '8');
+    particle.classList.add('traffic-particle', 'attack');
+    
+    container.appendChild(particle);
+    
+    // Animate from attacker to gateway
+    let progress = 0;
+    const startX = 80;
+    const endX = 345;
+    const y = 275;
+    
+    function animate() {
+        progress += 12;
+        const x = startX + (endX - startX) * (progress / 100);
+        
+        particle.setAttribute('cx', x);
+        particle.setAttribute('cy', y);
+        
+        if (progress >= 100) {
+            // Block at gateway
+            particle.classList.add('blocked');
+            createShieldEffect(345, 275);
+            setTimeout(() => particle.remove(), 300);
+            return;
+        }
+        
+        requestAnimationFrame(animate);
+    }
+    
+    animate();
+}
+
+function createShieldEffect(x, y) {
+    const container = document.getElementById('shieldEffects');
+    const shield = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    shield.setAttribute('cx', x);
+    shield.setAttribute('cy', y);
+    shield.setAttribute('r', '30');
+    shield.classList.add('shield-ring', 'active');
+    
+    container.appendChild(shield);
+    setTimeout(() => shield.remove(), 600);
+}
+
+function showBlockedNotification() {
+    const notification = document.getElementById('attackNotification');
+    notification.classList.add('show');
+    setTimeout(() => notification.classList.remove('show'), 2000);
+}
+
+function pulseSecurityLayers() {
+    document.querySelectorAll('.layer-dot').forEach((dot, i) => {
+        setTimeout(() => {
+            dot.classList.add('active');
+            dot.style.animation = 'none';
+            dot.offsetHeight; // Trigger reflow
+            dot.style.animation = 'livePulse 0.5s ease';
+        }, i * 100);
+    });
+}
+
+// Node interactions
+function setupNodeClicks() {
+    document.querySelectorAll('.node-group').forEach(node => {
+        node.addEventListener('click', () => {
+            const nodeId = node.dataset.node;
+            selectNode(nodeId, node);
+        });
+    });
+}
+
+function selectNode(nodeId, nodeElement) {
+    // Clear previous selection
+    document.querySelectorAll('.node-group').forEach(n => n.classList.remove('selected'));
+    
+    // Select new node
+    nodeElement.classList.add('selected');
+    selectedNode = nodeId;
+    
+    // Show info panel
+    const data = nodeData[nodeId];
+    if (data) {
+        showInfoPanel(data);
+    }
+}
+
+function showInfoPanel(data) {
+    const panel = document.getElementById('infoPanel');
+    document.getElementById('panelTitle').textContent = data.title;
+    document.getElementById('panelBadge').textContent = data.badge;
+    document.getElementById('panelDesc').textContent = data.desc;
+    
+    const grid = document.getElementById('panelGrid');
+    grid.innerHTML = data.details.map(d => `
+        <div class="info-item">
+            <div class="info-item-label">${d.label}</div>
+            <div class="info-item-value">${d.value}</div>
+        </div>
+    `).join('');
+    
+    panel.classList.add('visible');
+}
+
+function closeInfoPanel() {
+    document.getElementById('infoPanel').classList.remove('visible');
+    document.querySelectorAll('.node-group').forEach(n => n.classList.remove('selected'));
+    selectedNode = null;
+}
+
+// Live stats
+function startStatsUpdate() {
+    statsInterval = setInterval(() => {
+        if (trafficEnabled || attackMode) {
+            document.getElementById('statRequests').textContent = Math.floor(Math.random() * 50 + 120);
+            document.getElementById('statLatency').textContent = Math.floor(Math.random() * 20 + 15) + 'ms';
+            document.getElementById('statBlocked').textContent = attackMode ? Math.floor(Math.random() * 10 + 5) : 0;
+        }
+    }, 1000);
+}
+
+// Mobile menu
 document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
     document.querySelector('.nav-links').classList.toggle('mobile-open');
     this.classList.toggle('active');
 });
 
-// Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', function() {
+    link.addEventListener('click', () => {
         document.querySelector('.nav-links').classList.remove('mobile-open');
-        document.querySelector('.mobile-menu-toggle').classList.remove('active');
+        document.querySelector('.mobile-menu-toggle')?.classList.remove('active');
     });
 });
 </script>
