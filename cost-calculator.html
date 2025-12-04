@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <title>Cost Calculator | AWS Student Data Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Calculate AWS infrastructure costs and ROI for student data infrastructure with real-time cost estimation and automation savings analysis.">
+    <meta name="description" content="Interactive AWS cost calculator with real-time visualization, ROI analysis, and cost optimization recommendations.">
     <meta name="keywords" content="AWS, Cost Calculator, Cloud Cost Estimation, ROI Analysis, AWS Pricing, Infrastructure Costs">
     <meta name="author" content="Jawad Khan">
     
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Cost Calculator | AWS Student Data Infrastructure">
-    <meta property="og:description" content="Calculate AWS infrastructure costs and ROI with real-time estimation and automation savings analysis.">
+    <meta property="og:description" content="Interactive AWS cost calculator with real-time visualization and ROI analysis.">
     <meta property="og:url" content="https://mjkhan9.github.io/aws-student-data-infrastructure/cost-calculator.html">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Cost Calculator | AWS Student Data Infrastructure">
-    <meta name="twitter:description" content="Calculate AWS infrastructure costs and ROI with real-time estimation.">
+    <meta name="twitter:description" content="Interactive AWS cost calculator with real-time visualization.">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://mjkhan9.github.io/aws-student-data-infrastructure/cost-calculator.html">
@@ -25,262 +25,775 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     <style>
-        /* Cost Calculator - AWS Console Style */
+        /* ============================================
+           SPECTACULAR COST CALCULATOR
+           ============================================ */
         
-        /* Tight spacing for calculator page */
-        .calculator-page .content {
-            padding-top: 8px !important;
-        }
-        
-        .calculator-page .card {
-            margin-top: 8px !important;
-            padding-top: 12px !important;
-            padding-bottom: 12px !important;
-        }
-        
-        .calculator-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 12px;
-            margin-bottom: 16px;
-        }
-        
-        .input-section {
-            background: var(--aws-card-bg);
-            padding: 16px;
-            border-radius: var(--aws-radius);
+        /* Hero Section */
+        .calc-hero {
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            border-radius: 16px;
+            padding: 48px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
             border: 1px solid var(--aws-border);
         }
         
-        .input-section h2 {
+        .calc-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(255, 153, 0, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(46, 160, 67, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        
+        .calc-hero h1 {
+            font-size: 42px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .calc-hero p {
             font-size: 16px;
-            color: var(--aws-text-primary);
-            margin-bottom: 16px;
-            font-weight: 700;
-            border: none;
-            padding: 0;
+            max-width: 700px;
+            position: relative;
+            color: var(--aws-text-secondary);
         }
         
-        .input-group {
-            margin-bottom: 16px;
+        /* Preset Buttons */
+        .preset-section {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            position: relative;
         }
         
-        .input-label {
-            display: block;
-            font-weight: 600;
-            color: var(--aws-text-primary);
-            margin-bottom: 6px;
-            font-size: 13px;
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            font-size: 13px;
-            transition: all 0.15s ease;
+        .preset-btn {
+            padding: 12px 24px;
             background: var(--aws-panel-bg);
-            color: var(--aws-text-primary);
+            border: 1px solid var(--aws-border);
+            border-radius: 8px;
+            color: var(--aws-text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
             font-family: inherit;
         }
         
-        .input-field:focus {
-            outline: none;
-            border-color: var(--aws-blue);
-            background: var(--aws-card-bg);
+        .preset-btn:hover {
+            border-color: var(--aws-orange);
+            color: var(--aws-orange);
+            transform: translateY(-2px);
         }
         
-        .slider-container {
+        .preset-btn.active {
+            background: var(--aws-orange);
+            border-color: var(--aws-orange);
+            color: var(--aws-squid-ink);
+        }
+        
+        .preset-btn .preset-icon {
+            margin-right: 8px;
+        }
+        
+        /* Main Calculator Layout */
+        .calculator-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        /* Input Section */
+        .input-section {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .input-section h2 {
+            font-size: 18px;
+            color: var(--aws-text-primary);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--aws-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 24px;
+        }
+        
+        .input-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .input-label-text {
+            font-weight: 600;
+            color: var(--aws-text-primary);
+            font-size: 14px;
+        }
+        
+        .input-value-badge {
+            background: var(--aws-orange);
+            color: var(--aws-squid-ink);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .slider-track {
             position: relative;
-            padding-top: 6px;
+            height: 8px;
+            background: var(--aws-panel-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .slider-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--aws-orange), var(--aws-orange-light));
+            border-radius: 4px;
+            transition: width 0.1s ease;
         }
         
         .slider {
+            position: relative;
             width: 100%;
-            height: 4px;
-            border-radius: 2px;
-            background: var(--aws-border);
-            outline: none;
+            height: 8px;
             -webkit-appearance: none;
+            background: transparent;
+            cursor: pointer;
+            margin-top: -8px;
         }
         
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: var(--aws-blue);
+            background: var(--aws-orange);
             cursor: pointer;
-            border: 2px solid var(--aws-panel-bg);
+            border: 3px solid var(--aws-card-bg);
+            box-shadow: 0 2px 8px rgba(255, 153, 0, 0.4);
+            transition: transform 0.15s ease;
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
         }
         
         .slider::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: var(--aws-blue);
+            background: var(--aws-orange);
             cursor: pointer;
-            border: 2px solid var(--aws-panel-bg);
+            border: 3px solid var(--aws-card-bg);
+            box-shadow: 0 2px 8px rgba(255, 153, 0, 0.4);
         }
         
-        .slider-value {
-            display: inline-block;
-            background: var(--aws-blue);
-            color: white;
-            padding: 3px 10px;
-            border-radius: var(--aws-radius);
-            font-weight: 600;
-            font-size: 12px;
-            margin-left: 10px;
+        .input-hint {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+            margin-top: 6px;
         }
         
+        /* Results Section */
         .results-section {
-            background: var(--aws-card-bg);
-            padding: 16px;
-            border-radius: var(--aws-radius);
-            border: 1px solid var(--aws-border);
-            border-left: 3px solid var(--aws-blue);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
         
-        .results-section h2 {
+        /* Total Cost Card */
+        .total-cost-card {
+            background: linear-gradient(135deg, #1a2332 0%, #0d1117 100%);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .total-cost-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--aws-orange), var(--aws-green-light), var(--aws-blue-light));
+        }
+        
+        .total-label {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .total-value {
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--aws-orange);
+            line-height: 1;
+            margin-bottom: 8px;
+            font-family: Monaco, monospace;
+        }
+        
+        .total-period {
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+        }
+        
+        .annual-estimate {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--aws-border);
+            font-size: 14px;
+            color: var(--aws-text-secondary);
+        }
+        
+        .annual-value {
+            color: var(--aws-blue-light);
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        /* Cost Breakdown Chart */
+        .breakdown-card {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .breakdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .breakdown-header h3 {
             font-size: 16px;
             color: var(--aws-text-primary);
-            margin-bottom: 16px;
-            font-weight: 700;
+            margin: 0;
             border: none;
             padding: 0;
         }
         
-        .result-card {
+        .view-toggle {
+            display: flex;
+            gap: 4px;
             background: var(--aws-panel-bg);
-            padding: 12px;
-            border-radius: var(--aws-radius);
-            margin-bottom: 12px;
-            border: 1px solid var(--aws-border);
+            border-radius: 6px;
+            padding: 4px;
         }
         
-        .result-title {
+        .view-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: none;
+            border-radius: 4px;
+            color: var(--aws-text-tertiary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+        
+        .view-btn.active {
+            background: var(--aws-orange);
+            color: var(--aws-squid-ink);
+        }
+        
+        /* Bar Chart */
+        .cost-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .cost-bar-item {
+            display: grid;
+            grid-template-columns: 140px 1fr 80px;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .cost-bar-label {
+            font-size: 12px;
+            color: var(--aws-text-secondary);
+            text-align: right;
+        }
+        
+        .cost-bar-track {
+            height: 24px;
+            background: var(--aws-panel-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .cost-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .cost-bar-fill.rds { background: linear-gradient(90deg, #b84a7c, #d86a9c); }
+        .cost-bar-fill.nat { background: linear-gradient(90deg, #4a7cb8, #6b9cd0); }
+        .cost-bar-fill.ecs { background: linear-gradient(90deg, #6b5ba3, #8b7bc3); }
+        .cost-bar-fill.alb { background: linear-gradient(90deg, #ff9900, #ffac31); }
+        .cost-bar-fill.s3 { background: linear-gradient(90deg, #2d8659, #3fb950); }
+        .cost-bar-fill.transfer { background: linear-gradient(90deg, #1e8fff, #5fb3ff); }
+        .cost-bar-fill.cloudwatch { background: linear-gradient(90deg, #ff4f8b, #ff7aa8); }
+        .cost-bar-fill.logging { background: linear-gradient(90deg, #7b61ff, #a78bfa); }
+        
+        .cost-bar-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--aws-text-primary);
+            font-family: Monaco, monospace;
+        }
+        
+        /* Donut Chart View */
+        .donut-chart-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .donut-chart-container.active {
+            display: flex;
+        }
+        
+        .cost-bars.active {
+            display: flex;
+        }
+        
+        .cost-bars:not(.active) {
+            display: none;
+        }
+        
+        .donut-chart {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+        
+        .donut-chart svg {
+            transform: rotate(-90deg);
+        }
+        
+        .donut-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .donut-center-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--aws-orange);
+        }
+        
+        .donut-center-label {
             font-size: 11px;
             color: var(--aws-text-tertiary);
-            font-weight: 600;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
         
-        .result-value {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--aws-blue);
-            line-height: 1;
+        .donut-legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            width: 100%;
         }
         
-        .result-value.success {
-            color: var(--aws-green-light);
-        }
-        
-        .result-breakdown {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--aws-border);
-        }
-        
-        .breakdown-item {
+        .legend-item {
             display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
+            align-items: center;
+            gap: 8px;
             font-size: 12px;
-        }
-        
-        .breakdown-label {
             color: var(--aws-text-secondary);
         }
         
-        .breakdown-value {
-            font-weight: 600;
-            color: var(--aws-text-primary);
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+        
+        /* ROI Section */
+        .roi-section {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+        
+        .roi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .roi-header h2 {
+            font-size: 20px;
+            color: var(--aws-green-light);
+            margin: 0;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .roi-badge {
+            background: var(--aws-green);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .roi-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .roi-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--aws-green-light);
+            box-shadow: 0 8px 24px rgba(46, 160, 67, 0.2);
+        }
+        
+        .roi-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+        
+        .roi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--aws-green-light);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        
+        .roi-label {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
         }
         
         .roi-comparison {
-            background: var(--aws-card-bg);
-            border: 1px solid var(--aws-border);
-            border-left: 3px solid var(--aws-green);
-            padding: 16px;
-            border-radius: var(--aws-radius);
-            margin-top: 16px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 24px;
+            align-items: center;
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
         }
         
-        .roi-comparison h2 {
-            font-size: 16px;
-            color: var(--aws-green-light);
+        .comparison-side {
+            text-align: center;
+        }
+        
+        .comparison-label {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 8px;
+        }
+        
+        .comparison-time {
+            font-size: 36px;
             font-weight: 700;
+            color: var(--aws-text-primary);
+        }
+        
+        .comparison-time.fast {
+            color: var(--aws-green-light);
+        }
+        
+        .comparison-sub {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+            margin-top: 4px;
+        }
+        
+        .comparison-arrow {
+            font-size: 32px;
+            color: var(--aws-orange);
+            animation: arrowPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes arrowPulse {
+            0%, 100% { transform: translateX(0); opacity: 1; }
+            50% { transform: translateX(10px); opacity: 0.7; }
+        }
+        
+        /* Optimization Cards */
+        .optimization-section {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+        }
+        
+        .optimization-section h2 {
+            font-size: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             border: none;
             padding: 0;
         }
         
-        .roi-comparison p {
-            font-size: 12px;
-            color: var(--aws-text-secondary);
+        .optimization-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        
+        .opt-card {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .opt-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--aws-orange);
+            transform: scaleX(0);
+            transition: transform 0.2s ease;
+        }
+        
+        .opt-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .opt-card:hover {
+            border-color: var(--aws-orange);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        .opt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 12px;
         }
         
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 12px;
-        }
-        
-        .comparison-card {
-            background: var(--aws-panel-bg);
-            padding: 12px;
-            border-radius: var(--aws-radius);
-            text-align: center;
-            border: 1px solid var(--aws-border);
-        }
-        
-        .comparison-label {
-            font-size: 11px;
-            color: var(--aws-text-tertiary);
-            margin-bottom: 6px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .comparison-value {
+        .opt-icon {
             font-size: 24px;
-            font-weight: 800;
-            color: var(--aws-text-primary);
-            line-height: 1;
         }
         
-        .savings-badge {
+        .opt-savings {
             background: var(--aws-green);
             color: white;
-            padding: 6px 14px;
-            border-radius: var(--aws-radius);
-            display: inline-block;
-            margin-top: 12px;
-            font-weight: 600;
-            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
         }
         
-        @media (max-width: 1024px) {
-            .calculator-grid {
+        .opt-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .opt-desc {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+            line-height: 1.5;
+        }
+        
+        /* AWS Service Breakdown */
+        .service-breakdown {
+            margin-top: 32px;
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .service-header {
+            background: var(--aws-panel-bg);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--aws-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .service-header h3 {
+            font-size: 16px;
+            color: var(--aws-text-primary);
+            margin: 0;
+            border: none;
+            padding: 0;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--aws-border);
+        }
+        
+        .service-item {
+            background: var(--aws-card-bg);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .service-item:hover {
+            background: var(--aws-panel-bg);
+        }
+        
+        .service-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .service-name {
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+            margin-bottom: 6px;
+        }
+        
+        .service-cost {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--aws-orange);
+            font-family: Monaco, monospace;
+        }
+        
+        .service-detail {
+            font-size: 10px;
+            color: var(--aws-text-tertiary);
+            margin-top: 4px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .calculator-layout {
                 grid-template-columns: 1fr;
             }
-            .comparison-grid {
+            
+            .roi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .optimization-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .service-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .calc-hero {
+                padding: 32px 24px;
+            }
+            
+            .calc-hero h1 {
+                font-size: 32px;
+            }
+            
+            .preset-section {
+                flex-wrap: wrap;
+            }
+            
+            .roi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .roi-comparison {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .comparison-arrow {
+                transform: rotate(90deg);
+            }
+            
+            .optimization-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .service-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .cost-bar-item {
+                grid-template-columns: 100px 1fr 70px;
+            }
+            
+            .total-value {
+                font-size: 42px;
             }
         }
     </style>
 </head>
-<body class="calculator-page">
+<body>
 <header class="site-header">
     <div>
         <a href="index.html" class="logo">
@@ -307,164 +820,358 @@
 </header>
 
 <main class="content">
-    <section class="card">
-        <h1>AWS Infrastructure Cost & ROI Calculator</h1>
+    <!-- Hero Section -->
+    <section class="calc-hero">
+        <h1>💰 AWS Cost & ROI Calculator</h1>
         <p>
-            Calculate total monthly AWS infrastructure costs and return on investment from IAM automation. 
-            Uses real AWS pricing from the us-east-1 region to demonstrate both infrastructure 
-            costs and operational efficiency gains.
+            Calculate real-time infrastructure costs using actual AWS us-east-1 pricing. 
+            Visualize cost distribution, analyze automation ROI, and discover optimization opportunities 
+            for your student data infrastructure deployment.
         </p>
+        
+        <div class="preset-section">
+            <button class="preset-btn" data-preset="small" onclick="applyPreset('small')">
+                <span class="preset-icon">🏫</span> Small Department
+            </button>
+            <button class="preset-btn active" data-preset="medium" onclick="applyPreset('medium')">
+                <span class="preset-icon">🏛️</span> Medium Institution
+            </button>
+            <button class="preset-btn" data-preset="large" onclick="applyPreset('large')">
+                <span class="preset-icon">🎓</span> Large University
+            </button>
+        </div>
     </section>
-
-    <div class="calculator-grid">
+    
+    <!-- Main Calculator -->
+    <div class="calculator-layout">
+        <!-- Input Section -->
         <div class="input-section">
-            <h2>Infrastructure Inputs</h2>
+            <h2>⚙️ Infrastructure Parameters</h2>
             
             <div class="input-group">
-                <label class="input-label">Number of IAM Users</label>
-                <div class="slider-container">
-                    <input type="range" id="userCount" class="slider" min="5" max="200" value="50" step="5">
-                    <span class="slider-value" id="userCountValue">50</span>
+                <div class="input-label">
+                    <span class="input-label-text">IAM Users</span>
+                    <span class="input-value-badge" id="userCountBadge">50</span>
                 </div>
+                <div class="slider-track">
+                    <div class="slider-fill" id="userCountFill" style="width: 23%"></div>
+                </div>
+                <input type="range" id="userCount" class="slider" min="5" max="200" value="50" step="5">
+                <div class="input-hint">Active users requiring IAM provisioning</div>
             </div>
             
             <div class="input-group">
-                <label class="input-label">S3 Storage Volume (GB)</label>
-                <div class="slider-container">
-                    <input type="range" id="storageVolume" class="slider" min="100" max="5000" value="500" step="100">
-                    <span class="slider-value" id="storageVolumeValue">500 GB</span>
+                <div class="input-label">
+                    <span class="input-label-text">S3 Storage (GB)</span>
+                    <span class="input-value-badge" id="storageBadge">500 GB</span>
                 </div>
+                <div class="slider-track">
+                    <div class="slider-fill" id="storageFill" style="width: 10%"></div>
+                </div>
+                <input type="range" id="storageVolume" class="slider" min="100" max="5000" value="500" step="100">
+                <div class="input-hint">Student records, transcripts, and documents</div>
             </div>
             
             <div class="input-group">
-                <label class="input-label">RDS Runtime (hours/month)</label>
-                <div class="slider-container">
-                    <input type="range" id="rdsHours" class="slider" min="100" max="730" value="730" step="10">
-                    <span class="slider-value" id="rdsHoursValue">730 hrs</span>
+                <div class="input-label">
+                    <span class="input-label-text">RDS Runtime (hrs/month)</span>
+                    <span class="input-value-badge" id="rdsBadge">730 hrs</span>
                 </div>
+                <div class="slider-track">
+                    <div class="slider-fill" id="rdsFill" style="width: 100%"></div>
+                </div>
+                <input type="range" id="rdsHours" class="slider" min="100" max="730" value="730" step="10">
+                <div class="input-hint">730 hours = 24/7 operation</div>
             </div>
             
             <div class="input-group">
-                <label class="input-label">ECS Fargate Tasks</label>
-                <div class="slider-container">
-                    <input type="range" id="ecsTaskCount" class="slider" min="2" max="20" value="4" step="1">
-                    <span class="slider-value" id="ecsTaskCountValue">4</span>
+                <div class="input-label">
+                    <span class="input-label-text">ECS Fargate Tasks</span>
+                    <span class="input-value-badge" id="ecsBadge">4</span>
                 </div>
+                <div class="slider-track">
+                    <div class="slider-fill" id="ecsFill" style="width: 17%"></div>
+                </div>
+                <input type="range" id="ecsTaskCount" class="slider" min="2" max="20" value="4" step="1">
+                <div class="input-hint">Application containers running concurrently</div>
             </div>
             
             <div class="input-group">
-                <label class="input-label">Data Transfer Out (GB/month)</label>
-                <div class="slider-container">
-                    <input type="range" id="dataTransfer" class="slider" min="50" max="1000" value="200" step="50">
-                    <span class="slider-value" id="dataTransferValue">200 GB</span>
+                <div class="input-label">
+                    <span class="input-label-text">Data Transfer Out (GB/month)</span>
+                    <span class="input-value-badge" id="transferBadge">200 GB</span>
                 </div>
+                <div class="slider-track">
+                    <div class="slider-fill" id="transferFill" style="width: 15%"></div>
+                </div>
+                <input type="range" id="dataTransfer" class="slider" min="50" max="1000" value="200" step="50">
+                <div class="input-hint">Outbound bandwidth to users and integrations</div>
             </div>
         </div>
         
+        <!-- Results Section -->
         <div class="results-section">
-            <h2>Monthly Cost Breakdown</h2>
+            <!-- Total Cost Card -->
+            <div class="total-cost-card">
+                <div class="total-label">Estimated Monthly Cost</div>
+                <div class="total-value" id="totalCost">$0</div>
+                <div class="total-period">per month (us-east-1)</div>
+                <div class="annual-estimate">
+                    Annual estimate: <span class="annual-value" id="annualCost">$0</span>
+                </div>
+            </div>
             
-            <div class="result-card">
-                <div class="result-title">Total Monthly Infrastructure Cost</div>
-                <div class="result-value" id="totalCost">$0.00</div>
+            <!-- Cost Breakdown -->
+            <div class="breakdown-card">
+                <div class="breakdown-header">
+                    <h3>Cost Distribution</h3>
+                    <div class="view-toggle">
+                        <button class="view-btn active" onclick="setView('bars')">Bars</button>
+                        <button class="view-btn" onclick="setView('donut')">Chart</button>
+                    </div>
+                </div>
                 
-                <div class="result-breakdown">
-                    <div class="breakdown-item">
-                        <span class="breakdown-label">RDS PostgreSQL (db.r6g.xlarge)</span>
-                        <span class="breakdown-value" id="rdsCost">$0.00</span>
+                <!-- Bar Chart View -->
+                <div class="cost-bars active" id="barsView">
+                    <div class="cost-bar-item">
+                        <span class="cost-bar-label">RDS PostgreSQL</span>
+                        <div class="cost-bar-track">
+                            <div class="cost-bar-fill rds" id="rdsBar" style="width: 0%"></div>
+                        </div>
+                        <span class="cost-bar-value" id="rdsCost">$0</span>
                     </div>
-                    <div class="breakdown-item">
-                        <span class="breakdown-label">S3 Storage + Requests</span>
-                        <span class="breakdown-value" id="s3Cost">$0.00</span>
+                    <div class="cost-bar-item">
+                        <span class="cost-bar-label">NAT Gateway</span>
+                        <div class="cost-bar-track">
+                            <div class="cost-bar-fill nat" id="natBar" style="width: 0%"></div>
+                        </div>
+                        <span class="cost-bar-value" id="natCost">$0</span>
                     </div>
-                    <div class="breakdown-item">
-                        <span class="breakdown-label">ECS Fargate Compute</span>
-                        <span class="breakdown-value" id="ecsCost">$0.00</span>
+                    <div class="cost-bar-item">
+                        <span class="cost-bar-label">ECS Fargate</span>
+                        <div class="cost-bar-track">
+                            <div class="cost-bar-fill ecs" id="ecsBar" style="width: 0%"></div>
+                        </div>
+                        <span class="cost-bar-value" id="ecsCost">$0</span>
                     </div>
-                    <div class="breakdown-item">
-                        <span class="breakdown-label">NAT Gateway (2 AZs)</span>
-                        <span class="breakdown-value" id="natCost">$0.00</span>
+                    <div class="cost-bar-item">
+                        <span class="cost-bar-label">Load Balancer</span>
+                        <div class="cost-bar-track">
+                            <div class="cost-bar-fill alb" id="albBar" style="width: 0%"></div>
+                        </div>
+                        <span class="cost-bar-value" id="albCost">$0</span>
                     </div>
-                    <div class="breakdown-item">
-                        <span class="breakdown-label">Application Load Balancer</span>
-                        <span class="breakdown-value" id="albCost">$0.00</span>
+                    <div class="cost-bar-item">
+                        <span class="cost-bar-label">S3 Storage</span>
+                        <div class="cost-bar-track">
+                            <div class="cost-bar-fill s3" id="s3Bar" style="width: 0%"></div>
+                        </div>
+                        <span class="cost-bar-value" id="s3Cost">$0</span>
                     </div>
-                    <div class="breakdown-item">
-                        <span class="breakdown-label">Data Transfer Out</span>
-                        <span class="breakdown-value" id="transferCost">$0.00</span>
+                    <div class="cost-bar-item">
+                        <span class="cost-bar-label">Data Transfer</span>
+                        <div class="cost-bar-track">
+                            <div class="cost-bar-fill transfer" id="transferBar" style="width: 0%"></div>
+                        </div>
+                        <span class="cost-bar-value" id="transferCost">$0</span>
                     </div>
-                    <div class="breakdown-item">
-                        <span class="breakdown-label">CloudWatch + Logs</span>
-                        <span class="breakdown-value" id="cloudwatchCost">$0.00</span>
+                    <div class="cost-bar-item">
+                        <span class="cost-bar-label">CloudWatch</span>
+                        <div class="cost-bar-track">
+                            <div class="cost-bar-fill cloudwatch" id="cwBar" style="width: 0%"></div>
+                        </div>
+                        <span class="cost-bar-value" id="cloudwatchCost">$0</span>
                     </div>
-                    <div class="breakdown-item">
-                        <span class="breakdown-label">VPC Flow Logs + CloudTrail</span>
-                        <span class="breakdown-value" id="loggingCost">$0.00</span>
+                    <div class="cost-bar-item">
+                        <span class="cost-bar-label">Logging & Audit</span>
+                        <div class="cost-bar-track">
+                            <div class="cost-bar-fill logging" id="logBar" style="width: 0%"></div>
+                        </div>
+                        <span class="cost-bar-value" id="loggingCost">$0</span>
+                    </div>
+                </div>
+                
+                <!-- Donut Chart View -->
+                <div class="donut-chart-container" id="donutView">
+                    <div class="donut-chart">
+                        <svg viewBox="0 0 200 200" id="donutSvg">
+                            <!-- Donut segments drawn by JS -->
+                        </svg>
+                        <div class="donut-center">
+                            <div class="donut-center-value" id="donutTotal">$0</div>
+                            <div class="donut-center-label">Monthly</div>
+                        </div>
+                    </div>
+                    <div class="donut-legend" id="donutLegend">
+                        <!-- Legend items drawn by JS -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="roi-comparison">
-        <h2>IAM Automation ROI Analysis</h2>
-        <p>
-            Comparing manual IAM provisioning versus automated pipeline for <span id="roiUserCount">50</span> users
-        </p>
+    <!-- ROI Section -->
+    <section class="roi-section">
+        <div class="roi-header">
+            <h2>📈 IAM Automation ROI</h2>
+            <div class="roi-badge">Real Savings</div>
+        </div>
         
-        <div class="comparison-grid">
-            <div class="comparison-card">
-                <div class="comparison-label">Manual Provisioning Time</div>
-                <div class="comparison-value" id="manualTime">150 min</div>
-                <p style="font-size: 11px; color: var(--aws-text-tertiary); margin-top: 6px;">
-                    ~3 minutes per user via AWS Console
-                </p>
+        <div class="roi-grid">
+            <div class="roi-card">
+                <div class="roi-icon">⚡</div>
+                <div class="roi-value" id="roiEfficiency">67%</div>
+                <div class="roi-label">Faster Provisioning</div>
             </div>
-            
-            <div class="comparison-card">
-                <div class="comparison-label">Automated Provisioning Time</div>
-                <div class="comparison-value" id="automatedTime" style="color: var(--aws-green-light);">45 sec</div>
-                <p style="font-size: 11px; color: var(--aws-text-tertiary); margin-top: 6px;">
-                    Script execution + validation
-                </p>
+            <div class="roi-card">
+                <div class="roi-icon">🎯</div>
+                <div class="roi-value">0%</div>
+                <div class="roi-label">Error Rate</div>
             </div>
-            
-            <div class="comparison-card">
-                <div class="comparison-label">Time Saved</div>
-                <div class="comparison-value" id="timeSaved" style="color: var(--aws-green-light);">149 min</div>
-                <p style="font-size: 11px; color: var(--aws-text-tertiary); margin-top: 6px;">
-                    67% efficiency improvement
-                </p>
+            <div class="roi-card">
+                <div class="roi-icon">💵</div>
+                <div class="roi-value" id="roiSavings">$12,450</div>
+                <div class="roi-label">Annual Savings</div>
             </div>
-            
-            <div class="comparison-card">
-                <div class="comparison-label">Cost Savings (Annual)</div>
-                <div class="comparison-value" id="costSavings" style="color: var(--aws-green-light);">$12,450</div>
-                <p style="font-size: 11px; color: var(--aws-text-tertiary); margin-top: 6px;">
-                    Based on $50/hr engineer time
-                </p>
+            <div class="roi-card">
+                <div class="roi-icon">✅</div>
+                <div class="roi-value">100%</div>
+                <div class="roi-label">Compliance</div>
             </div>
         </div>
         
-        <div style="text-align: center;">
-            <div class="savings-badge">
-                <span id="roiEfficiency">67%</span> faster provisioning • 
-                <span id="roiErrorRate">0%</span> error rate • 
-                <span id="roiCompliance">100%</span> policy compliance
+        <div class="roi-comparison">
+            <div class="comparison-side">
+                <div class="comparison-label">Manual Provisioning</div>
+                <div class="comparison-time" id="manualTime">150 min</div>
+                <div class="comparison-sub">~3 minutes per user via console</div>
+            </div>
+            <div class="comparison-arrow">→</div>
+            <div class="comparison-side">
+                <div class="comparison-label">Automated Pipeline</div>
+                <div class="comparison-time fast" id="autoTime">45 sec</div>
+                <div class="comparison-sub">Script execution + validation</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- AWS Service Breakdown -->
+    <div class="service-breakdown">
+        <div class="service-header">
+            <h3>AWS Service Breakdown</h3>
+            <span style="font-size: 12px; color: var(--aws-text-tertiary);">us-east-1 pricing</span>
+        </div>
+        <div class="service-grid">
+            <div class="service-item">
+                <div class="service-icon">🗄️</div>
+                <div class="service-name">RDS PostgreSQL</div>
+                <div class="service-cost" id="svcRds">$0</div>
+                <div class="service-detail">db.r6g.xlarge Multi-AZ</div>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">🌐</div>
+                <div class="service-name">NAT Gateway</div>
+                <div class="service-cost" id="svcNat">$0</div>
+                <div class="service-detail">2 AZs + data processing</div>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">⚙️</div>
+                <div class="service-name">ECS Fargate</div>
+                <div class="service-cost" id="svcEcs">$0</div>
+                <div class="service-detail">vCPU + Memory</div>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">⚖️</div>
+                <div class="service-name">Load Balancer</div>
+                <div class="service-cost" id="svcAlb">$0</div>
+                <div class="service-detail">ALB + LCU charges</div>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">📦</div>
+                <div class="service-name">S3 Storage</div>
+                <div class="service-cost" id="svcS3">$0</div>
+                <div class="service-detail">Standard + requests</div>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">📡</div>
+                <div class="service-name">Data Transfer</div>
+                <div class="service-cost" id="svcTransfer">$0</div>
+                <div class="service-detail">Outbound to internet</div>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">📊</div>
+                <div class="service-name">CloudWatch</div>
+                <div class="service-cost" id="svcCw">$0</div>
+                <div class="service-detail">Metrics + alarms</div>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">📋</div>
+                <div class="service-name">Audit Logging</div>
+                <div class="service-cost" id="svcLog">$0</div>
+                <div class="service-detail">CloudTrail + Flow Logs</div>
             </div>
         </div>
     </div>
     
-    <section class="card">
-        <h2>Cost Optimization Opportunities</h2>
-        <ul>
-            <li><strong>Reserved Instance Pricing:</strong> RDS Reserved Instances reduce database costs by 40-60% with 1-3 year commitment</li>
-            <li><strong>Savings Plans:</strong> Compute Savings Plans for ECS Fargate provide up to 50% discount on consistent workloads</li>
-            <li><strong>S3 Intelligent-Tiering:</strong> Automatically moves infrequently accessed data to lower-cost storage classes</li>
-            <li><strong>NAT Gateway Optimization:</strong> VPC endpoints for S3 and DynamoDB eliminate NAT Gateway data processing charges</li>
-            <li><strong>Right-Sizing:</strong> CloudWatch metrics analysis identifies over-provisioned resources for downsizing</li>
-            <li><strong>Spot Instances:</strong> ECS Fargate Spot reduces compute costs by up to 70% for fault-tolerant workloads</li>
-        </ul>
+    <!-- Optimization Section -->
+    <section class="optimization-section">
+        <h2>💡 Cost Optimization Opportunities</h2>
+        
+        <div class="optimization-grid">
+            <div class="opt-card">
+                <div class="opt-header">
+                    <span class="opt-icon">📅</span>
+                    <span class="opt-savings">Up to 60%</span>
+                </div>
+                <div class="opt-title">Reserved Instances</div>
+                <div class="opt-desc">Commit to 1-3 year RDS Reserved Instances for significant database cost reduction.</div>
+            </div>
+            
+            <div class="opt-card">
+                <div class="opt-header">
+                    <span class="opt-icon">💾</span>
+                    <span class="opt-savings">Up to 50%</span>
+                </div>
+                <div class="opt-title">Compute Savings Plans</div>
+                <div class="opt-desc">Apply Savings Plans to ECS Fargate workloads for predictable compute discounts.</div>
+            </div>
+            
+            <div class="opt-card">
+                <div class="opt-header">
+                    <span class="opt-icon">🗂️</span>
+                    <span class="opt-savings">Up to 40%</span>
+                </div>
+                <div class="opt-title">S3 Intelligent-Tiering</div>
+                <div class="opt-desc">Automatically move infrequently accessed data to lower-cost storage classes.</div>
+            </div>
+            
+            <div class="opt-card">
+                <div class="opt-header">
+                    <span class="opt-icon">🔗</span>
+                    <span class="opt-savings">Variable</span>
+                </div>
+                <div class="opt-title">VPC Endpoints</div>
+                <div class="opt-desc">Eliminate NAT Gateway charges for S3 and DynamoDB with VPC endpoints.</div>
+            </div>
+            
+            <div class="opt-card">
+                <div class="opt-header">
+                    <span class="opt-icon">📐</span>
+                    <span class="opt-savings">Up to 30%</span>
+                </div>
+                <div class="opt-title">Right-Sizing</div>
+                <div class="opt-desc">Analyze CloudWatch metrics to identify over-provisioned resources.</div>
+            </div>
+            
+            <div class="opt-card">
+                <div class="opt-header">
+                    <span class="opt-icon">⚡</span>
+                    <span class="opt-savings">Up to 70%</span>
+                </div>
+                <div class="opt-title">Fargate Spot</div>
+                <div class="opt-desc">Use Spot capacity for fault-tolerant, interruptible workloads.</div>
+            </div>
+        </div>
     </section>
 </main>
 
@@ -480,13 +1187,18 @@
 </footer>
 
 <script>
+// ============================================
+// SPECTACULAR COST CALCULATOR
+// ============================================
+
+// AWS Pricing (us-east-1)
 const PRICING = {
-    rdsInstanceHourly: 0.504,
+    rdsInstanceHourly: 0.504,      // db.r6g.xlarge
     rdsStorageGB: 0.115,
     s3StandardGB: 0.023,
-    s3Requests: 0.0004,
-    ecsFargateVCPU: 0.04048,
-    ecsFargateGB: 0.004445,
+    s3Requests: 0.0004,            // per 1000 requests
+    ecsFargateVCPU: 0.04048,       // per vCPU-hour
+    ecsFargateGB: 0.004445,        // per GB-hour
     natGatewayHourly: 0.045,
     natGatewayDataGB: 0.045,
     albHourly: 0.0225,
@@ -496,95 +1208,322 @@ const PRICING = {
     loggingGB: 0.50
 };
 
-function formatCurrency(value) {
-    return `$${value.toFixed(2)}`;
-}
+// Presets
+const PRESETS = {
+    small: { users: 25, storage: 200, rds: 730, ecs: 2, transfer: 100 },
+    medium: { users: 50, storage: 500, rds: 730, ecs: 4, transfer: 200 },
+    large: { users: 150, storage: 2000, rds: 730, ecs: 10, transfer: 500 }
+};
 
-function updateSliderValue(sliderId, valueId, suffix = "") {
-    const slider = document.getElementById(sliderId);
-    const valueDisplay = document.getElementById(valueId);
+// Donut chart colors
+const CHART_COLORS = [
+    '#b84a7c', // RDS
+    '#4a7cb8', // NAT
+    '#6b5ba3', // ECS
+    '#ff9900', // ALB
+    '#2d8659', // S3
+    '#1e8fff', // Transfer
+    '#ff4f8b', // CloudWatch
+    '#7b61ff'  // Logging
+];
+
+let currentView = 'bars';
+let costs = {};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    setupSliders();
+    calculateCosts();
+});
+
+// Setup slider interactions
+function setupSliders() {
+    const sliders = [
+        { id: 'userCount', badge: 'userCountBadge', fill: 'userCountFill', suffix: '', max: 200, min: 5 },
+        { id: 'storageVolume', badge: 'storageBadge', fill: 'storageFill', suffix: ' GB', max: 5000, min: 100 },
+        { id: 'rdsHours', badge: 'rdsBadge', fill: 'rdsFill', suffix: ' hrs', max: 730, min: 100 },
+        { id: 'ecsTaskCount', badge: 'ecsBadge', fill: 'ecsFill', suffix: '', max: 20, min: 2 },
+        { id: 'dataTransfer', badge: 'transferBadge', fill: 'transferFill', suffix: ' GB', max: 1000, min: 50 }
+    ];
     
-    slider.addEventListener("input", function() {
-        valueDisplay.textContent = this.value + suffix;
-        calculateCosts();
+    sliders.forEach(config => {
+        const slider = document.getElementById(config.id);
+        slider.addEventListener('input', () => {
+            updateSlider(config);
+            calculateCosts();
+        });
+        updateSlider(config);
     });
 }
 
-function calculateCosts() {
-    const userCount = parseInt(document.getElementById("userCount").value);
-    const storageVolume = parseInt(document.getElementById("storageVolume").value);
-    const rdsHours = parseInt(document.getElementById("rdsHours").value);
-    const ecsTaskCount = parseInt(document.getElementById("ecsTaskCount").value);
-    const dataTransfer = parseInt(document.getElementById("dataTransfer").value);
+function updateSlider(config) {
+    const slider = document.getElementById(config.id);
+    const badge = document.getElementById(config.badge);
+    const fill = document.getElementById(config.fill);
     
+    const value = parseInt(slider.value);
+    const percent = ((value - config.min) / (config.max - config.min)) * 100;
+    
+    badge.textContent = value + config.suffix;
+    fill.style.width = percent + '%';
+}
+
+// Apply preset
+function applyPreset(preset) {
+    const values = PRESETS[preset];
+    if (!values) return;
+    
+    // Update buttons
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.preset === preset);
+    });
+    
+    // Set slider values
+    document.getElementById('userCount').value = values.users;
+    document.getElementById('storageVolume').value = values.storage;
+    document.getElementById('rdsHours').value = values.rds;
+    document.getElementById('ecsTaskCount').value = values.ecs;
+    document.getElementById('dataTransfer').value = values.transfer;
+    
+    // Update displays
+    const configs = [
+        { id: 'userCount', badge: 'userCountBadge', fill: 'userCountFill', suffix: '', max: 200, min: 5 },
+        { id: 'storageVolume', badge: 'storageBadge', fill: 'storageFill', suffix: ' GB', max: 5000, min: 100 },
+        { id: 'rdsHours', badge: 'rdsBadge', fill: 'rdsFill', suffix: ' hrs', max: 730, min: 100 },
+        { id: 'ecsTaskCount', badge: 'ecsBadge', fill: 'ecsFill', suffix: '', max: 20, min: 2 },
+        { id: 'dataTransfer', badge: 'transferBadge', fill: 'transferFill', suffix: ' GB', max: 1000, min: 50 }
+    ];
+    
+    configs.forEach(updateSlider);
+    calculateCosts();
+}
+
+// Main calculation
+function calculateCosts() {
+    const userCount = parseInt(document.getElementById('userCount').value);
+    const storageVolume = parseInt(document.getElementById('storageVolume').value);
+    const rdsHours = parseInt(document.getElementById('rdsHours').value);
+    const ecsTaskCount = parseInt(document.getElementById('ecsTaskCount').value);
+    const dataTransfer = parseInt(document.getElementById('dataTransfer').value);
+    
+    // Calculate individual costs
     const rdsComputeCost = rdsHours * PRICING.rdsInstanceHourly;
     const rdsStorageCost = 100 * PRICING.rdsStorageGB;
-    const rdsCost = rdsComputeCost + rdsStorageCost;
+    costs.rds = rdsComputeCost + rdsStorageCost;
     
     const s3StorageCost = storageVolume * PRICING.s3StandardGB;
     const s3RequestCost = (userCount * 100 * PRICING.s3Requests);
-    const s3Cost = s3StorageCost + s3RequestCost;
+    costs.s3 = s3StorageCost + s3RequestCost;
     
-    const ecsCost = ecsTaskCount * 730 * (0.25 * PRICING.ecsFargateVCPU + 0.5 * PRICING.ecsFargateGB);
+    costs.ecs = ecsTaskCount * 730 * (0.25 * PRICING.ecsFargateVCPU + 0.5 * PRICING.ecsFargateGB);
     
     const natHourlyCost = 2 * 730 * PRICING.natGatewayHourly;
     const natDataCost = dataTransfer * PRICING.natGatewayDataGB;
-    const natCost = natHourlyCost + natDataCost;
+    costs.nat = natHourlyCost + natDataCost;
     
-    const albCost = 730 * PRICING.albHourly + (730 * PRICING.albLCU);
-    const transferCost = dataTransfer * PRICING.dataTransferGB;
-    const cloudwatchCost = PRICING.cloudwatchBase + (userCount * 0.15);
-    const loggingCost = (dataTransfer / 10) * PRICING.loggingGB;
+    costs.alb = 730 * PRICING.albHourly + (730 * PRICING.albLCU);
+    costs.transfer = dataTransfer * PRICING.dataTransferGB;
+    costs.cloudwatch = PRICING.cloudwatchBase + (userCount * 0.15);
+    costs.logging = (dataTransfer / 10) * PRICING.loggingGB;
     
-    const totalCost = rdsCost + s3Cost + ecsCost + natCost + albCost + transferCost + cloudwatchCost + loggingCost;
+    const totalCost = costs.rds + costs.s3 + costs.ecs + costs.nat + 
+                      costs.alb + costs.transfer + costs.cloudwatch + costs.logging;
     
-    document.getElementById("rdsCost").textContent = formatCurrency(rdsCost);
-    document.getElementById("s3Cost").textContent = formatCurrency(s3Cost);
-    document.getElementById("ecsCost").textContent = formatCurrency(ecsCost);
-    document.getElementById("natCost").textContent = formatCurrency(natCost);
-    document.getElementById("albCost").textContent = formatCurrency(albCost);
-    document.getElementById("transferCost").textContent = formatCurrency(transferCost);
-    document.getElementById("cloudwatchCost").textContent = formatCurrency(cloudwatchCost);
-    document.getElementById("loggingCost").textContent = formatCurrency(loggingCost);
-    document.getElementById("totalCost").textContent = formatCurrency(totalCost);
-    
-    const manualTimeMinutes = userCount * 3;
-    const automatedTimeSeconds = 45;
-    const automatedTimeMinutes = automatedTimeSeconds / 60;
-    const timeSavedMinutes = manualTimeMinutes - automatedTimeMinutes;
-    const efficiencyGain = ((timeSavedMinutes / manualTimeMinutes) * 100).toFixed(1);
-    
-    const hourlyRate = 50;
-    const annualProvisioningCycles = 4;
-    const annualSavings = (timeSavedMinutes / 60) * hourlyRate * annualProvisioningCycles;
-    
-    document.getElementById("roiUserCount").textContent = userCount;
-    document.getElementById("manualTime").textContent = `${manualTimeMinutes} min`;
-    document.getElementById("automatedTime").textContent = `${automatedTimeSeconds} sec`;
-    document.getElementById("timeSaved").textContent = `${timeSavedMinutes.toFixed(0)} min`;
-    document.getElementById("costSavings").textContent = formatCurrency(annualSavings);
-    document.getElementById("roiEfficiency").textContent = `${efficiencyGain}%`;
+    // Update displays
+    updateDisplay(totalCost);
+    updateBars(totalCost);
+    updateDonut(totalCost);
+    updateROI(userCount);
+    updateServices();
 }
 
-updateSliderValue("userCount", "userCountValue", "");
-updateSliderValue("storageVolume", "storageVolumeValue", " GB");
-updateSliderValue("rdsHours", "rdsHoursValue", " hrs");
-updateSliderValue("ecsTaskCount", "ecsTaskCountValue", "");
-updateSliderValue("dataTransfer", "dataTransferValue", " GB");
+function formatCurrency(value) {
+    return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
 
-calculateCosts();
+function updateDisplay(total) {
+    // Animate total cost
+    animateValue('totalCost', total, true);
+    document.getElementById('annualCost').textContent = formatCurrency(total * 12);
+    
+    // Update breakdown values
+    document.getElementById('rdsCost').textContent = formatCurrency(costs.rds);
+    document.getElementById('natCost').textContent = formatCurrency(costs.nat);
+    document.getElementById('ecsCost').textContent = formatCurrency(costs.ecs);
+    document.getElementById('albCost').textContent = formatCurrency(costs.alb);
+    document.getElementById('s3Cost').textContent = formatCurrency(costs.s3);
+    document.getElementById('transferCost').textContent = formatCurrency(costs.transfer);
+    document.getElementById('cloudwatchCost').textContent = formatCurrency(costs.cloudwatch);
+    document.getElementById('loggingCost').textContent = formatCurrency(costs.logging);
+}
 
-// Mobile menu toggle
+function animateValue(elementId, value, isCurrency = false) {
+    const element = document.getElementById(elementId);
+    const duration = 500;
+    const startTime = performance.now();
+    const startValue = parseFloat(element.textContent.replace(/[$,]/g, '')) || 0;
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        
+        const current = startValue + (value - startValue) * eased;
+        element.textContent = isCurrency ? formatCurrency(current) : Math.round(current);
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    
+    requestAnimationFrame(update);
+}
+
+function updateBars(total) {
+    const costData = [
+        { id: 'rdsBar', value: costs.rds },
+        { id: 'natBar', value: costs.nat },
+        { id: 'ecsBar', value: costs.ecs },
+        { id: 'albBar', value: costs.alb },
+        { id: 's3Bar', value: costs.s3 },
+        { id: 'transferBar', value: costs.transfer },
+        { id: 'cwBar', value: costs.cloudwatch },
+        { id: 'logBar', value: costs.logging }
+    ];
+    
+    const maxCost = Math.max(...costData.map(c => c.value));
+    
+    costData.forEach(item => {
+        const percent = maxCost > 0 ? (item.value / maxCost) * 100 : 0;
+        document.getElementById(item.id).style.width = percent + '%';
+    });
+}
+
+function updateDonut(total) {
+    const svg = document.getElementById('donutSvg');
+    const legend = document.getElementById('donutLegend');
+    
+    const costData = [
+        { label: 'RDS', value: costs.rds },
+        { label: 'NAT Gateway', value: costs.nat },
+        { label: 'ECS Fargate', value: costs.ecs },
+        { label: 'Load Balancer', value: costs.alb },
+        { label: 'S3 Storage', value: costs.s3 },
+        { label: 'Data Transfer', value: costs.transfer },
+        { label: 'CloudWatch', value: costs.cloudwatch },
+        { label: 'Logging', value: costs.logging }
+    ];
+    
+    // Clear previous
+    svg.innerHTML = '';
+    legend.innerHTML = '';
+    
+    // Draw donut
+    const centerX = 100;
+    const centerY = 100;
+    const radius = 80;
+    const innerRadius = 50;
+    
+    let cumulativePercent = 0;
+    
+    costData.forEach((item, index) => {
+        const percent = total > 0 ? (item.value / total) : 0;
+        
+        if (percent > 0.01) {
+            const startAngle = cumulativePercent * 2 * Math.PI;
+            cumulativePercent += percent;
+            const endAngle = cumulativePercent * 2 * Math.PI;
+            
+            const x1 = centerX + radius * Math.cos(startAngle);
+            const y1 = centerY + radius * Math.sin(startAngle);
+            const x2 = centerX + radius * Math.cos(endAngle);
+            const y2 = centerY + radius * Math.sin(endAngle);
+            
+            const x3 = centerX + innerRadius * Math.cos(endAngle);
+            const y3 = centerY + innerRadius * Math.sin(endAngle);
+            const x4 = centerX + innerRadius * Math.cos(startAngle);
+            const y4 = centerY + innerRadius * Math.sin(startAngle);
+            
+            const largeArc = percent > 0.5 ? 1 : 0;
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', `
+                M ${x1} ${y1}
+                A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}
+                L ${x3} ${y3}
+                A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${x4} ${y4}
+                Z
+            `);
+            path.setAttribute('fill', CHART_COLORS[index]);
+            path.style.transition = 'opacity 0.2s ease';
+            path.addEventListener('mouseenter', () => path.style.opacity = '0.8');
+            path.addEventListener('mouseleave', () => path.style.opacity = '1');
+            svg.appendChild(path);
+        }
+        
+        // Legend item
+        const legendItem = document.createElement('div');
+        legendItem.className = 'legend-item';
+        legendItem.innerHTML = `
+            <div class="legend-dot" style="background: ${CHART_COLORS[index]}"></div>
+            <span>${item.label}</span>
+        `;
+        legend.appendChild(legendItem);
+    });
+    
+    document.getElementById('donutTotal').textContent = formatCurrency(total);
+}
+
+function updateROI(userCount) {
+    const manualMinutes = userCount * 3;
+    const autoSeconds = 45;
+    const autoMinutes = autoSeconds / 60;
+    const savedMinutes = manualMinutes - autoMinutes;
+    const efficiency = ((savedMinutes / manualMinutes) * 100).toFixed(0);
+    
+    const hourlyRate = 50;
+    const annualCycles = 4;
+    const annualSavings = (savedMinutes / 60) * hourlyRate * annualCycles;
+    
+    document.getElementById('manualTime').textContent = manualMinutes + ' min';
+    document.getElementById('autoTime').textContent = autoSeconds + ' sec';
+    document.getElementById('roiEfficiency').textContent = efficiency + '%';
+    document.getElementById('roiSavings').textContent = formatCurrency(annualSavings);
+}
+
+function updateServices() {
+    document.getElementById('svcRds').textContent = formatCurrency(costs.rds);
+    document.getElementById('svcNat').textContent = formatCurrency(costs.nat);
+    document.getElementById('svcEcs').textContent = formatCurrency(costs.ecs);
+    document.getElementById('svcAlb').textContent = formatCurrency(costs.alb);
+    document.getElementById('svcS3').textContent = formatCurrency(costs.s3);
+    document.getElementById('svcTransfer').textContent = formatCurrency(costs.transfer);
+    document.getElementById('svcCw').textContent = formatCurrency(costs.cloudwatch);
+    document.getElementById('svcLog').textContent = formatCurrency(costs.logging);
+}
+
+// View toggle
+function setView(view) {
+    currentView = view;
+    
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.toLowerCase() === view);
+    });
+    
+    document.getElementById('barsView').classList.toggle('active', view === 'bars');
+    document.getElementById('donutView').classList.toggle('active', view === 'donut');
+}
+
+// Mobile menu
 document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
     document.querySelector('.nav-links').classList.toggle('mobile-open');
     this.classList.toggle('active');
 });
 
-// Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', function() {
+    link.addEventListener('click', () => {
         document.querySelector('.nav-links').classList.remove('mobile-open');
-        document.querySelector('.mobile-menu-toggle').classList.remove('active');
+        document.querySelector('.mobile-menu-toggle')?.classList.remove('active');
     });
 });
 </script>
