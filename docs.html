@@ -24,96 +24,472 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23232f3e' width='100' height='100' rx='8'/><text y='.9em' x='50%' text-anchor='middle' font-size='70' fill='%23ff9900'>☁</text></svg>">
     
     <style>
-        /* Documentation Page Specific Styles */
-        .toc-card {
-            background: linear-gradient(135deg, var(--aws-card-bg) 0%, var(--aws-panel-bg) 100%);
-            border-left: 4px solid var(--aws-orange);
+        /* ============================================
+           SPECTACULAR DOCUMENTATION PAGE
+           ============================================ */
+        
+        /* Hero Section */
+        .docs-hero {
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            border-radius: 16px;
+            padding: 56px 48px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--aws-border);
         }
         
-        .toc {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 16px;
+        .docs-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 10% 80%, rgba(30, 143, 255, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 20%, rgba(255, 153, 0, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(123, 97, 255, 0.05) 0%, transparent 60%);
+            pointer-events: none;
         }
         
-        .toc-link {
+        /* Animated floating docs */
+        .floating-docs {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .floating-doc {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.1;
+            animation: floatDoc 20s linear infinite;
+        }
+        
+        @keyframes floatDoc {
+            0% { transform: translateY(100%) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.15; }
+            90% { opacity: 0.15; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .docs-hero h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            position: relative;
             display: flex;
             align-items: center;
-            padding: 12px 16px;
+            gap: 16px;
+        }
+        
+        .docs-hero h1 .icon-pulse {
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .docs-hero p {
+            font-size: 17px;
+            max-width: 750px;
+            position: relative;
+            color: var(--aws-text-secondary);
+            line-height: 1.7;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 32px;
+            position: relative;
+        }
+        
+        .hero-stat {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .hero-stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 153, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .hero-stat-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .hero-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--aws-orange);
+        }
+        
+        .hero-stat-label {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Interactive TOC */
+        .toc-spectacular {
+            background: linear-gradient(135deg, #1a2332 0%, #0d1117 100%);
+            border: 1px solid var(--aws-border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .toc-spectacular::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--aws-orange), var(--aws-blue-light), var(--aws-green-light));
+        }
+        
+        .toc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .toc-header h2 {
+            font-size: 20px;
+            margin: 0;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .toc-badge {
+            background: var(--aws-orange);
+            color: var(--aws-squid-ink);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        
+        .toc-item {
             background: var(--aws-panel-bg);
             border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            color: var(--aws-text-secondary);
+            border-radius: 12px;
+            padding: 20px;
             text-decoration: none;
-            transition: all 0.2s ease;
-            font-size: 14px;
+            color: inherit;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
-        .toc-link::before {
-            content: "▸";
-            color: var(--aws-orange);
-            margin-right: 12px;
-            font-weight: 700;
-            transition: transform 0.2s ease;
+        .toc-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--aws-orange);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
         }
         
-        .toc-link:hover {
+        .toc-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .toc-item:hover {
             background: var(--aws-card-bg);
             border-color: var(--aws-orange);
-            color: var(--aws-text-primary);
-            transform: translateX(4px);
+            transform: translateX(8px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
         
-        .toc-link:hover::before {
-            transform: translateX(4px);
+        .toc-item-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
         }
         
-        .doc-diagram {
-            margin: 24px 0;
-            padding: 24px;
-            background: var(--aws-squid-ink-dark);
-            border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            overflow-x: auto;
+        .toc-item-icon {
+            font-size: 24px;
         }
         
-        .ascii-diagram {
-            font-family: "Courier New", Courier, monospace;
+        .toc-item-number {
             font-size: 12px;
-            line-height: 1.4;
-            color: var(--aws-text-secondary);
+            color: var(--aws-orange);
+            font-weight: 700;
+        }
+        
+        .toc-item-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+        }
+        
+        .toc-item-desc {
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+            line-height: 1.5;
+        }
+        
+        /* Architecture Summary */
+        .arch-section {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+        
+        .section-header h2 {
+            font-size: 22px;
             margin: 0;
-            white-space: pre;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-badge {
+            background: rgba(46, 160, 67, 0.15);
+            border: 1px solid var(--aws-green);
+            color: var(--aws-green-light);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .arch-visual {
+            background: linear-gradient(180deg, #0a0e14 0%, #111820 100%);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 24px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .arch-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(30, 143, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 143, 255, 0.02) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .arch-tiers {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .arch-tier {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .arch-tier:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .arch-tier.public { border-top: 4px solid #4a7cb8; }
+        .arch-tier.private { border-top: 4px solid #6b5ba3; }
+        .arch-tier.isolated { border-top: 4px solid #b84a7c; }
+        .arch-tier.security { border-top: 4px solid var(--aws-orange); }
+        
+        .arch-tier-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+        
+        .arch-tier-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--aws-text-primary);
+            margin-bottom: 6px;
+        }
+        
+        .arch-tier-cidr {
+            font-size: 12px;
+            color: var(--aws-orange);
+            font-family: Monaco, monospace;
+            margin-bottom: 8px;
+        }
+        
+        .arch-tier-desc {
+            font-size: 11px;
+            color: var(--aws-text-tertiary);
+            line-height: 1.4;
+        }
+        
+        .arch-connector {
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--aws-border), var(--aws-orange), var(--aws-border));
+            position: relative;
+        }
+        
+        .arch-connector::after {
+            content: '→';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--aws-orange);
+            font-size: 14px;
+            background: #0a0e14;
+            padding: 0 4px;
+        }
+        
+        .arch-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        .arch-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .arch-feature:hover {
+            border-color: var(--aws-orange);
+            transform: translateX(4px);
+        }
+        
+        .arch-feature-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .arch-feature-text {
+            font-size: 13px;
+            color: var(--aws-text-secondary);
+            line-height: 1.5;
+        }
+        
+        .arch-feature-text strong {
+            display: block;
+            color: var(--aws-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        /* Design Goals */
+        .goals-section {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            border: 1px solid var(--aws-border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+        
+        .goals-section h2 {
+            font-size: 22px;
+            margin-bottom: 24px;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--aws-green-light);
         }
         
         .goals-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            margin-top: 24px;
         }
         
         .goal-card {
-            background: var(--aws-panel-bg);
-            border: 1px solid var(--aws-border);
-            border-left: 4px solid var(--aws-blue);
-            border-radius: var(--aws-radius);
-            padding: 24px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 28px;
             text-align: center;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .goal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--aws-green-light);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .goal-card:hover::before {
+            transform: scaleX(1);
         }
         
         .goal-card:hover {
-            border-left-color: var(--aws-orange);
-            transform: translateY(-4px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-            background: var(--aws-card-bg);
+            transform: translateY(-8px);
+            border-color: var(--aws-green-light);
+            box-shadow: 0 16px 48px rgba(46, 160, 67, 0.2);
         }
         
         .goal-icon {
             font-size: 48px;
             margin-bottom: 16px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
         }
         
         .goal-title {
@@ -126,178 +502,329 @@
         .goal-desc {
             font-size: 13px;
             color: var(--aws-text-secondary);
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
-        .controls-table {
-            margin-top: 24px;
+        /* Security Controls */
+        .controls-section {
+            background: var(--aws-card-bg);
             border: 1px solid var(--aws-border);
-            border-radius: var(--aws-radius);
-            overflow: hidden;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+        
+        .controls-section h2 {
+            font-size: 22px;
+            margin-bottom: 24px;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .controls-grid {
+            display: grid;
+            gap: 12px;
         }
         
         .control-row {
             display: grid;
-            grid-template-columns: 1.5fr 2fr 1fr;
-            gap: 16px;
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--aws-border);
+            grid-template-columns: 200px 1fr 120px;
+            gap: 20px;
+            padding: 20px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 10px;
             align-items: center;
+            transition: all 0.2s ease;
         }
         
-        .control-row:last-child {
-            border-bottom: none;
+        .control-row:hover {
+            border-color: var(--aws-green-light);
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
         
-        .control-row.header {
-            background: var(--aws-squid-ink-dark);
+        .control-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .control-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 153, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .control-label {
+            font-size: 14px;
             font-weight: 700;
             color: var(--aws-text-primary);
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 0.5px;
         }
         
-        .control-row:not(.header):hover {
-            background: var(--aws-card-bg);
-        }
-        
-        .control-category {
-            font-weight: 600;
-            color: var(--aws-text-primary);
-        }
-        
-        .control-implementation {
+        .control-desc {
+            font-size: 13px;
             color: var(--aws-text-secondary);
-            font-size: 14px;
+            line-height: 1.5;
         }
         
         .control-status {
             text-align: right;
         }
         
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: var(--aws-radius);
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .status-badge.success {
-            background: rgba(46, 160, 67, 0.15);
-            color: var(--aws-green-light);
-            border: 1px solid var(--aws-green);
-        }
-        
-        .tech-table {
-            margin-top: 24px;
-        }
-        
-        .tech-row {
-            display: flex;
-            gap: 24px;
-            padding: 20px;
-            background: var(--aws-panel-bg);
-            border: 1px solid var(--aws-border);
-            border-left: 4px solid var(--aws-orange);
-            border-radius: var(--aws-radius);
-            margin-bottom: 16px;
-            transition: all 0.2s ease;
+        .status-active {
+            display: inline-flex;
             align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(46, 160, 67, 0.15);
+            border: 1px solid var(--aws-green);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--aws-green-light);
         }
         
-        .tech-row:hover {
-            border-left-color: var(--aws-blue);
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--aws-green-light);
+            border-radius: 50%;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
+        }
+        
+        /* Technology Stack */
+        .tech-section {
             background: var(--aws-card-bg);
-            transform: translateX(4px);
+            border: 1px solid var(--aws-border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
         }
         
-        .tech-category {
+        .tech-section h2 {
+            font-size: 22px;
+            margin-bottom: 24px;
+            border: none;
+            padding: 0;
             display: flex;
             align-items: center;
             gap: 12px;
-            font-weight: 700;
-            color: var(--aws-text-primary);
-            min-width: 140px;
-            font-size: 15px;
         }
         
-        .tech-icon {
-            font-size: 24px;
+        .tech-categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .tech-category {
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-left: 4px solid var(--aws-orange);
+            border-radius: 10px;
+            padding: 24px;
+            transition: all 0.2s ease;
+        }
+        
+        .tech-category:hover {
+            border-left-color: var(--aws-blue-light);
+            transform: translateX(8px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tech-category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .tech-category-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(255, 153, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        
+        .tech-category-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--aws-orange);
         }
         
         .tech-items {
-            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tech-item {
+            padding: 6px 12px;
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 6px;
+            font-size: 12px;
             color: var(--aws-text-secondary);
-            font-size: 14px;
-            line-height: 1.6;
+            transition: all 0.2s ease;
+        }
+        
+        .tech-item:hover {
+            border-color: var(--aws-orange);
+            color: var(--aws-orange);
+        }
+        
+        /* Compliance Section */
+        .compliance-section {
+            background: linear-gradient(135deg, #1a1f2e 0%, #0d1117 100%);
+            border: 1px solid var(--aws-border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .compliance-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--aws-green), var(--aws-green-light));
+        }
+        
+        .compliance-section h2 {
+            font-size: 22px;
+            margin-bottom: 24px;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         
         .compliance-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 24px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
         }
         
-        .compliance-item {
-            background: var(--aws-panel-bg);
+        .compliance-card {
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--aws-border);
-            border-left: 4px solid var(--aws-green-light);
-            border-radius: var(--aws-radius);
+            border-radius: 12px;
             padding: 24px;
-            transition: all 0.2s ease;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
         }
         
-        .compliance-item:hover {
-            border-left-color: var(--aws-orange);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        .compliance-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--aws-green-light);
+            box-shadow: 0 12px 32px rgba(46, 160, 67, 0.15);
         }
         
         .compliance-badge {
             display: inline-block;
-            padding: 8px 16px;
+            padding: 10px 20px;
             background: var(--aws-green);
-            color: var(--aws-text-primary);
-            border-radius: var(--aws-radius);
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+        
+        .compliance-title {
             font-size: 14px;
             font-weight: 700;
-            margin-bottom: 12px;
+            color: var(--aws-text-primary);
+            margin-bottom: 8px;
         }
         
         .compliance-desc {
-            font-size: 14px;
-            color: var(--aws-text-secondary);
-            line-height: 1.6;
+            font-size: 12px;
+            color: var(--aws-text-tertiary);
+            line-height: 1.5;
+        }
+        
+        /* Resources Grid */
+        .resources-section {
+            background: var(--aws-card-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 16px;
+            padding: 32px;
+        }
+        
+        .resources-section h2 {
+            font-size: 22px;
+            margin-bottom: 24px;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         
         .resources-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            margin-top: 24px;
         }
         
-        .resource-link {
-            display: flex;
-            flex-direction: column;
-            padding: 24px;
+        .resource-card {
             background: var(--aws-panel-bg);
             border: 1px solid var(--aws-border);
-            border-left: 4px solid var(--aws-blue);
-            border-radius: var(--aws-radius);
+            border-radius: 12px;
+            padding: 28px;
             text-decoration: none;
             color: inherit;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
-        .resource-link:hover {
-            border-left-color: var(--aws-orange);
-            transform: translateY(-4px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-            background: var(--aws-card-bg);
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--aws-orange);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .resource-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .resource-card:hover {
+            border-color: var(--aws-orange);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
         }
         
         .resource-icon {
@@ -316,65 +843,130 @@
             font-size: 13px;
             color: var(--aws-text-secondary);
             line-height: 1.5;
+            margin-bottom: 16px;
         }
         
-        /* Section anchor offset for fixed header */
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--aws-orange);
+            font-weight: 600;
+            transition: gap 0.2s ease;
+        }
+        
+        .resource-card:hover .resource-link {
+            gap: 12px;
+        }
+        
+        /* Search Box */
+        .search-box {
+            position: relative;
+            margin-bottom: 32px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 52px;
+            background: var(--aws-panel-bg);
+            border: 1px solid var(--aws-border);
+            border-radius: 12px;
+            font-size: 15px;
+            color: var(--aws-text-primary);
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--aws-orange);
+            box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.15);
+        }
+        
+        .search-input::placeholder {
+            color: var(--aws-text-tertiary);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: var(--aws-text-tertiary);
+        }
+        
+        /* Section anchor offset */
         section[id] {
-            scroll-margin-top: 80px;
+            scroll-margin-top: 100px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .toc-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .goals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .compliance-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .resources-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         
         @media (max-width: 768px) {
-            .toc {
-                gap: 8px;
+            .docs-hero {
+                padding: 40px 24px;
             }
             
-            .toc-link {
-                padding: 10px 12px;
-                font-size: 13px;
+            .docs-hero h1 {
+                font-size: 32px;
             }
             
+            .hero-stats {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .toc-grid,
             .goals-grid,
+            .tech-categories,
             .compliance-grid,
             .resources-grid {
                 grid-template-columns: 1fr;
             }
             
+            .arch-tiers {
+                flex-direction: column;
+            }
+            
+            .arch-connector {
+                width: 2px;
+                height: 30px;
+            }
+            
+            .arch-connector::after {
+                content: '↓';
+            }
+            
+            .arch-features {
+                grid-template-columns: 1fr;
+            }
+            
             .control-row {
                 grid-template-columns: 1fr;
-                gap: 8px;
-            }
-            
-            .control-row.header {
-                display: none;
-            }
-            
-            .control-category {
-                font-weight: 700;
-                color: var(--aws-orange);
-                margin-bottom: 4px;
+                gap: 12px;
             }
             
             .control-status {
                 text-align: left;
-                margin-top: 8px;
-            }
-            
-            .tech-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-            
-            .tech-category {
-                min-width: auto;
-            }
-            
-            .doc-diagram {
-                padding: 16px;
-            }
-            
-            .ascii-diagram {
-                font-size: 10px;
             }
         }
     </style>
@@ -382,10 +974,10 @@
 <body>
 <header class="site-header">
     <div>
-        <div class="logo">
+        <a href="index.html" class="logo">
             <span class="logo-icon">☁</span>
             AWS Student Data Infrastructure
-        </div>
+        </a>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="architecture.html">Architecture</a>
@@ -406,264 +998,524 @@
 </header>
 
 <main class="content">
-    <section class="card">
-        <h1>Project Documentation</h1>
+    <!-- Hero Section -->
+    <section class="docs-hero">
+        <div class="floating-docs" id="floatingDocs"></div>
+        
+        <h1>
+            <span class="icon-pulse">📚</span>
+            Technical Documentation
+        </h1>
         <p>
-            Comprehensive documentation for the AWS Student Data Infrastructure project, including 
-            architecture summary, automation design, security controls, and technical specifications. 
-            This documentation serves as a technical reference for understanding the infrastructure 
-            design decisions and operational procedures.
+            Comprehensive technical reference for the AWS Student Data Infrastructure project. 
+            This documentation covers architecture decisions, security controls, operational procedures, 
+            and compliance requirements — designed for cloud engineers, security teams, and technical reviewers.
         </p>
-    </section>
-
-    <!-- Table of Contents -->
-    <section class="card toc-card">
-        <h2>Table of Contents</h2>
-        <nav class="toc">
-            <a href="#architecture-summary" class="toc-link">Architecture Summary</a>
-            <a href="#design-goals" class="toc-link">Core Design Goals</a>
-            <a href="#security-controls" class="toc-link">Security Controls</a>
-            <a href="#technology-components" class="toc-link">Technology Components</a>
-            <a href="#compliance" class="toc-link">Compliance & Standards</a>
-            <a href="#resources" class="toc-link">Additional Resources</a>
-        </nav>
-    </section>
-
-    <section id="architecture-summary" class="card">
-        <h2>Architecture Summary</h2>
-        <p>The infrastructure implements a production-grade three-tier architecture optimized for security and compliance:</p>
         
-        <ul class="feature-list">
-            <li><strong>Three-tier VPC architecture</strong> with public admin tier, private application tier, and isolated database tier</li>
-            <li><strong>NAT Gateway</strong> for outbound-only internet access from private tiers, enabling software updates and patching</li>
-            <li><strong>RDS PostgreSQL Multi-AZ</strong> with encryption at rest and in transit, deployed in private subnets</li>
-            <li><strong>Security Groups</strong> configured with least privilege and SG-to-SG references (no IP-based rules)</li>
-            <li><strong>CloudTrail</strong> enabled for all regions with log file validation and S3 storage</li>
-            <li><strong>VPC Flow Logs</strong> capturing all accepted and rejected traffic for network visibility</li>
-            <li><strong>VPC Endpoints</strong> for private AWS service access without internet gateway</li>
-        </ul>
-        
-        <div class="doc-diagram">
-            <pre class="ascii-diagram">┌─────────────────────────────────────────────────────────────┐
-│                    VPC: 172.32.0.0/16                       │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ Admin Tier  │  │  App Tier   │  │  DB Tier    │         │
-│  │ (Public)    │→ │ (Private)   │→ │ (Isolated)  │         │
-│  │ 172.32.1.0  │  │ 172.32.10.0 │  │ 172.32.20.0 │         │
-│  │   /24       │  │    /24      │  │    /24      │         │
-│  │             │  │             │  │             │         │
-│  │ [Bastion]   │  │ [App Servers]│ │ [RDS Multi-AZ]│        │
-│  │ [IGW]       │  │ [NAT GW]    │  │ [No IGW]    │         │
-│  └─────────────┘  └─────────────┘  └─────────────┘         │
-│                                                             │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │  Security Layer: CloudTrail + Flow Logs + GuardDuty │   │
-│  └─────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘</pre>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-icon">📄</div>
+                <div class="hero-stat-content">
+                    <span class="hero-stat-value">6</span>
+                    <span class="hero-stat-label">Documentation Sections</span>
+                </div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-icon">🛡️</div>
+                <div class="hero-stat-content">
+                    <span class="hero-stat-value">7</span>
+                    <span class="hero-stat-label">Security Controls</span>
+                </div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-icon">✅</div>
+                <div class="hero-stat-content">
+                    <span class="hero-stat-value">4</span>
+                    <span class="hero-stat-label">Compliance Standards</span>
+                </div>
+            </div>
         </div>
     </section>
-
-    <section id="design-goals" class="card">
-        <h2>Core Design Goals</h2>
-        <p>The architecture was designed with the following primary objectives:</p>
+    
+    <!-- Search Box -->
+    <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="docSearch" placeholder="Search documentation... (e.g., VPC, encryption, IAM)" onkeyup="filterSections()">
+    </div>
+    
+    <!-- Interactive TOC -->
+    <section class="toc-spectacular">
+        <div class="toc-header">
+            <h2>
+                <span>📑</span>
+                Quick Navigation
+            </h2>
+            <span class="toc-badge">Jump to Section</span>
+        </div>
+        
+        <div class="toc-grid">
+            <a href="#architecture-summary" class="toc-item">
+                <div class="toc-item-header">
+                    <span class="toc-item-icon">🏗️</span>
+                    <span class="toc-item-number">01</span>
+                </div>
+                <div class="toc-item-title">Architecture Summary</div>
+                <div class="toc-item-desc">Three-tier VPC design with network isolation</div>
+            </a>
+            
+            <a href="#design-goals" class="toc-item">
+                <div class="toc-item-header">
+                    <span class="toc-item-icon">🎯</span>
+                    <span class="toc-item-number">02</span>
+                </div>
+                <div class="toc-item-title">Design Goals</div>
+                <div class="toc-item-desc">Core objectives and architectural principles</div>
+            </a>
+            
+            <a href="#security-controls" class="toc-item">
+                <div class="toc-item-header">
+                    <span class="toc-item-icon">🛡️</span>
+                    <span class="toc-item-number">03</span>
+                </div>
+                <div class="toc-item-title">Security Controls</div>
+                <div class="toc-item-desc">Defense-in-depth implementation details</div>
+            </a>
+            
+            <a href="#technology-stack" class="toc-item">
+                <div class="toc-item-header">
+                    <span class="toc-item-icon">⚙️</span>
+                    <span class="toc-item-number">04</span>
+                </div>
+                <div class="toc-item-title">Technology Stack</div>
+                <div class="toc-item-desc">AWS services and automation tools</div>
+            </a>
+            
+            <a href="#compliance" class="toc-item">
+                <div class="toc-item-header">
+                    <span class="toc-item-icon">✅</span>
+                    <span class="toc-item-number">05</span>
+                </div>
+                <div class="toc-item-title">Compliance</div>
+                <div class="toc-item-desc">FERPA, CIS, and regulatory alignment</div>
+            </a>
+            
+            <a href="#resources" class="toc-item">
+                <div class="toc-item-header">
+                    <span class="toc-item-icon">🔗</span>
+                    <span class="toc-item-number">06</span>
+                </div>
+                <div class="toc-item-title">Resources</div>
+                <div class="toc-item-desc">Interactive tools and additional materials</div>
+            </a>
+        </div>
+    </section>
+    
+    <!-- Architecture Summary -->
+    <section id="architecture-summary" class="arch-section doc-section">
+        <div class="section-header">
+            <h2>
+                <span>🏗️</span>
+                Architecture Summary
+            </h2>
+            <span class="section-badge">Production Ready</span>
+        </div>
+        
+        <p>The infrastructure implements a production-grade three-tier architecture optimized for security, compliance, and high availability.</p>
+        
+        <div class="arch-visual">
+            <div class="arch-tiers">
+                <div class="arch-tier public">
+                    <div class="arch-tier-icon">🌐</div>
+                    <div class="arch-tier-name">Public Tier</div>
+                    <div class="arch-tier-cidr">172.32.1.0/24</div>
+                    <div class="arch-tier-desc">NAT Gateway, Bastion Host, IGW Attached</div>
+                </div>
+                
+                <div class="arch-connector"></div>
+                
+                <div class="arch-tier private">
+                    <div class="arch-tier-icon">⚙️</div>
+                    <div class="arch-tier-name">Application Tier</div>
+                    <div class="arch-tier-cidr">172.32.10.0/24</div>
+                    <div class="arch-tier-desc">ECS Fargate, Lambda, ALB</div>
+                </div>
+                
+                <div class="arch-connector"></div>
+                
+                <div class="arch-tier isolated">
+                    <div class="arch-tier-icon">🗄️</div>
+                    <div class="arch-tier-name">Database Tier</div>
+                    <div class="arch-tier-cidr">172.32.20.0/24</div>
+                    <div class="arch-tier-desc">RDS PostgreSQL, No Internet</div>
+                </div>
+                
+                <div class="arch-connector"></div>
+                
+                <div class="arch-tier security">
+                    <div class="arch-tier-icon">🛡️</div>
+                    <div class="arch-tier-name">Security Layer</div>
+                    <div class="arch-tier-cidr">Cross-VPC</div>
+                    <div class="arch-tier-desc">CloudTrail, GuardDuty, KMS</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="arch-features">
+            <div class="arch-feature">
+                <span class="arch-feature-icon">🔒</span>
+                <div class="arch-feature-text">
+                    <strong>Network Isolation</strong>
+                    Database tier has no internet gateway route; access only via app tier security groups
+                </div>
+            </div>
+            <div class="arch-feature">
+                <span class="arch-feature-icon">🔐</span>
+                <div class="arch-feature-text">
+                    <strong>Encryption Everywhere</strong>
+                    Customer-managed KMS keys for all data with automatic rotation
+                </div>
+            </div>
+            <div class="arch-feature">
+                <span class="arch-feature-icon">📊</span>
+                <div class="arch-feature-text">
+                    <strong>Complete Visibility</strong>
+                    CloudTrail, VPC Flow Logs, and GuardDuty for comprehensive monitoring
+                </div>
+            </div>
+            <div class="arch-feature">
+                <span class="arch-feature-icon">🌐</span>
+                <div class="arch-feature-text">
+                    <strong>Multi-AZ Deployment</strong>
+                    Spans us-east-1a and us-east-1b for high availability
+                </div>
+            </div>
+            <div class="arch-feature">
+                <span class="arch-feature-icon">🔗</span>
+                <div class="arch-feature-text">
+                    <strong>VPC Endpoints</strong>
+                    Private access to S3, KMS, and CloudWatch without internet transit
+                </div>
+            </div>
+            <div class="arch-feature">
+                <span class="arch-feature-icon">⚡</span>
+                <div class="arch-feature-text">
+                    <strong>NAT Gateway</strong>
+                    Secure outbound-only access for patching and updates
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Design Goals -->
+    <section id="design-goals" class="goals-section doc-section">
+        <h2>
+            <span>🎯</span>
+            Core Design Goals
+        </h2>
         
         <div class="goals-grid">
             <div class="goal-card">
                 <div class="goal-icon">🔐</div>
                 <div class="goal-title">FERPA Alignment</div>
-                <div class="goal-desc">Maintain data isolation and access controls aligned with educational privacy requirements and Family Educational Rights and Privacy Act compliance</div>
+                <div class="goal-desc">Maintain data isolation and access controls aligned with educational privacy requirements and Family Educational Rights and Privacy Act compliance.</div>
             </div>
+            
             <div class="goal-card">
                 <div class="goal-icon">🛡️</div>
                 <div class="goal-title">Zero Public Exposure</div>
-                <div class="goal-desc">Eliminate all public attack surfaces through network segmentation and private subnet deployment for sensitive resources</div>
+                <div class="goal-desc">Eliminate all public attack surfaces through network segmentation and private subnet deployment for sensitive resources.</div>
             </div>
+            
             <div class="goal-card">
                 <div class="goal-icon">👤</div>
                 <div class="goal-title">Least Privilege</div>
-                <div class="goal-desc">Enforce IAM least privilege access, multi-factor authentication requirements, and role-based access control</div>
+                <div class="goal-desc">Enforce IAM least privilege access, multi-factor authentication requirements, and role-based access control throughout.</div>
             </div>
+            
             <div class="goal-card">
                 <div class="goal-icon">📊</div>
                 <div class="goal-title">Full Auditability</div>
-                <div class="goal-desc">Ensure complete audit trail via CloudTrail, VPC Flow Logs, and GuardDuty for compliance and security monitoring</div>
+                <div class="goal-desc">Ensure complete audit trail via CloudTrail, VPC Flow Logs, and GuardDuty for compliance and security monitoring.</div>
             </div>
+            
             <div class="goal-card">
                 <div class="goal-icon">🏗️</div>
                 <div class="goal-title">Defense-in-Depth</div>
-                <div class="goal-desc">Implement multiple security layers at each tier including network, application, and data protection controls</div>
+                <div class="goal-desc">Implement multiple security layers at each tier including network, application, and data protection controls.</div>
             </div>
+            
             <div class="goal-card">
                 <div class="goal-icon">🔄</div>
                 <div class="goal-title">High Availability</div>
-                <div class="goal-desc">Enable multi-AZ deployment with automated failover for business continuity and disaster recovery</div>
+                <div class="goal-desc">Enable multi-AZ deployment with automated failover for business continuity and disaster recovery.</div>
             </div>
         </div>
     </section>
-
-    <section id="security-controls" class="card">
-        <h2>Security Controls</h2>
+    
+    <!-- Security Controls -->
+    <section id="security-controls" class="controls-section doc-section">
+        <h2>
+            <span>🛡️</span>
+            Security Controls
+        </h2>
         <p>Comprehensive security controls implemented across all infrastructure layers:</p>
         
-        <div class="controls-table">
-            <div class="control-row header">
-                <div class="control-category">Control</div>
-                <div class="control-implementation">Implementation</div>
-                <div class="control-status">Status</div>
-            </div>
+        <div class="controls-grid">
             <div class="control-row">
-                <div class="control-category">Network Isolation</div>
-                <div class="control-implementation">Database tier has no internet gateway route; access only via application tier security groups</div>
-                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+                <div class="control-name">
+                    <div class="control-icon">🌐</div>
+                    <span class="control-label">Network Isolation</span>
+                </div>
+                <div class="control-desc">Database tier has no internet gateway route; access only via application tier security groups</div>
+                <div class="control-status">
+                    <span class="status-active"><span class="status-dot"></span> Active</span>
+                </div>
             </div>
+            
             <div class="control-row">
-                <div class="control-category">Encryption at Rest</div>
-                <div class="control-implementation">Customer-managed KMS keys for all data (RDS, S3, EBS volumes) with automatic key rotation</div>
-                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+                <div class="control-name">
+                    <div class="control-icon">🔐</div>
+                    <span class="control-label">Encryption at Rest</span>
+                </div>
+                <div class="control-desc">Customer-managed KMS keys for all data (RDS, S3, EBS volumes) with automatic key rotation</div>
+                <div class="control-status">
+                    <span class="status-active"><span class="status-dot"></span> Active</span>
+                </div>
             </div>
+            
             <div class="control-row">
-                <div class="control-category">Encryption in Transit</div>
-                <div class="control-implementation">TLS 1.2+ for all data transmission; RDS SSL connections required</div>
-                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+                <div class="control-name">
+                    <div class="control-icon">🔒</div>
+                    <span class="control-label">Encryption in Transit</span>
+                </div>
+                <div class="control-desc">TLS 1.2+ for all data transmission; RDS SSL connections required</div>
+                <div class="control-status">
+                    <span class="status-active"><span class="status-dot"></span> Active</span>
+                </div>
             </div>
+            
             <div class="control-row">
-                <div class="control-category">Access Control</div>
-                <div class="control-implementation">Tag-based S3 access policies, IAM conditions, and security group rules with least privilege</div>
-                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+                <div class="control-name">
+                    <div class="control-icon">👤</div>
+                    <span class="control-label">Access Control</span>
+                </div>
+                <div class="control-desc">Tag-based S3 access policies, IAM conditions, and security group rules with least privilege</div>
+                <div class="control-status">
+                    <span class="status-active"><span class="status-dot"></span> Active</span>
+                </div>
             </div>
+            
             <div class="control-row">
-                <div class="control-category">Threat Detection</div>
-                <div class="control-implementation">GuardDuty threat detection, CloudWatch alarms, and automated response workflows</div>
-                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+                <div class="control-name">
+                    <div class="control-icon">🔍</div>
+                    <span class="control-label">Threat Detection</span>
+                </div>
+                <div class="control-desc">GuardDuty threat detection, CloudWatch alarms, and automated response workflows</div>
+                <div class="control-status">
+                    <span class="status-active"><span class="status-dot"></span> Active</span>
+                </div>
             </div>
+            
             <div class="control-row">
-                <div class="control-category">Audit Logging</div>
-                <div class="control-implementation">Complete audit trail of all API calls (CloudTrail), network traffic (Flow Logs), and security events</div>
-                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+                <div class="control-name">
+                    <div class="control-icon">📋</div>
+                    <span class="control-label">Audit Logging</span>
+                </div>
+                <div class="control-desc">Complete audit trail of all API calls (CloudTrail), network traffic (Flow Logs), and security events</div>
+                <div class="control-status">
+                    <span class="status-active"><span class="status-dot"></span> Active</span>
+                </div>
             </div>
+            
             <div class="control-row">
-                <div class="control-category">Backup & Recovery</div>
-                <div class="control-implementation">Automated RDS backups with 7-day retention, S3 versioning, and cross-region replication</div>
-                <div class="control-status"><span class="status-badge success">✓ Active</span></div>
+                <div class="control-name">
+                    <div class="control-icon">💾</div>
+                    <span class="control-label">Backup & Recovery</span>
+                </div>
+                <div class="control-desc">Automated RDS backups with 7-day retention, S3 versioning, and cross-region replication</div>
+                <div class="control-status">
+                    <span class="status-active"><span class="status-dot"></span> Active</span>
+                </div>
             </div>
         </div>
     </section>
-
-    <section id="technology-components" class="card">
-        <h2>Technology Components</h2>
-        <p>Core AWS services and technologies used in the infrastructure:</p>
+    
+    <!-- Technology Stack -->
+    <section id="technology-stack" class="tech-section doc-section">
+        <h2>
+            <span>⚙️</span>
+            Technology Stack
+        </h2>
+        <p>Core AWS services and technologies powering the infrastructure:</p>
         
-        <div class="tech-table">
-            <div class="tech-row">
-                <div class="tech-category">
-                    <span class="tech-icon">🌐</span>
-                    Networking
+        <div class="tech-categories">
+            <div class="tech-category">
+                <div class="tech-category-header">
+                    <div class="tech-category-icon">🌐</div>
+                    <span class="tech-category-name">Networking</span>
                 </div>
-                <div class="tech-items">AWS VPC, Security Groups, NACLs, NAT Gateway, Internet Gateway, VPC Endpoints (S3, KMS, CloudWatch Logs)</div>
+                <div class="tech-items">
+                    <span class="tech-item">AWS VPC</span>
+                    <span class="tech-item">Security Groups</span>
+                    <span class="tech-item">NACLs</span>
+                    <span class="tech-item">NAT Gateway</span>
+                    <span class="tech-item">Internet Gateway</span>
+                    <span class="tech-item">VPC Endpoints</span>
+                </div>
             </div>
-            <div class="tech-row">
-                <div class="tech-category">
-                    <span class="tech-icon">⚙️</span>
-                    Compute
+            
+            <div class="tech-category">
+                <div class="tech-category-header">
+                    <div class="tech-category-icon">⚙️</div>
+                    <span class="tech-category-name">Compute</span>
                 </div>
-                <div class="tech-items">EC2 instances, ECS Fargate for containerized workloads, Lambda for serverless functions, Application Load Balancer for traffic distribution</div>
+                <div class="tech-items">
+                    <span class="tech-item">EC2</span>
+                    <span class="tech-item">ECS Fargate</span>
+                    <span class="tech-item">Lambda</span>
+                    <span class="tech-item">ALB</span>
+                </div>
             </div>
-            <div class="tech-row">
-                <div class="tech-category">
-                    <span class="tech-icon">🗄️</span>
-                    Database
+            
+            <div class="tech-category">
+                <div class="tech-category-header">
+                    <div class="tech-category-icon">🗄️</div>
+                    <span class="tech-category-name">Database & Storage</span>
                 </div>
-                <div class="tech-items">RDS PostgreSQL Multi-AZ with automated backups, read replicas, and encryption at rest and in transit</div>
+                <div class="tech-items">
+                    <span class="tech-item">RDS PostgreSQL</span>
+                    <span class="tech-item">Multi-AZ</span>
+                    <span class="tech-item">S3</span>
+                    <span class="tech-item">EBS</span>
+                </div>
             </div>
-            <div class="tech-row">
-                <div class="tech-category">
-                    <span class="tech-icon">📦</span>
-                    Storage
+            
+            <div class="tech-category">
+                <div class="tech-category-header">
+                    <div class="tech-category-icon">🔐</div>
+                    <span class="tech-category-name">Security</span>
                 </div>
-                <div class="tech-items">S3 with SSE-KMS encryption, versioning, lifecycle policies, and Block Public Access enabled</div>
+                <div class="tech-items">
+                    <span class="tech-item">IAM</span>
+                    <span class="tech-item">KMS</span>
+                    <span class="tech-item">CloudTrail</span>
+                    <span class="tech-item">GuardDuty</span>
+                    <span class="tech-item">AWS WAF</span>
+                </div>
             </div>
-            <div class="tech-row">
-                <div class="tech-category">
-                    <span class="tech-icon">🔐</span>
-                    Security
+            
+            <div class="tech-category">
+                <div class="tech-category-header">
+                    <div class="tech-category-icon">📊</div>
+                    <span class="tech-category-name">Monitoring</span>
                 </div>
-                <div class="tech-items">IAM with MFA enforcement, KMS for key management, CloudTrail for audit logging, GuardDuty for threat detection, AWS WAF for application protection</div>
+                <div class="tech-items">
+                    <span class="tech-item">CloudWatch</span>
+                    <span class="tech-item">VPC Flow Logs</span>
+                    <span class="tech-item">CloudWatch Logs</span>
+                    <span class="tech-item">SNS Alerts</span>
+                </div>
             </div>
-            <div class="tech-row">
-                <div class="tech-category">
-                    <span class="tech-icon">📊</span>
-                    Monitoring
+            
+            <div class="tech-category">
+                <div class="tech-category-header">
+                    <div class="tech-category-icon">🤖</div>
+                    <span class="tech-category-name">Automation</span>
                 </div>
-                <div class="tech-items">CloudWatch for metrics and alarms, VPC Flow Logs for network visibility, CloudTrail for API logging, CloudWatch Logs for application logs</div>
-            </div>
-            <div class="tech-row">
-                <div class="tech-category">
-                    <span class="tech-icon">🤖</span>
-                    Automation
+                <div class="tech-items">
+                    <span class="tech-item">Python 3.11</span>
+                    <span class="tech-item">Boto3 SDK</span>
+                    <span class="tech-item">AWS CLI</span>
+                    <span class="tech-item">Custom Scripts</span>
                 </div>
-                <div class="tech-items">Python 3.11 with Boto3 SDK, AWS CLI, and custom provisioning scripts for IAM and resource management</div>
             </div>
         </div>
     </section>
-
-    <section id="compliance" class="card">
-        <h2>Compliance & Standards</h2>
+    
+    <!-- Compliance -->
+    <section id="compliance" class="compliance-section doc-section">
+        <h2>
+            <span>✅</span>
+            Compliance & Standards
+        </h2>
         <p>The infrastructure aligns with industry standards and regulatory requirements:</p>
         
         <div class="compliance-grid">
-            <div class="compliance-item">
+            <div class="compliance-card">
                 <div class="compliance-badge">FERPA</div>
-                <div class="compliance-desc">Family Educational Rights and Privacy Act alignment for student data protection, ensuring proper access controls, encryption, and audit trails for educational records</div>
+                <div class="compliance-title">Educational Privacy</div>
+                <div class="compliance-desc">Family Educational Rights and Privacy Act alignment for student data protection with proper access controls and audit trails.</div>
             </div>
-            <div class="compliance-item">
+            
+            <div class="compliance-card">
                 <div class="compliance-badge">CIS</div>
-                <div class="compliance-desc">Center for Internet Security AWS Foundations Benchmark compliance, following security best practices for cloud infrastructure configuration</div>
+                <div class="compliance-title">AWS Foundations</div>
+                <div class="compliance-desc">Center for Internet Security AWS Foundations Benchmark compliance for cloud infrastructure configuration.</div>
             </div>
-            <div class="compliance-item">
-                <div class="compliance-badge">Well-Architected</div>
-                <div class="compliance-desc">AWS Well-Architected Framework security pillar best practices, including encryption, access control, and monitoring requirements</div>
+            
+            <div class="compliance-card">
+                <div class="compliance-badge">WAF</div>
+                <div class="compliance-title">Well-Architected</div>
+                <div class="compliance-desc">AWS Well-Architected Framework security pillar best practices including encryption and monitoring.</div>
             </div>
-            <div class="compliance-item">
+            
+            <div class="compliance-card">
                 <div class="compliance-badge">SOC 2</div>
-                <div class="compliance-desc">Security controls aligned with SOC 2 Type II requirements for data security, availability, and confidentiality</div>
+                <div class="compliance-title">Security Controls</div>
+                <div class="compliance-desc">Aligned with SOC 2 Type II requirements for data security, availability, and confidentiality.</div>
             </div>
         </div>
     </section>
-
-    <section id="resources" class="card">
-        <h2>Additional Resources</h2>
+    
+    <!-- Resources -->
+    <section id="resources" class="resources-section doc-section">
+        <h2>
+            <span>🔗</span>
+            Additional Resources
+        </h2>
         <p>Explore related documentation and interactive tools:</p>
         
         <div class="resources-grid">
-            <a href="architecture.html" class="resource-link">
-                <span class="resource-icon">🏗️</span>
-                <span class="resource-title">Detailed Architecture</span>
-                <span class="resource-desc">In-depth architecture documentation with network diagrams and component details</span>
+            <a href="architecture.html" class="resource-card">
+                <div class="resource-icon">🏗️</div>
+                <div class="resource-title">Detailed Architecture</div>
+                <div class="resource-desc">In-depth architecture documentation with animated network diagrams and component details.</div>
+                <span class="resource-link">Explore Architecture <span>→</span></span>
             </a>
-            <a href="interactive-diagram.html" class="resource-link">
-                <span class="resource-icon">🗺️</span>
-                <span class="resource-title">Interactive Diagram</span>
-                <span class="resource-desc">Explore the VPC architecture visually with clickable components</span>
+            
+            <a href="interactive-diagram.html" class="resource-card">
+                <div class="resource-icon">🗺️</div>
+                <div class="resource-title">Interactive Diagram</div>
+                <div class="resource-desc">Explore the VPC architecture visually with clickable components and live traffic simulation.</div>
+                <span class="resource-link">Launch Diagram <span>→</span></span>
             </a>
-            <a href="automation.html" class="resource-link">
-                <span class="resource-icon">⚙️</span>
-                <span class="resource-title">IAM Automation</span>
-                <span class="resource-desc">Learn about the automated provisioning workflow and Python implementation</span>
+            
+            <a href="automation.html" class="resource-card">
+                <div class="resource-icon">⚙️</div>
+                <div class="resource-title">IAM Automation</div>
+                <div class="resource-desc">Learn about the automated provisioning workflow and Python Boto3 implementation.</div>
+                <span class="resource-link">View Automation <span>→</span></span>
             </a>
-            <a href="security-simulator.html" class="resource-link">
-                <span class="resource-icon">🛡️</span>
-                <span class="resource-title">Security Simulator</span>
-                <span class="resource-desc">Test and understand how security controls defend against common attack vectors</span>
+            
+            <a href="security-simulator.html" class="resource-card">
+                <div class="resource-icon">🛡️</div>
+                <div class="resource-title">Security Simulator</div>
+                <div class="resource-desc">Test and understand how security controls defend against common attack vectors.</div>
+                <span class="resource-link">Launch Simulator <span>→</span></span>
             </a>
-            <a href="cost-calculator.html" class="resource-link">
-                <span class="resource-icon">💰</span>
-                <span class="resource-title">Cost Calculator</span>
-                <span class="resource-desc">Estimate infrastructure costs and understand cost optimization strategies</span>
+            
+            <a href="cost-calculator.html" class="resource-card">
+                <div class="resource-icon">💰</div>
+                <div class="resource-title">Cost Calculator</div>
+                <div class="resource-desc">Estimate infrastructure costs with real AWS pricing and ROI analysis.</div>
+                <span class="resource-link">Calculate Costs <span>→</span></span>
             </a>
-            <a href="review.html" class="resource-link">
-                <span class="resource-icon">📋</span>
-                <span class="resource-title">Project Review</span>
-                <span class="resource-desc">View evaluation results and technical achievements</span>
+            
+            <a href="review.html" class="resource-card">
+                <div class="resource-icon">📋</div>
+                <div class="resource-title">Project Review</div>
+                <div class="resource-desc">View evaluation results, technical achievements, and skills demonstrated.</div>
+                <span class="resource-link">View Review <span>→</span></span>
             </a>
         </div>
     </section>
@@ -671,7 +1523,7 @@
 
 <footer class="site-footer">
     <div class="footer-content">
-        <p>Documentation • AWS Student Data Infrastructure • 2025</p>
+        <p>Technical Documentation • AWS Student Data Infrastructure • 2025</p>
         <p class="footer-links">
             <a href="https://github.com/mjkhan9/aws-student-data-infrastructure" target="_blank" rel="noopener noreferrer">
                 View on GitHub
@@ -681,28 +1533,32 @@
 </footer>
 
 <script>
-// Mobile menu toggle
-document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
-    document.querySelector('.nav-links').classList.toggle('mobile-open');
-    this.classList.toggle('active');
-});
+// ============================================
+// SPECTACULAR DOCUMENTATION PAGE
+// ============================================
 
-// Close mobile menu when clicking a link
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-        document.querySelector('.nav-links').classList.remove('mobile-open');
-        document.querySelector('.mobile-menu-toggle')?.classList.remove('active');
-    });
-});
+// Floating documents animation
+const floatingContainer = document.getElementById('floatingDocs');
+const docIcons = ['📄', '📑', '📋', '📝', '📊', '🔐', '🛡️', '⚙️'];
+
+for (let i = 0; i < 15; i++) {
+    const doc = document.createElement('div');
+    doc.className = 'floating-doc';
+    doc.textContent = docIcons[Math.floor(Math.random() * docIcons.length)];
+    doc.style.left = `${Math.random() * 100}%`;
+    doc.style.animationDelay = `${Math.random() * 20}s`;
+    doc.style.animationDuration = `${15 + Math.random() * 10}s`;
+    floatingContainer.appendChild(doc);
+}
 
 // Smooth scroll for TOC links
-document.querySelectorAll('.toc-link').forEach(link => {
+document.querySelectorAll('.toc-item').forEach(link => {
     link.addEventListener('click', function(e) {
         e.preventDefault();
         const targetId = this.getAttribute('href').substring(1);
         const targetElement = document.getElementById(targetId);
         if (targetElement) {
-            const headerOffset = 80;
+            const headerOffset = 100;
             const elementPosition = targetElement.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
             
@@ -710,8 +1566,99 @@ document.querySelectorAll('.toc-link').forEach(link => {
                 top: offsetPosition,
                 behavior: 'smooth'
             });
+            
+            // Highlight the section briefly
+            targetElement.style.transition = 'box-shadow 0.3s ease';
+            targetElement.style.boxShadow = '0 0 0 3px rgba(255, 153, 0, 0.3)';
+            setTimeout(() => {
+                targetElement.style.boxShadow = '';
+            }, 1500);
         }
     });
+});
+
+// Search functionality
+function filterSections() {
+    const searchTerm = document.getElementById('docSearch').value.toLowerCase();
+    const sections = document.querySelectorAll('.doc-section');
+    
+    sections.forEach(section => {
+        const text = section.textContent.toLowerCase();
+        if (searchTerm === '' || text.includes(searchTerm)) {
+            section.style.display = 'block';
+            section.style.opacity = '1';
+            
+            // Highlight matching terms
+            if (searchTerm !== '') {
+                section.style.boxShadow = '0 0 0 2px rgba(255, 153, 0, 0.2)';
+            } else {
+                section.style.boxShadow = '';
+            }
+        } else {
+            section.style.opacity = '0.3';
+        }
+    });
+}
+
+// Intersection observer for scroll animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+// Apply initial styles and observe
+document.querySelectorAll('.doc-section, .toc-spectacular').forEach((section, index) => {
+    section.style.opacity = '0';
+    section.style.transform = 'translateY(20px)';
+    section.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    observer.observe(section);
+});
+
+// Trigger animations on load
+window.addEventListener('load', () => {
+    document.querySelectorAll('.doc-section, .toc-spectacular').forEach(section => {
+        section.style.opacity = '1';
+        section.style.transform = 'translateY(0)';
+    });
+});
+
+// Mobile menu
+document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('mobile-open');
+    this.classList.toggle('active');
+});
+
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.remove('mobile-open');
+        document.querySelector('.mobile-menu-toggle')?.classList.remove('active');
+    });
+});
+
+// Keyboard navigation for search
+document.getElementById('docSearch').addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        this.value = '';
+        filterSections();
+        this.blur();
+    }
+});
+
+// Add keyboard shortcut for search (Ctrl/Cmd + K)
+document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        document.getElementById('docSearch').focus();
+    }
 });
 </script>
 </body>
