@@ -1,177 +1,96 @@
 # AWS Student Data Infrastructure
 
-**Secure Three-Tier Cloud Architecture for Academic Data Systems**
+**Production-grade cloud architecture for secure academic data systems**
+
+[![Terraform](https://img.shields.io/badge/Terraform-1.0+-623CE4?logo=terraform)](https://www.terraform.io/)
+[![AWS](https://img.shields.io/badge/AWS-VPC%20|%20IAM%20|%20RDS-FF9900?logo=amazon-aws)](https://aws.amazon.com/)
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-Educational-blue)](#)
 
 ---
 
-**Author:** Mohammad Khan  
-**Institution:** University of Houston  
-**Date:** December 2025
+## Overview
+
+This repository contains **Infrastructure as Code (IaC)** and **automation scripts** for deploying a secure, FERPA-aligned AWS environment for student data systems.
+
+### What's Inside
+
+| Directory | Contents | Purpose |
+|-----------|----------|---------|
+| [`/infrastructure`](./infrastructure) | Terraform configurations | Deploy 3-tier VPC with security controls |
+| [`/scripts`](./scripts) | Python/Boto3 automation | IAM provisioning, security auditing |
+| [`/docs`](./docs) | Interactive documentation | Architecture visualizations, demos |
 
 ---
 
-## 📋 Project Overview
-
-This project demonstrates a production-ready AWS cloud architecture designed to securely manage sensitive student information systems. The implementation showcases enterprise-grade security controls, network isolation, automated IAM provisioning, and comprehensive audit logging—all aligned with FERPA compliance requirements.
-
-### Project Objectives
-
-- Design a **three-tier VPC architecture** with complete network segmentation
-- Implement **defense-in-depth security controls** for student data protection
-- Develop **automated IAM provisioning** to reduce manual errors and improve efficiency
-- Create **comprehensive documentation** suitable for academic and professional review
-- Build an **interactive web presentation** demonstrating technical concepts
-
----
-
-## 🏗️ Architecture Overview
+## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           AWS CLOUD (VPC: 172.32.0.0/16)                │
-├─────────────────────────────────────────────────────────────────────────┤
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │  PUBLIC TIER (Admin/Bastion)                                     │   │
-│  │  • Internet Gateway                                              │   │
-│  │  • Bastion Host for secure admin access                          │   │
-│  │  • NAT Gateway for outbound traffic                              │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-│                                    │                                     │
-│                                    ▼                                     │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │  PRIVATE TIER (Application)                                      │   │
-│  │  • ECS Fargate containers                                        │   │
-│  │  • Application APIs and services                                 │   │
-│  │  • No direct internet access                                     │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-│                                    │                                     │
-│                                    ▼                                     │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │  DATABASE TIER (Isolated)                                        │   │
-│  │  • Amazon RDS PostgreSQL (Multi-AZ)                              │   │
-│  │  • KMS encryption at rest                                        │   │
-│  │  • No internet routing                                           │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-├─────────────────────────────────────────────────────────────────────────┤
-│  SECURITY & MONITORING                                                  │
-│  • CloudTrail (audit logging) • VPC Flow Logs • GuardDuty • AWS KMS    │
-└─────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│                     VPC: 172.32.0.0/16 (Multi-AZ)                        │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌────────────────┐   ┌────────────────┐   ┌────────────────┐           │
+│  │  PUBLIC TIER   │   │   APP TIER     │   │   DB TIER      │           │
+│  │  ────────────  │   │  ────────────  │   │  ────────────  │           │
+│  │  • NAT Gateway │──▶│  • ECS Fargate │──▶│  • RDS (Multi- │           │
+│  │  • Bastion     │   │  • Lambda      │   │    AZ)         │           │
+│  │  • ALB         │   │  • APIs        │   │  • KMS Encrypt │           │
+│  │                │   │                │   │  • NO INTERNET │           │
+│  │  IGW Attached  │   │  NAT Outbound  │   │  ISOLATED      │           │
+│  └────────────────┘   └────────────────┘   └────────────────┘           │
+│         │                    │                    │                      │
+│         ▼                    ▼                    ▼                      │
+│  ┌─────────────────────────────────────────────────────────────┐        │
+│  │          Security & Audit Layer                              │        │
+│  │  CloudTrail • VPC Flow Logs • GuardDuty • CloudWatch • KMS  │        │
+│  └─────────────────────────────────────────────────────────────┘        │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
----
-
-## 🔐 Security Features
-
-| Security Control | Implementation |
-|------------------|----------------|
-| **Network Isolation** | Three-tier VPC with private subnets, no public DB access |
-| **Encryption at Rest** | AWS KMS customer-managed keys for RDS and S3 |
-| **Encryption in Transit** | TLS 1.2+ enforced on all connections |
-| **Access Control** | Security group chaining (SG-to-SG references) |
-| **Audit Logging** | CloudTrail with integrity validation |
-| **Threat Detection** | GuardDuty integration for anomaly detection |
-| **Least Privilege** | Role-based IAM with automated provisioning |
-
----
-
-## 🚀 Key Features
-
-### 1. Three-Tier VPC Architecture
-- Complete network segmentation across availability zones
-- Database tier isolated with no internet routing
-- Security groups configured with explicit allow rules only
-
-### 2. IAM Automation
-- Python-based provisioning script reducing setup time by **67%**
-- Zero configuration errors across test executions
-- Tag-based access control for FERPA compliance
-- Comprehensive audit trail for all operations
-
-### 3. Interactive Documentation
-- Live web presentation hosted on GitHub Pages
-- Interactive network diagrams
-- Security attack simulator demonstrating defense mechanisms
-- Cost calculator with ROI analysis
-
----
-
-## 📁 Repository Structure
+### Security Group Chain
 
 ```
-aws-student-data-infrastructure/
-│
-├── index.html                    # Landing page / project overview
-├── architecture.html             # Network architecture deep dive
-├── automation.html               # IAM automation explanation
-├── cost-calculator.html          # Cost & ROI calculator
-├── docs.html                     # Technical documentation
-├── interactive-diagram.html      # Interactive network diagram
-├── live-demo.html                # Live IAM automation demo
-├── review.html                   # Faculty review results
-├── security-simulator.html       # Security attack simulator
-├── style.css                     # Shared stylesheet
-│
-├── scripts/
-│   └── iam_provisioner.py        # IAM automation script
-│
-├── docs/
-│   ├── architecture_summary.md   # Architecture documentation
-│   └── faculty_review_report.md  # Faculty evaluation report
-│
-├── demo-output/
-│   ├── execution_output.txt      # Sample automation output
-│   └── website_output_preview.txt
-│
-├── .gitignore
-├── .nojekyll                     # GitHub Pages configuration
-└── README.md
+Internet ──[443]──▶ ALB-SG ──[443]──▶ APP-SG ──[5432]──▶ DB-SG
+                      │
+   Corporate IPs ──[22]──▶ Bastion-SG
 ```
 
----
-
-## 🛠️ Technology Stack
-
-| Category | Technologies |
-|----------|--------------|
-| **Cloud Platform** | Amazon Web Services (AWS) |
-| **Networking** | VPC, Subnets, NAT Gateway, Internet Gateway |
-| **Compute** | ECS Fargate |
-| **Database** | Amazon RDS PostgreSQL (Multi-AZ) |
-| **Security** | IAM, KMS, Security Groups, NACLs |
-| **Monitoring** | CloudTrail, VPC Flow Logs, GuardDuty |
-| **Automation** | Python 3.11, Boto3 |
-| **Documentation** | HTML5, CSS3, JavaScript |
+No skip-level access. Database tier is **completely isolated** from the internet.
 
 ---
 
-## 💻 Running the IAM Provisioner
+## Quick Start
 
-### Prerequisites
-- Python 3.8+
-- AWS credentials configured (optional - runs in demo mode without credentials)
-
-### Installation
+### 1. Deploy Infrastructure (Terraform)
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd aws-student-data-infrastructure
+cd infrastructure
 
-# Install dependencies (optional, for AWS integration)
-pip install boto3
-
-# Run the provisioning script
-python scripts/iam_provisioner.py
+# Initialize and deploy
+terraform init
+terraform plan
+terraform apply
 ```
 
-### Demo Mode Output
+See [`/infrastructure/README.md`](./infrastructure/README.md) for configuration options.
 
-The script runs in demo mode by default, simulating IAM provisioning:
+### 2. Run IAM Automation (Python)
 
+```bash
+cd scripts
+
+# Install dependencies
+pip install boto3
+
+# Run provisioning (demo mode by default)
+python iam_provisioner.py
+```
+
+Output:
 ```
 === IAM Provisioning System (Enhanced Version) ===
 [INFO] Validating IAM group 'StudentDataRestrictedAccess'...
-[INFO] [DEMO] Group 'StudentDataRestrictedAccess' verified.
 [INFO] Provisioning user: registrar_office_analyst
 [INFO] [DEMO] Provisioned user 'registrar_office_analyst' with least-privilege access.
 ...
@@ -180,61 +99,117 @@ Provisioning Summary
 ============================================================
 Total users: 5
 Successful: 5
-Failed: 0
 Execution time: 0.25 seconds
 Efficiency gain: 40% faster than manual IAM onboarding.
-Compliance: 100% least-privilege enforcement.
+```
+
+### 3. View Documentation
+
+Open [`/docs/index.html`](./docs/index.html) in a browser, or visit the live site:
+
+**[📊 Live Demo & Documentation](https://mjkhan9.github.io/aws-student-data-infrastructure/)**
+
+---
+
+## Key Features
+
+### Infrastructure (Terraform)
+
+- ✅ **Three-tier VPC** with network isolation
+- ✅ **Security group chaining** (ALB → App → DB)
+- ✅ **Multi-AZ deployment** for high availability
+- ✅ **VPC Flow Logs** for network monitoring
+- ✅ **NACLs** for subnet-level stateless filtering
+- ✅ **Database isolation** (no internet routes)
+
+### Automation (Python/Boto3)
+
+- ✅ **IAM user provisioning** with least-privilege groups
+- ✅ **Input validation** and error handling
+- ✅ **Retry logic** with exponential backoff
+- ✅ **Comprehensive logging** for audit trails
+- ✅ **Demo mode** for safe testing
+
+### Documentation (Web)
+
+- ✅ **Interactive VPC diagram** with clickable components
+- ✅ **Security attack simulator** demonstrating defenses
+- ✅ **Cost calculator** with real AWS pricing
+- ✅ **Live IAM demo** showing script execution
+
+---
+
+## Project Structure
+
+```
+aws-student-data-infrastructure/
+│
+├── infrastructure/              # 🏗️ Terraform IaC
+│   ├── main.tf                  # VPC, subnets, gateways, flow logs
+│   ├── security-groups.tf       # Security groups, NACLs
+│   ├── variables.tf             # Configurable parameters
+│   ├── outputs.tf               # Exported values
+│   └── README.md                # Deployment guide
+│
+├── scripts/                     # 🐍 Python Automation
+│   └── iam_provisioner.py       # IAM user/group provisioning
+│
+├── docs/                        # 📄 Web Documentation (GitHub Pages)
+│   ├── index.html               # Landing page
+│   ├── architecture.html        # Network architecture deep-dive
+│   ├── automation.html          # IAM automation explanation
+│   ├── security-simulator.html  # Interactive attack simulator
+│   ├── cost-calculator.html     # AWS pricing calculator
+│   ├── live-demo.html           # IAM script demo
+│   └── ...
+│
+└── README.md                    # You are here
 ```
 
 ---
 
-## 📊 Project Outcomes
+## Technology Stack
 
-| Metric | Result |
-|--------|--------|
-| IAM Provisioning Speed | **67% faster** than manual processes |
-| Configuration Error Rate | **0%** across all test executions |
-| Database Exposure | **0%** - fully private, no internet access |
-| Encryption Coverage | **100%** - all data at rest and in transit |
-| Security Incidents (Simulated) | **0** successful breaches |
-| Documentation Completeness | **100%** - all required artifacts present |
+| Category | Technologies |
+|----------|--------------|
+| **IaC** | Terraform 1.0+, HCL |
+| **Cloud** | AWS (VPC, IAM, RDS, KMS, CloudTrail, GuardDuty) |
+| **Automation** | Python 3.8+, Boto3 |
+| **Documentation** | HTML5, CSS3, JavaScript |
 
 ---
 
-## 🎓 Academic Context
+## Compliance Alignment
 
-This project was developed as part of coursework at the **University of Houston**, demonstrating:
+This architecture implements controls aligned with:
 
-- Cloud architecture design principles
-- Security engineering for sensitive data systems
-- Infrastructure automation and DevOps practices
-- Technical documentation and presentation skills
+- **FERPA** (Family Educational Rights and Privacy Act)
+- **AWS Well-Architected Framework** (Security Pillar)
+- **CIS AWS Foundations Benchmark**
 
-### Faculty Assessment
-
-> *"The project demonstrates production-ready cloud architecture and security engineering capabilities. The VPC design closely mirrors patterns used in real student information systems at major universities."*
-
-**Overall Assessment:** Demonstrates senior-level cloud infrastructure and security engineering capabilities
-
----
-
-## 🌐 Live Demo
-
-View the interactive web presentation: [AWS Student Data Infrastructure](https://mjkhan9.github.io/aws-student-data-infrastructure/)
+| Control | Implementation |
+|---------|----------------|
+| Data Encryption | KMS (at rest), TLS 1.2+ (in transit) |
+| Network Isolation | Private subnets, no public DB access |
+| Access Logging | CloudTrail, VPC Flow Logs |
+| Least Privilege | IAM groups with minimal permissions |
+| Threat Detection | GuardDuty integration |
 
 ---
 
-## 📄 License
-
-This project is created for educational and portfolio demonstration purposes.
-
----
-
-## 📧 Contact
+## Author
 
 **Mohammad Khan**  
-University of Houston  
-[LinkedIn](https://linkedin.com/in/mohammad-jkhan/)
+IT Operations Specialist | AWS Certified Solutions Architect  
+University of Houston
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?logo=linkedin)](https://linkedin.com/in/mohammad-jkhan/)
+
+---
+
+## License
+
+This project is created for educational and portfolio demonstration purposes.
 
 ---
 
