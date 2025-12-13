@@ -121,6 +121,11 @@ Open [`/docs/index.html`](./docs/index.html) in a browser, or visit the live sit
 - ✅ **VPC Flow Logs** for network monitoring
 - ✅ **NACLs** for subnet-level stateless filtering
 - ✅ **Database isolation** (no internet routes)
+- ✅ **CloudTrail** audit logging with security alarms
+- ✅ **KMS encryption** keys for RDS, S3, EBS, Secrets
+- ✅ **VPC Endpoints** for private AWS service access
+- ✅ **MFA enforcement** IAM policy
+- ✅ **Password policy** with complexity requirements
 
 ### Automation (Python/Boto3)
 
@@ -129,6 +134,15 @@ Open [`/docs/index.html`](./docs/index.html) in a browser, or visit the live sit
 - ✅ **Retry logic** with exponential backoff
 - ✅ **Comprehensive logging** for audit trails
 - ✅ **Demo mode** for safe testing
+- ✅ **Unit tests** with pytest coverage
+
+### CI/CD (GitHub Actions)
+
+- ✅ **Terraform validation** on pull requests
+- ✅ **Security scanning** with tfsec and Checkov
+- ✅ **Python linting** with flake8
+- ✅ **Automated testing** across Python 3.9-3.12
+- ✅ **Code coverage** reporting
 
 ### Documentation (Web)
 
@@ -144,15 +158,25 @@ Open [`/docs/index.html`](./docs/index.html) in a browser, or visit the live sit
 ```
 aws-student-data-infrastructure/
 │
+├── .github/workflows/           # 🔄 CI/CD Pipelines
+│   ├── terraform.yml            # Terraform validation & planning
+│   └── python-tests.yml         # Python testing & linting
+│
 ├── infrastructure/              # 🏗️ Terraform IaC
 │   ├── main.tf                  # VPC, subnets, gateways, flow logs
 │   ├── security-groups.tf       # Security groups, NACLs
+│   ├── iam.tf                   # MFA enforcement, least-privilege policies
+│   ├── kms.tf                   # Customer-managed encryption keys
+│   ├── cloudtrail.tf            # API audit logging, security alarms
+│   ├── vpc-endpoints.tf         # Private AWS service access
 │   ├── variables.tf             # Configurable parameters
 │   ├── outputs.tf               # Exported values
 │   └── README.md                # Deployment guide
 │
 ├── scripts/                     # 🐍 Python Automation
-│   └── iam_provisioner.py       # IAM user/group provisioning
+│   ├── iam_provisioner.py       # IAM user/group provisioning
+│   ├── test_iam_provisioner.py  # Unit tests
+│   └── requirements.txt         # Python dependencies
 │
 ├── docs/                        # 📄 Web Documentation (GitHub Pages)
 │   ├── index.html               # Landing page

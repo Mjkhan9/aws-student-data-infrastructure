@@ -105,6 +105,10 @@ enable_vpc_flow_logs  = true
 |------|---------|
 | `main.tf` | VPC, subnets, gateways, route tables, flow logs |
 | `security-groups.tf` | Security groups with chained rules, NACLs |
+| `iam.tf` | IAM group, MFA enforcement, least-privilege policies |
+| `kms.tf` | Customer-managed KMS keys for RDS, S3, EBS, Secrets |
+| `cloudtrail.tf` | CloudTrail audit logging with S3 storage and alarms |
+| `vpc-endpoints.tf` | VPC endpoints for private AWS service access |
 | `variables.tf` | Configurable parameters with validation |
 | `outputs.tf` | Exported values for integration |
 
@@ -132,17 +136,34 @@ enable_vpc_flow_logs  = true
 | NAT Gateway | ~$32 + data transfer |
 | VPC Flow Logs | ~$0.50/GB ingested |
 | EIP | Free (when attached) |
+| CloudTrail | Free (management events) |
+| CloudTrail S3 | ~$0.023/GB stored |
+| KMS Keys | ~$1/key/month + usage |
+| VPC Endpoints (Gateway) | Free (S3, DynamoDB) |
+| VPC Endpoints (Interface) | ~$7.20/endpoint/month |
 
 *Actual costs depend on traffic volume. See [AWS Pricing Calculator](https://calculator.aws/).*
+
+## Security Features
+
+| Feature | Status | Description |
+|---------|--------|-------------|
+| MFA Enforcement | ✅ Enabled | Users must authenticate with MFA |
+| KMS Encryption | ✅ Enabled | Customer-managed keys for RDS, S3, EBS |
+| CloudTrail | ✅ Enabled | API audit logging with CloudWatch integration |
+| VPC Endpoints | ✅ Enabled | Private access to S3, DynamoDB, Secrets Manager |
+| Password Policy | ✅ Enabled | 14+ chars, complexity, 90-day rotation |
+| Security Alarms | ✅ Enabled | Alerts for unauthorized access, root usage |
 
 ## Next Steps
 
 After deploying this infrastructure:
 
-1. **Add RDS**: Use `db_subnet_group_name` output for RDS deployment
+1. **Add RDS**: Use `db_subnet_group_name` and `kms_rds_key_arn` outputs for encrypted RDS
 2. **Add ALB**: Deploy in public subnets with `alb_security_group_id`
 3. **Add ECS**: Deploy Fargate tasks in application subnets
 4. **Enable GuardDuty**: Add threat detection for the VPC
+5. **Store Secrets**: Use Secrets Manager with `kms_secrets_key_arn` for DB credentials
 
 ## Author
 

@@ -139,3 +139,58 @@ variable "additional_tags" {
   default     = {}
 }
 
+#-------------------------------------------------------------------------------
+# CloudTrail Configuration
+#-------------------------------------------------------------------------------
+
+variable "enable_cloudtrail" {
+  description = "Enable CloudTrail for API audit logging"
+  type        = bool
+  default     = true
+}
+
+variable "cloudtrail_log_retention_days" {
+  description = "Number of days to retain CloudTrail logs in CloudWatch"
+  type        = number
+  default     = 90
+
+  validation {
+    condition     = contains([1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653], var.cloudtrail_log_retention_days)
+    error_message = "CloudTrail log retention must be a valid CloudWatch Logs retention period."
+  }
+}
+
+variable "enable_s3_data_events" {
+  description = "Enable S3 data event logging in CloudTrail (additional cost)"
+  type        = bool
+  default     = false
+}
+
+variable "enable_security_alarms" {
+  description = "Enable CloudWatch alarms for security events"
+  type        = bool
+  default     = true
+}
+
+#-------------------------------------------------------------------------------
+# VPC Endpoints Configuration
+#-------------------------------------------------------------------------------
+
+variable "enable_vpc_endpoints" {
+  description = "Enable VPC endpoints for private AWS service access"
+  type        = bool
+  default     = true
+}
+
+variable "enable_ssm_endpoints" {
+  description = "Enable SSM-related VPC endpoints (for Session Manager)"
+  type        = bool
+  default     = false
+}
+
+variable "enable_ecr_endpoints" {
+  description = "Enable ECR VPC endpoints (for ECS/Fargate container pulls)"
+  type        = bool
+  default     = false
+}
+
