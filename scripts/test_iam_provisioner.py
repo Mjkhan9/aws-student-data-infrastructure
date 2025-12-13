@@ -107,11 +107,17 @@ class TestRetryDecorator(unittest.TestCase):
 
     def test_retry_on_transient_failure(self):
         """Test that transient failures trigger retries."""
+        # Skip if boto3 not available (can't create real ClientError)
+        try:
+            from botocore.exceptions import ClientError
+        except ImportError:
+            self.skipTest("botocore not installed")
+        
         call_count = 0
-
-        # Create a mock exception that looks like a throttling error
-        mock_exception = Exception("Throttling")
-        mock_exception.response = {'Error': {'Code': 'Throttling'}}
+        
+        # Create a real ClientError for throttling
+        error_response = {'Error': {'Code': 'Throttling', 'Message': 'Rate exceeded'}}
+        mock_exception = ClientError(error_response, 'TestOperation')
 
         @retry_on_failure(max_retries=3, delay=0.01)
         def failing_then_success():
@@ -127,11 +133,17 @@ class TestRetryDecorator(unittest.TestCase):
 
     def test_max_retries_exceeded(self):
         """Test that max retries are respected."""
+        # Skip if boto3 not available (can't create real ClientError)
+        try:
+            from botocore.exceptions import ClientError
+        except ImportError:
+            self.skipTest("botocore not installed")
+        
         call_count = 0
 
-        # Create a mock exception that looks like a throttling error
-        mock_exception = Exception("Throttling")
-        mock_exception.response = {'Error': {'Code': 'Throttling'}}
+        # Create a real ClientError for throttling
+        error_response = {'Error': {'Code': 'Throttling', 'Message': 'Rate exceeded'}}
+        mock_exception = ClientError(error_response, 'TestOperation')
 
         @retry_on_failure(max_retries=3, delay=0.01)
         def always_fails():
@@ -139,18 +151,24 @@ class TestRetryDecorator(unittest.TestCase):
             call_count += 1
             raise mock_exception
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(ClientError):
             always_fails()
         
         self.assertEqual(call_count, 3)
 
     def test_no_retry_on_client_error(self):
         """Test that client errors (non-throttling) don't retry."""
+        # Skip if boto3 not available (can't create real ClientError)
+        try:
+            from botocore.exceptions import ClientError
+        except ImportError:
+            self.skipTest("botocore not installed")
+        
         call_count = 0
 
-        # Create a mock exception that looks like a client error
-        mock_exception = Exception("AccessDenied")
-        mock_exception.response = {'Error': {'Code': 'AccessDenied'}}
+        # Create a real ClientError for access denied (should not retry)
+        error_response = {'Error': {'Code': 'AccessDenied', 'Message': 'Access Denied'}}
+        mock_exception = ClientError(error_response, 'TestOperation')
 
         @retry_on_failure(max_retries=3, delay=0.01)
         def client_error():
@@ -158,7 +176,7 @@ class TestRetryDecorator(unittest.TestCase):
             call_count += 1
             raise mock_exception
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(ClientError):
             client_error()
         
         # Should only be called once (no retry for client errors)
