@@ -178,6 +178,94 @@ output "infrastructure_summary" {
     database_subnets     = length(aws_subnet.database)
     nat_gateway_enabled  = var.enable_nat_gateway
     flow_logs_enabled    = var.enable_vpc_flow_logs
+    cloudtrail_enabled   = var.enable_cloudtrail
+    vpc_endpoints_enabled = var.enable_vpc_endpoints
   }
+}
+
+#-------------------------------------------------------------------------------
+# KMS Key Outputs
+#-------------------------------------------------------------------------------
+
+output "kms_rds_key_arn" {
+  description = "ARN of the KMS key for RDS encryption"
+  value       = aws_kms_key.rds.arn
+}
+
+output "kms_rds_key_id" {
+  description = "ID of the KMS key for RDS encryption"
+  value       = aws_kms_key.rds.key_id
+}
+
+output "kms_s3_key_arn" {
+  description = "ARN of the KMS key for S3 encryption"
+  value       = aws_kms_key.s3.arn
+}
+
+output "kms_ebs_key_arn" {
+  description = "ARN of the KMS key for EBS encryption"
+  value       = aws_kms_key.ebs.arn
+}
+
+output "kms_secrets_key_arn" {
+  description = "ARN of the KMS key for Secrets Manager"
+  value       = aws_kms_key.secrets.arn
+}
+
+#-------------------------------------------------------------------------------
+# CloudTrail Outputs
+#-------------------------------------------------------------------------------
+
+output "cloudtrail_arn" {
+  description = "ARN of the CloudTrail trail"
+  value       = var.enable_cloudtrail ? aws_cloudtrail.main[0].arn : null
+}
+
+output "cloudtrail_s3_bucket" {
+  description = "S3 bucket for CloudTrail logs"
+  value       = var.enable_cloudtrail ? aws_s3_bucket.cloudtrail[0].id : null
+}
+
+output "cloudtrail_log_group" {
+  description = "CloudWatch Log Group for CloudTrail"
+  value       = var.enable_cloudtrail ? aws_cloudwatch_log_group.cloudtrail[0].name : null
+}
+
+#-------------------------------------------------------------------------------
+# VPC Endpoint Outputs
+#-------------------------------------------------------------------------------
+
+output "vpc_endpoint_s3_id" {
+  description = "ID of the S3 VPC endpoint"
+  value       = var.enable_vpc_endpoints ? aws_vpc_endpoint.s3[0].id : null
+}
+
+output "vpc_endpoint_dynamodb_id" {
+  description = "ID of the DynamoDB VPC endpoint"
+  value       = var.enable_vpc_endpoints ? aws_vpc_endpoint.dynamodb[0].id : null
+}
+
+output "vpc_endpoints_security_group_id" {
+  description = "Security group ID for VPC interface endpoints"
+  value       = var.enable_vpc_endpoints ? aws_security_group.vpc_endpoints[0].id : null
+}
+
+#-------------------------------------------------------------------------------
+# IAM Outputs
+#-------------------------------------------------------------------------------
+
+output "iam_group_name" {
+  description = "Name of the IAM group for student data access"
+  value       = aws_iam_group.student_data_access.name
+}
+
+output "iam_group_arn" {
+  description = "ARN of the IAM group for student data access"
+  value       = aws_iam_group.student_data_access.arn
+}
+
+output "mfa_enforcement_policy_arn" {
+  description = "ARN of the MFA enforcement policy"
+  value       = aws_iam_policy.mfa_enforcement.arn
 }
 
