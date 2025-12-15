@@ -36,7 +36,7 @@
 
 ## Key Achievements
 
-- ✅ Zero unauthorized access during security testing
-- ✅ 40% faster IAM provisioning through automation
-- ✅ Fully isolated database tier with no public exposure
-- ✅ Passed comprehensive faculty evaluation
+- Zero unauthorized access during security testing
+- 40% faster IAM provisioning through automation
+- Fully isolated database tier with no public exposure
+- Passed comprehensive faculty evaluation

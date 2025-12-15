@@ -1,25 +1,20 @@
 # AWS Student Data Infrastructure
 
-**Production-grade cloud architecture for secure academic data systems**
+Secure cloud architecture for academic data systems, built with Terraform and Python automation.
 
-[![Terraform](https://img.shields.io/badge/Terraform-1.0+-623CE4?logo=terraform)](https://www.terraform.io/)
+I created this project to demonstrate FERPA-aligned infrastructure patterns. The design isolates student data in private subnets with no direct internet access, implements encryption at rest and in transit, and includes comprehensive audit logging.
+
 [![AWS](https://img.shields.io/badge/AWS-VPC%20|%20IAM%20|%20RDS-FF9900?logo=amazon-aws)](https://aws.amazon.com/)
-[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-Educational-blue)](#)
+
+**[Live Documentation](https://mjkhan9.github.io/aws-student-data-infrastructure/)**
 
 ---
 
-## Overview
+## What's Inside
 
-This repository contains **Infrastructure as Code (IaC)** and **automation scripts** for deploying a secure, FERPA-aligned AWS environment for student data systems.
-
-### What's Inside
-
-| Directory | Contents | Purpose |
-|-----------|----------|---------|
-| [`/infrastructure`](./infrastructure) | Terraform configurations | Deploy 3-tier VPC with security controls |
-| [`/scripts`](./scripts) | Python/Boto3 automation | IAM provisioning, security auditing |
-| [`/docs`](./docs) | Interactive documentation | Architecture visualizations, demos |
+- `/infrastructure` - Terraform configurations for deploying a 3-tier VPC with security controls
+- `/scripts` - Python/Boto3 automation for IAM provisioning and security auditing
+- `/docs` - Interactive documentation with architecture visualizations
 
 ---
 
@@ -56,40 +51,34 @@ Internet ──[443]──▶ ALB-SG ──[443]──▶ APP-SG ──[5432]─
    Corporate IPs ──[22]──▶ Bastion-SG
 ```
 
-No skip-level access. Database tier is **completely isolated** from the internet.
+No skip-level access. The database tier is completely isolated from the internet.
 
 ---
 
 ## Quick Start
 
-### 1. Deploy Infrastructure (Terraform)
+### Deploy Infrastructure (Terraform)
 
 ```bash
 cd infrastructure
-
-# Initialize and deploy
 terraform init
 terraform plan
 terraform apply
 ```
 
-See [`/infrastructure/README.md`](./infrastructure/README.md) for configuration options.
+See `/infrastructure/README.md` for configuration options.
 
-### 2. Run IAM Automation (Python)
+### Run IAM Automation (Python)
 
 ```bash
 cd scripts
-
-# Install dependencies
 pip install boto3
-
-# Run provisioning (demo mode by default)
 python iam_provisioner.py
 ```
 
 Output:
 ```
-=== IAM Provisioning System (Enhanced Version) ===
+=== IAM Provisioning System ===
 [INFO] Validating IAM group 'StudentDataRestrictedAccess'...
 [INFO] Provisioning user: registrar_office_analyst
 [INFO] [DEMO] Provisioned user 'registrar_office_analyst' with least-privilege access.
@@ -100,14 +89,7 @@ Provisioning Summary
 Total users: 5
 Successful: 5
 Execution time: 0.25 seconds
-Efficiency gain: 40% faster than manual IAM onboarding.
 ```
-
-### 3. View Documentation
-
-Open [`/docs/index.html`](./docs/index.html) in a browser, or visit the live site:
-
-**[📊 Live Demo & Documentation](https://mjkhan9.github.io/aws-student-data-infrastructure/)**
 
 ---
 
@@ -115,41 +97,41 @@ Open [`/docs/index.html`](./docs/index.html) in a browser, or visit the live sit
 
 ### Infrastructure (Terraform)
 
-- ✅ **Three-tier VPC** with network isolation
-- ✅ **Security group chaining** (ALB → App → DB)
-- ✅ **Multi-AZ deployment** for high availability
-- ✅ **VPC Flow Logs** for network monitoring
-- ✅ **NACLs** for subnet-level stateless filtering
-- ✅ **Database isolation** (no internet routes)
-- ✅ **CloudTrail** audit logging with security alarms
-- ✅ **KMS encryption** keys for RDS, S3, EBS, Secrets
-- ✅ **VPC Endpoints** for private AWS service access
-- ✅ **MFA enforcement** IAM policy
-- ✅ **Password policy** with complexity requirements
+- Three-tier VPC with network isolation
+- Security group chaining (ALB → App → DB)
+- Multi-AZ deployment for availability
+- VPC Flow Logs for network monitoring
+- NACLs for subnet-level stateless filtering
+- Database isolation (no internet routes)
+- CloudTrail audit logging with security alarms
+- KMS encryption keys for RDS, S3, EBS, Secrets
+- VPC Endpoints for private AWS service access
+- MFA enforcement IAM policy
+- Password policy with complexity requirements
 
 ### Automation (Python/Boto3)
 
-- ✅ **IAM user provisioning** with least-privilege groups
-- ✅ **Input validation** and error handling
-- ✅ **Retry logic** with exponential backoff
-- ✅ **Comprehensive logging** for audit trails
-- ✅ **Demo mode** for safe testing
-- ✅ **Unit tests** with pytest coverage
+- IAM user provisioning with least-privilege groups
+- Input validation and error handling
+- Retry logic with exponential backoff
+- Comprehensive logging for audit trails
+- Demo mode for safe testing
+- Unit tests with pytest coverage
 
 ### CI/CD (GitHub Actions)
 
-- ✅ **Terraform validation** on pull requests
-- ✅ **Security scanning** with tfsec and Checkov
-- ✅ **Python linting** with flake8
-- ✅ **Automated testing** across Python 3.9-3.12
-- ✅ **Code coverage** reporting
+- Terraform validation on pull requests
+- Security scanning with tfsec and Checkov
+- Python linting with flake8
+- Automated testing across Python 3.9-3.12
+- Code coverage reporting
 
 ### Documentation (Web)
 
-- ✅ **Interactive VPC diagram** with clickable components
-- ✅ **Security attack simulator** demonstrating defenses
-- ✅ **Cost calculator** with real AWS pricing
-- ✅ **Live IAM demo** showing script execution
+- Interactive VPC diagram with clickable components
+- Security attack simulator demonstrating defenses
+- Cost calculator with real AWS pricing
+- Live IAM demo showing script execution
 
 ---
 
@@ -158,11 +140,11 @@ Open [`/docs/index.html`](./docs/index.html) in a browser, or visit the live sit
 ```
 aws-student-data-infrastructure/
 │
-├── .github/workflows/           # 🔄 CI/CD Pipelines
+├── .github/workflows/           # CI/CD Pipelines
 │   ├── terraform.yml            # Terraform validation & planning
 │   └── python-tests.yml         # Python testing & linting
 │
-├── infrastructure/              # 🏗️ Terraform IaC
+├── infrastructure/              # Terraform IaC
 │   ├── main.tf                  # VPC, subnets, gateways, flow logs
 │   ├── security-groups.tf       # Security groups, NACLs
 │   ├── iam.tf                   # MFA enforcement, least-privilege policies
@@ -173,12 +155,12 @@ aws-student-data-infrastructure/
 │   ├── outputs.tf               # Exported values
 │   └── README.md                # Deployment guide
 │
-├── scripts/                     # 🐍 Python Automation
+├── scripts/                     # Python Automation
 │   ├── iam_provisioner.py       # IAM user/group provisioning
 │   ├── test_iam_provisioner.py  # Unit tests
 │   └── requirements.txt         # Python dependencies
 │
-├── docs/                        # 📄 Web Documentation (GitHub Pages)
+├── docs/                        # Web Documentation (GitHub Pages)
 │   ├── index.html               # Landing page
 │   ├── architecture.html        # Network architecture deep-dive
 │   ├── automation.html          # IAM automation explanation
@@ -192,32 +174,24 @@ aws-student-data-infrastructure/
 
 ---
 
-## Technology Stack
+## Security & Compliance
 
-| Category | Technologies |
-|----------|--------------|
-| **IaC** | Terraform 1.0+, HCL |
-| **Cloud** | AWS (VPC, IAM, RDS, KMS, CloudTrail, GuardDuty) |
-| **Automation** | Python 3.8+, Boto3 |
-| **Documentation** | HTML5, CSS3, JavaScript |
+This architecture implements controls aligned with FERPA, AWS Well-Architected Framework, and CIS AWS Foundations Benchmark:
 
----
+**Data Encryption**  
+KMS for data at rest, TLS 1.2+ for data in transit
 
-## Compliance Alignment
+**Network Isolation**  
+Private subnets with no public database access
 
-This architecture implements controls aligned with:
+**Access Logging**  
+CloudTrail and VPC Flow Logs for complete visibility
 
-- **FERPA** (Family Educational Rights and Privacy Act)
-- **AWS Well-Architected Framework** (Security Pillar)
-- **CIS AWS Foundations Benchmark**
+**Least Privilege**  
+IAM groups with minimal required permissions
 
-| Control | Implementation |
-|---------|----------------|
-| Data Encryption | KMS (at rest), TLS 1.2+ (in transit) |
-| Network Isolation | Private subnets, no public DB access |
-| Access Logging | CloudTrail, VPC Flow Logs |
-| Least Privilege | IAM groups with minimal permissions |
-| Threat Detection | GuardDuty integration |
+**Threat Detection**  
+GuardDuty integration for anomaly detection
 
 ---
 
@@ -227,14 +201,12 @@ This architecture implements controls aligned with:
 IT Operations Specialist | AWS Certified Solutions Architect  
 University of Houston
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?logo=linkedin)](https://linkedin.com/in/mohammad-jkhan/)
+[LinkedIn](https://linkedin.com/in/mohammad-jkhan/)
 
 ---
 
 ## License
 
-This project is created for educational and portfolio demonstration purposes.
-
----
+Created for educational and portfolio demonstration purposes.
 
 *Last updated: December 2025*

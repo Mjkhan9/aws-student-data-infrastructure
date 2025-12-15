@@ -70,7 +70,7 @@ terraform plan
 # Apply infrastructure
 terraform apply
 
-# Destroy when done (careful!)
+# Destroy when done
 terraform destroy
 ```
 
@@ -146,28 +146,30 @@ enable_vpc_flow_logs  = true
 
 ## Security Features
 
-| Feature | Status | Description |
-|---------|--------|-------------|
-| MFA Enforcement | ✅ Enabled | Users must authenticate with MFA |
-| KMS Encryption | ✅ Enabled | Customer-managed keys for RDS, S3, EBS |
-| CloudTrail | ✅ Enabled | API audit logging with CloudWatch integration |
-| VPC Endpoints | ✅ Enabled | Private access to S3, DynamoDB, Secrets Manager |
-| Password Policy | ✅ Enabled | 14+ chars, complexity, 90-day rotation |
-| Security Alarms | ✅ Enabled | Alerts for unauthorized access, root usage |
+**MFA Enforcement** - Users must authenticate with MFA for console access
+
+**KMS Encryption** - Customer-managed keys for RDS, S3, EBS, and Secrets Manager
+
+**CloudTrail** - API audit logging with CloudWatch integration and security alarms
+
+**VPC Endpoints** - Private access to S3, DynamoDB, and Secrets Manager without internet traversal
+
+**Password Policy** - 14+ characters, complexity requirements, 90-day rotation
+
+**Security Alarms** - CloudWatch alarms for unauthorized access attempts and root account usage
 
 ## Next Steps
 
 After deploying this infrastructure:
 
-1. **Add RDS**: Use `db_subnet_group_name` and `kms_rds_key_arn` outputs for encrypted RDS
-2. **Add ALB**: Deploy in public subnets with `alb_security_group_id`
-3. **Add ECS**: Deploy Fargate tasks in application subnets
-4. **Enable GuardDuty**: Add threat detection for the VPC
-5. **Store Secrets**: Use Secrets Manager with `kms_secrets_key_arn` for DB credentials
+1. **Add RDS** - Use `db_subnet_group_name` and `kms_rds_key_arn` outputs for encrypted database
+2. **Add ALB** - Deploy in public subnets with `alb_security_group_id`
+3. **Add ECS** - Deploy Fargate tasks in application subnets
+4. **Enable GuardDuty** - Add threat detection for the VPC
+5. **Store Secrets** - Use Secrets Manager with `kms_secrets_key_arn` for DB credentials
 
 ## Author
 
 **Mohammad Khan**  
 University of Houston  
 AWS Certified Solutions Architect
-
