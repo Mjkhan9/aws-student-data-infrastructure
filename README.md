@@ -21,26 +21,12 @@ I created this project to demonstrate FERPA-aligned infrastructure patterns. The
 ## Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                     VPC: 172.32.0.0/16 (Multi-AZ)                        │
-├──────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  ┌────────────────┐   ┌────────────────┐   ┌────────────────┐           │
-│  │  PUBLIC TIER   │   │   APP TIER     │   │   DB TIER      │           │
-│  │  ────────────  │   │  ────────────  │   │  ────────────  │           │
-│  │  • NAT Gateway │──▶│  • ECS Fargate │──▶│  • RDS (Multi- │           │
-│  │  • Bastion     │   │  • Lambda      │   │    AZ)         │           │
-│  │  • ALB         │   │  • APIs        │   │  • KMS Encrypt │           │
-│  │                │   │                │   │  • NO INTERNET │           │
-│  │  IGW Attached  │   │  NAT Outbound  │   │  ISOLATED      │           │
-│  └────────────────┘   └────────────────┘   └────────────────┘           │
-│         │                    │                    │                      │
-│         ▼                    ▼                    ▼                      │
-│  ┌─────────────────────────────────────────────────────────────┐        │
-│  │          Security & Audit Layer                              │        │
-│  │  CloudTrail • VPC Flow Logs • GuardDuty • CloudWatch • KMS  │        │
-│  └─────────────────────────────────────────────────────────────┘        │
-└──────────────────────────────────────────────────────────────────────────┘
+VPC (172.32.0.0/16) - Multi-AZ
+├── Public Tier: NAT Gateway, Bastion, ALB
+├── App Tier: ECS Fargate, Lambda
+└── DB Tier: RDS (isolated, no internet)
+
+Security Layer: CloudTrail, VPC Flow Logs, GuardDuty, KMS
 ```
 
 ### Security Group Chain
@@ -176,7 +162,7 @@ aws-student-data-infrastructure/
 
 ## Security & Compliance
 
-This architecture implements controls aligned with FERPA, AWS Well-Architected Framework, and CIS AWS Foundations Benchmark:
+The architecture follows FERPA requirements and AWS security best practices:
 
 **Data Encryption**  
 KMS for data at rest, TLS 1.2+ for data in transit
