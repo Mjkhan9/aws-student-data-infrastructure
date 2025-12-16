@@ -59,22 +59,36 @@ See `/infrastructure/README.md` for configuration options.
 ```bash
 cd scripts
 pip install boto3
+
+# Run in DEMO mode (default - no AWS changes)
 python iam_provisioner.py
+
+# Run in LIVE mode (requires AWS credentials)
+IAM_LIVE_MODE=true python iam_provisioner.py
 ```
 
-Output:
+Demo Output:
 ```
-=== IAM Provisioning System ===
+============================================================
+IAM Provisioning System - DEMO MODE
+============================================================
+[INFO] Running in DEMO mode - no AWS changes will be made.
+[INFO] Set IAM_LIVE_MODE=true to execute actual AWS API calls.
+
 [INFO] Validating IAM group 'StudentDataRestrictedAccess'...
+[INFO] [DEMO] Group 'StudentDataRestrictedAccess' verified.
 [INFO] Provisioning user: registrar_office_analyst
 [INFO] [DEMO] Provisioned user 'registrar_office_analyst' with least-privilege access.
 ...
 ============================================================
-Provisioning Summary
+Provisioning Summary (DEMO MODE)
 ============================================================
 Total users: 5
 Successful: 5
 Execution time: 0.25 seconds
+Group policy: StudentDataRestrictedAccess with least-privilege access
+[NOTE] Run with IAM_LIVE_MODE=true to create actual IAM resources
+============================================================
 ```
 
 ---
@@ -187,7 +201,7 @@ GuardDuty integration for anomaly detection
 IT Operations Specialist | AWS Certified Solutions Architect  
 University of Houston
 
-[LinkedIn](https://linkedin.com/in/mohammad-jkhan/)
+[LinkedIn](https://linkedin.com/in/mohammad-jkhan) · [GitHub](https://github.com/Mjkhan9)
 
 ---
 

@@ -3,18 +3,27 @@ Automated IAM Provisioning for Student Data Infrastructure
 Author: Mohammad Khan
 Date: November 14, 2025
 
-Final version presented to faculty review panel.
+Production-ready IAM provisioning script for student data access management.
 Enhanced with improved error handling, logging, type hints, and best practices.
+
+Usage:
+    # Run in demo mode (default - safe for testing)
+    python iam_provisioner.py
+
+    # Run in live mode (requires AWS credentials)
+    IAM_LIVE_MODE=true python iam_provisioner.py
 """
 
 import logging
 import time
 import re
+import os
 from typing import Optional, List
 from functools import wraps
 
-# Configuration
-DEMO_MODE = True
+# Configuration - Use environment variable to control mode
+# Set IAM_LIVE_MODE=true to execute actual AWS API calls
+DEMO_MODE = os.environ.get("IAM_LIVE_MODE", "").lower() != "true"
 GROUP_NAME = "StudentDataRestrictedAccess"
 POLICY_ARN = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 MAX_RETRIES = 3
@@ -217,8 +226,18 @@ def create_identity(iam: Optional[object], username: str) -> bool:
 
 def main() -> None:
     """Main entry point for the IAM provisioning script."""
-    logger.info("\n=== IAM Provisioning System (Enhanced Version) ===")
-
+    mode = "DEMO" if DEMO_MODE else "LIVE"
+    logger.info(f"\n{'='*60}")
+    logger.info(f"IAM Provisioning System - {mode} MODE")
+    logger.info(f"{'='*60}")
+    
+    if DEMO_MODE:
+        logger.info("[INFO] Running in DEMO mode - no AWS changes will be made.")
+        logger.info("[INFO] Set IAM_LIVE_MODE=true to execute actual AWS API calls.")
+    else:
+        logger.warning("[LIVE] Running in LIVE mode - AWS resources will be modified!")
+    
+    logger.info("")
     iam = iam_client()
     
     # Ensure group exists and is configured
@@ -248,8 +267,9 @@ def main() -> None:
     elapsed = time.time() - start
 
     # Summary
+    mode = "DEMO" if DEMO_MODE else "LIVE"
     logger.info(f"\n{'='*60}")
-    logger.info("Provisioning Summary")
+    logger.info(f"Provisioning Summary ({mode} MODE)")
     logger.info(f"{'='*60}")
     logger.info(f"Total users: {len(users)}")
     logger.info(f"Successful: {success_count}")
@@ -257,8 +277,9 @@ def main() -> None:
     if failed_users:
         logger.warning(f"Failed users: {', '.join(failed_users)}")
     logger.info(f"Execution time: {elapsed:.2f} seconds")
-    logger.info(f"Efficiency gain: 40% faster than manual IAM onboarding.")
-    logger.info(f"Compliance: 100% least-privilege enforcement.")
+    logger.info(f"Group policy: {GROUP_NAME} with least-privilege access")
+    if DEMO_MODE:
+        logger.info(f"[NOTE] Run with IAM_LIVE_MODE=true to create actual IAM resources")
     logger.info(f"{'='*60}\n")
 
 
