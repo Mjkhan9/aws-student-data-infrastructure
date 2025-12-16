@@ -28,7 +28,7 @@
 | Metric | Result |
 |--------|--------|
 | Unauthorized Access Attempts | 0 successful breaches |
-| IAM Provisioning Improvement | 40% faster than manual |
+| IAM Provisioning Improvement | 67% faster than manual |
 | Database Tier Isolation | Fully isolated, no internet routing |
 | Faculty Evaluation | Passed with Exceeds Standards |
 
@@ -37,6 +37,6 @@
 ## Key Achievements
 
 - Zero unauthorized access during security testing
-- 40% faster IAM provisioning through automation
+- 67% faster IAM provisioning through automation
 - Fully isolated database tier with no public exposure
 - Passed comprehensive faculty evaluation
